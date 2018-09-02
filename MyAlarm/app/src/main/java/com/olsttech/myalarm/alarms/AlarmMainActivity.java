@@ -1,4 +1,4 @@
-package com.olsttech.myalarm;
+package com.olsttech.myalarm.alarms;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import com.olsttech.myalarm.R;
+
+public class AlarmMainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
