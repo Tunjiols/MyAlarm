@@ -8,8 +8,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.olsttech.myalarm.alarms.AlarmMainActivity"
     tools:showIn="@layout/activity_main"
-    android:paddingStart="@dimen/padding_avg"
-    android:paddingEnd="@dimen/padding_avg"
     android:background="@color/grey_A900"
     android:orientation="vertical">
 
@@ -43,16 +41,16 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/lime_A700"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/framelayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_900">
+        android:layout_height="wrap_content">
 
-    </FrameLayout>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

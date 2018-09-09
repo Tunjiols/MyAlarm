@@ -1,4 +1,6 @@
-package com.olsttech.myalarm.data;
+package com.olsttech.myalarm.services;
+
+import com.olsttech.myalarm.models.Alarm;
 
 import java.util.List;
 

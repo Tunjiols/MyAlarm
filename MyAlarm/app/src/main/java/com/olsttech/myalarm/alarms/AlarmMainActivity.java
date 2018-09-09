@@ -1,34 +1,52 @@
 package com.olsttech.myalarm.alarms;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.olsttech.myalarm.R;
+import com.olsttech.myalarm.adapters.AlarmRecyclerViewAdapter;
+import com.olsttech.myalarm.models.Alarm;
 
-public class AlarmMainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View{
     private Toolbar toolbar;
     private FloatingActionButton fab;
+    private AlarmContract.Presenter mAlarmPresenter;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bindViews();
+        initSetup();
     }
 
     /**Bind view method*/
     private void bindViews(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclayout);
         fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
     /**Initial setups method*/
     private void initSetup(){
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mAlarmPresenter = new AlarmPresenter(this, this);
+        mAlarmPresenter.getAllAlarms();
+
         setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +55,28 @@ public class AlarmMainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public void showAlarms(List<Alarm> alarms) {
+        AlarmRecyclerViewAdapter recyclerViewAdapter = new AlarmRecyclerViewAdapter(this,
+                alarms, this);
+        mRecyclerView.setAdapter(recyclerViewAdapter);
+    }
+
+    @Override
+    public void showAddAlarm() {
+
+    }
+
+    @Override
+    public void showEditAlarm(@NonNull Alarm alarm) {
+
+    }
+
+    @Override
+    public void showAlarmRadioBtn() {
+
     }
 
     @Override

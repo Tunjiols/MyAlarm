@@ -2,7 +2,7 @@ package com.olsttech.myalarm.alarms;
 
 import android.support.annotation.NonNull;
 
-import com.olsttech.myalarm.data.Alarm;
+import com.olsttech.myalarm.models.Alarm;
 
 import java.util.List;
 
@@ -11,15 +11,22 @@ import java.util.List;
  */
 
 public interface AlarmContract {
-    interface view {
-        void showAlarm(List<Alarm> Alarm);
+    interface View {
+        void showAlarms(List<Alarm> Alarm);
         void showAddAlarm();
-        void showAlarmDetails(@NonNull Alarm alarm);
+        void showEditAlarm(@NonNull Alarm alarm);
+        void showAlarmRadioBtn();
     }
 
-    interface userActionListener{
+    interface Presenter{
+        void getAllAlarms();
+        void getAlarm();
+        void getAlarmRadioBtnStatus();
+    }
+
+    interface UserActionListener{
         void addNewAlarm();
         void loadAlarm();
-        void disableAlarm(@NonNull Alarm alarm);
+        void radioBtnAlarm(@NonNull Alarm alarm);
     }
 }

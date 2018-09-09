@@ -12,6 +12,48 @@
     <dimen name="margin_big">32dp</dimen>
     <dimen name="margin_huge">64dp</dimen>
 
+    <dimen name="_1sdp">1dp</dimen>
+    <dimen name="_2sdp">2dp</dimen>
+    <dimen name="_3sdp">3dp</dimen>
+    <dimen name="_4sdp">4dp</dimen>
+    <dimen name="_5sdp">5dp</dimen>
+    <dimen name="_6sdp">6dp</dimen>
+    <dimen name="_7sdp">7dp</dimen>
+    <dimen name="_8sdp">8dp</dimen>
+    <dimen name="_9sdp">9dp</dimen>
+    <dimen name="_10sdp">10dp</dimen>
+    <dimen name="_11sdp">11dp</dimen>
+    <dimen name="_12sdp">12dp</dimen>
+    <dimen name="_13sdp">13dp</dimen>
+    <dimen name="_14sdp">14dp</dimen>
+    <dimen name="_15sdp">15dp</dimen>
+    <dimen name="_16sdp">16dp</dimen>
+    <dimen name="_17sdp">17dp</dimen>
+    <dimen name="_18sdp">18dp</dimen>
+    <dimen name="_20sdp">20dp</dimen>
+    <dimen name="_21sdp">21dp</dimen>
+    <dimen name="_200sdp">200dp</dimen>
+
+    <dimen name="_1sp">1sp</dimen>
+    <dimen name="_2sp">2sp</dimen>
+    <dimen name="_3sp">3sp</dimen>
+    <dimen name="_4sp">4sp</dimen>
+    <dimen name="_5sp">5sp</dimen>
+    <dimen name="_6sp">6sp</dimen>
+    <dimen name="_7sp">7sp</dimen>
+    <dimen name="_8sp">8sp</dimen>
+    <dimen name="_9sp">9sp</dimen>
+    <dimen name="_10sp">10sp</dimen>
+    <dimen name="_11sp">11sp</dimen>
+    <dimen name="_12sp">12sp</dimen>
+    <dimen name="_13sp">13sp</dimen>
+    <dimen name="_14sp">14sp</dimen>
+    <dimen name="_15sp">15sp</dimen>
+    <dimen name="_16sp">16sp</dimen>
+    <dimen name="_17sp">17sp</dimen>
+    <dimen name="_18sp">18sp</dimen>
+    <dimen name="_20sp">20sp</dimen>
+    <dimen name="_21sp">21sp</dimen>
     <!--
 Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
