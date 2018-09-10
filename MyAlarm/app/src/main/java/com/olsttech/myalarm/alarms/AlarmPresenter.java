@@ -4,6 +4,10 @@ import android.content.Context;
 
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
+import com.olsttech.myalarm.models.Alarm;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by adetunji on 01/09/2018.class AlarmPresenter
@@ -22,17 +26,23 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     @Override
     public void getAllAlarms() {
 
-        mView.showAlarms(mAlarmDataManager.getAllAlarms());
+        mAlarmDataManager.getAllAlarms(new AlarmDataManagerApi.DataManagerLoadAlarmCallBack() {
+            @Override
+            public void onAlarmLoaded(List<Alarm> alarms) {
+                mView.showAlarms(alarms);
+            }
+        });
+
     }
 
     @Override
-    public void getAlarm() {
+    public void getAlarm(String alarmId) {
 
     }
     
     @Override
     public void addAlarm(){
-    
+        mView.showAddAlarm();
     }
     
     public void editAlarm(){

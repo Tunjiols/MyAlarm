@@ -3,7 +3,9 @@ package com.olsttech.myalarm.data;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.olsttech.myalarm.alarms.AlarmContract;
 import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.utils.AlarmConstants;
 import com.olsttech.myalarm.utils.AlarmSharePrefs;
 
 import java.util.ArrayList;
@@ -22,12 +24,10 @@ public class AlarmPreference implements AlarmPreferenceApi{
     }
 
     @Override
-    public List<Alarm> prefGetAllAlarms(@NonNull LoadAlarmCallback callback) {
+    public void prefGetAllAlarms(@NonNull LoadAlarmCallback callback) {
 
-        List<Alarm> alarmList = new ArrayList<Alarm>();
-        callback.onAlarmLoaded(alarmList);
+        callback.onAlarmLoaded(allAlarmsFromPreference());
 
-        return allAlarmsFromPreference(alarmList);
     }
 
     @Override
@@ -45,12 +45,13 @@ public class AlarmPreference implements AlarmPreferenceApi{
 
     }
 
-    private List<Alarm> allAlarmsFromPreference(List<Alarm> alarmList){
+    private List<Alarm> allAlarmsFromPreference(){
+        List<Alarm> alarmList = new ArrayList<Alarm>();
         Alarm alarm = new Alarm();
-        alarm.setAlarmLabel(mAlarmSharePrefs.getString());
-        alarm.setAlamTime(mAlarmSharePrefs.getLongDate());
-        alarm.setAlarmDay(mAlarmSharePrefs.getString());
-        alarm.setAlarmStatus(mAlarmSharePrefs.getBoolean());
+        alarm.setAlarmLabel(mAlarmSharePrefs.getString(AlarmConstants.ALARM_LABEL));
+        alarm.setAlamTime(mAlarmSharePrefs.getLongDate(AlarmConstants.ALARM_TIME));
+        alarm.setAlarmDay(mAlarmSharePrefs.getString(AlarmConstants.ALARM_DAY));
+        alarm.setAlarmStatus(mAlarmSharePrefs.getBoolean(AlarmConstants.ALARM_STATUS,false));
 
         alarmList.add(alarm);
 

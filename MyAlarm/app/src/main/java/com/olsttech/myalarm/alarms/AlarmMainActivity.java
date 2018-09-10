@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
 import com.olsttech.myalarm.adapters.AlarmRecyclerViewAdapter;
@@ -39,8 +40,8 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private void bindViews(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclayout);
-        mEdit = (TextView) findViewById(R.Id.edit);
-        mAdd = (TextView) findViewById(R.Id.add);
+        mEdit = (TextView) findViewById(R.id.edit);
+        mAdd = (TextView) findViewById(R.id.add);
         fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
@@ -75,7 +76,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     }
     
     @Override
-    public void showAlarmEditState(@NonNull String alarmId) {
+    public void showAlarmEditScreen(@NonNull String alarmId) {
 
     }
 
@@ -98,22 +99,22 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     @Override
     public void onClick(View v) {
-        switch(v.getId){
+        switch(v.getId()){
             case R.id.edit:
-                AlarmPresenter.EditAlarmClickListener = new AlarmPresenter.EditAlarmClickListener{
+                new AlarmContract.EditAlarmClickListener() {
                     @Override
-                    public void editAlarm(){
+                    public void editAlarm() {
                         mAlarmPresenter.editAlarm();
-                    };
-                }
+                    }
+                };
                 break;
-            case R.Id.add:
-                AlarmPresenter.AddAlarmClickListener = new AlarmPresenter.AddAlarmClickListener{
+            case R.id.add:
+                new AlarmContract.AddAlarmClickListener() {
                     @Override
-                    public void addNewAlarm(){
+                    public void addNewAlarm() {
                         mAlarmPresenter.addAlarm();
-                    };
-                }
+                    }
+                };
                 break;
         }
     }

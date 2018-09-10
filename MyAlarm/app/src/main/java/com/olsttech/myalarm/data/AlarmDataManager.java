@@ -24,15 +24,15 @@ public class AlarmDataManager implements AlarmDataManagerApi.LoadAlarmFromPrefer
     }
 
     @Override
-    public void getAllAlarms(@NonNull AlarmDataManagerApi.DataManagerLoadAlarmCallBack callBack) {
+    public void getAllAlarms(@NonNull final AlarmDataManagerApi.DataManagerLoadAlarmCallBack callBack) {
 
-        callBack.onAlarmLoaded(mAlarmList = mAlarmPreference.prefGetAllAlarms(new AlarmPreferenceApi.LoadAlarmCallback() {
+        // Load from API only if needed.
+        mAlarmPreference.prefGetAllAlarms(new AlarmPreferenceApi.LoadAlarmCallback() {
             @Override
             public void onAlarmLoaded(List<Alarm> alarms) {
-
+                callBack.onAlarmLoaded(alarms);
             }
-        }));
-
+        });
     }
 
     @Override

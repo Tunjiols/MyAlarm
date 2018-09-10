@@ -24,7 +24,7 @@ public interface AlarmPreferenceApi {
 
 
 
-        List<Alarm> prefGetAllAlarms(@NonNull LoadAlarmCallback callback);
+        void prefGetAllAlarms(@NonNull LoadAlarmCallback callback);
 
         void prefGetAlarm(@NonNull String alarmId, @NonNull GetAlarmCallback callback);
 
