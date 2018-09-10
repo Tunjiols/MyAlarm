@@ -7,6 +7,9 @@ package com.olsttech.myalarm.addAlarm;
 public interface AddAlarmContract {
   interface View {
    void showAddAlarm()
+   void showRepeatScreen()
+   void showLabelScreen();
+   void showSoundsListScreen();
   }
   
   interface Presenter{
@@ -14,11 +17,7 @@ public interface AddAlarmContract {
    void addAlarmLabel();
    void setSound();
    void setAlarmTime();
+   void setSnooze();
    void saveAlarm(@NonNull Alarm alarm, String alarmId);
   }
-  
-  interface OnViewClickListener{
-   
-  }
-
 }
