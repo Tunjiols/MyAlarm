@@ -27,14 +27,20 @@ public interface AlarmContract {
         void getAlarmRadioBtnStatus();
     }
     
-    interface AlarmItemListener {
+    interface AlarmItemClickListener {
 
         void onAlarmClick(Alarm alarm);
     }
 
-    interface UserActionListener{
+    interface AddAlarmClickListener{
         void addNewAlarm();
+    }
+    
+    interface EditAlarmClickListener{
         void editAlarm();
+    }
+    
+    interface AlarmItemBtnClickListener{
         void radioBtnAlarm(@NonNull Alarm alarm);
     }
 }
