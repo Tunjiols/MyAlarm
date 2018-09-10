@@ -19,7 +19,7 @@ import com.olsttech.myalarm.models.Alarm;
 import java.util.List;
 
 public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View,  
-               AlarmContract.UserActionListener, View.OnClickListener{
+                View.OnClickListener{
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private AlarmContract.Presenter mAlarmPresenter;
@@ -100,10 +100,20 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     public void onClick(View v) {
         switch(v.getId){
             case R.id.edit:
-                mAlarmPresenter.showEditAlarm(@NonNull Alarm alarm);
+                AlarmPresenter.EditAlarmClickListener = new AlarmPresenter.EditAlarmClickListener{
+                    @Override
+                    public void editAlarm(){
+                        mAlarmPresenter.editAlarm();
+                    };
+                }
                 break;
             case R.Id.add:
-                mAlarmPresenter.showAddAlarm();
+                AlarmPresenter.AddAlarmClickListener = new AlarmPresenter.AddAlarmClickListener{
+                    @Override
+                    public void addNewAlarm(){
+                        mAlarmPresenter.addAlarm();
+                    };
+                }
                 break;
         }
     }
