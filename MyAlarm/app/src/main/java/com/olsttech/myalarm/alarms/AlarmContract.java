@@ -21,13 +21,15 @@ public interface AlarmContract {
 
     interface Presenter{
         void getAllAlarms();
-        void getAlarm();
+        void getAlarm(@NonNull String alarmId);
+        void addAlarm(Alarm alarm);
+        void editAlarm(Alarm alarm, String alarmId);
         void getAlarmRadioBtnStatus();
     }
 
     interface UserActionListener{
         void addNewAlarm();
-        void loadAlarm();
+        void editAlarm();
         void radioBtnAlarm(@NonNull Alarm alarm);
     }
 }
