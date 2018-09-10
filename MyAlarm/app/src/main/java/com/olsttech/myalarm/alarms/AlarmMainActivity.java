@@ -18,11 +18,14 @@ import com.olsttech.myalarm.models.Alarm;
 
 import java.util.List;
 
-public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View{
+public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View,  
+               AlarmContract.UserActionListener, View.OnClickListener{
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private AlarmContract.Presenter mAlarmPresenter;
     private RecyclerView mRecyclerView;
+    private TextView mEdit;
+    private TextView mAdd;
     private LinearLayoutManager mLinearLayoutManager;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,8 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private void bindViews(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclayout);
+        mEdit = (TextView) findViewById(R.Id.edit);
+        mAdd = (TextView) findViewById(R.Id.add);
         fab = (FloatingActionButton) findViewById(R.id.fab);
     }
 
@@ -68,6 +73,11 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     public void showAddAlarm() {
 
     }
+    
+    @Override
+    public void showAlarmEditState(@NonNull String alarmId) {
+
+    }
 
     @Override
     public void showEditAlarm(@NonNull Alarm alarm) {
@@ -86,6 +96,18 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId){
+            case R.id.edit:
+                mAlarmPresenter.showEditAlarm(@NonNull Alarm alarm);
+                break;
+            case R.Id.add:
+                mAlarmPresenter.showAddAlarm();
+                break;
+        }
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
