@@ -29,6 +29,15 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     public void getAlarm() {
 
     }
+    
+    @Override
+    public void addAlarm(){
+    
+    }
+    
+    public void editAlarm(){
+    
+    }
 
     @Override
     public void getAlarmRadioBtnStatus() {
