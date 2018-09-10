@@ -26,6 +26,11 @@ public interface AlarmContract {
         void editAlarm(Alarm alarm, String alarmId);
         void getAlarmRadioBtnStatus();
     }
+    
+    interface AlarmItemListener {
+
+        void onAlarmClick(Alarm alarm);
+    }
 
     interface UserActionListener{
         void addNewAlarm();
