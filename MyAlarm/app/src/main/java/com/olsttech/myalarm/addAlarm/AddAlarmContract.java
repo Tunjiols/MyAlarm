@@ -9,7 +9,7 @@ import com.olsttech.myalarm.models.Alarm;
  */
 
 public interface AddAlarmContract {
-    
+
     interface View {
         void showAddAlarm();
         void showRepeatScreen();

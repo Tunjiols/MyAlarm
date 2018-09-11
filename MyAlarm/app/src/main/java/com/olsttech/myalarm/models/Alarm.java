@@ -10,7 +10,18 @@ public class Alarm {
     public long alamTime;
     public String alarmLabel;
     public String alarmDay;
+    public String alarmSound;
     public boolean alarmStatus;
+
+    public Alarm (){}
+
+    public Alarm (long alamTime, String alarmLabel, String alarmDay, String alarmSound, boolean alarmStatus){
+        this.alamTime = alamTime;
+        this.alarmLabel = alarmLabel;
+        this.alarmDay = alarmDay;
+        this.alarmSound = alarmSound;
+        this.alarmStatus = alarmStatus;
+    }
 
     public long getAlamTime() {
         return alamTime;
@@ -34,6 +45,14 @@ public class Alarm {
 
     public void setAlarmDay(String alarmDay) {
         this.alarmDay = alarmDay;
+    }
+
+    public String getAlamSound() {
+        return alarmSound;
+    }
+
+    public void setAlamSound(String alarmSound) {
+        this.alarmSound = alarmSound;
     }
 
     public boolean isAlarmStatus() {
