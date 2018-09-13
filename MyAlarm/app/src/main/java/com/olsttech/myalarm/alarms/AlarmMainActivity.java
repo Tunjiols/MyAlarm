@@ -76,8 +76,16 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     }
     
     @Override
-    public void showAlarmEditScreen(@NonNull String alarmId) {
-
+    public void showAlarmEditScreen(@NonNull String alarmId, @NonNull Alarm AlarmList) {
+        
+        AlarmItemClickListener mAlarmItemClickListener = new AlarmItemClickListener(){
+            @Override
+            public void onAlarmClicked(@NonNull Alarm clickedAlarm){
+                //open alarm edit activity
+            }
+        }
+        
+        EditAlarmAdapter editAdapter = new EditAlarmAdapter(AlarmList, mAlarmItemClickListener);
     }
 
     @Override
@@ -137,10 +145,10 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     priavate static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
     
         private List<Alarm> mAlarmList;
-        private AlarmContract.EditAlarmClickListener mEditAlarmClickListener;
+        private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
         
-        public EditAlarmAdapter(List<Alarm> alarmList, AlarmContract.EditAlarmClickListener editAlarmClickListener){
-            this.mEditAlarmClickListener = editAlarmClickListener;
+        public EditAlarmAdapter(List<Alarm> alarmList, AlarmContract.AlarmItemClickListener alarmItemClickListener){
+            this.mAlarmItemClickListenerr = alarmItemClickListener;
             this.mAlarmList = alarmList;
         }
         
@@ -150,7 +158,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(R.layout.home_recycler_list, parent, false);
             
-            return new ViewHolder(view, mEditAlarmClickListener);
+            return new ViewHolder(view, mAlarmItemClickListener);
         }
         
         @Override
@@ -180,11 +188,11 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             public ImageView mDeleteIcon;
             public ImageView mForward;
             //public ImageView mItemDelete
-            public AlarmContract.EditAlarmClickListener mEditAlarmClickListener;
+            public AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
             
-            public ViewHolder(View itemView, AlarmContract.EditAlarmClickListener editAlarmClickListener){
+            public ViewHolder(View itemView, AlarmContract.AlarmItemClickListener alarmItemClickListener){
                 super(itemView);
-                mEditAlarmClickListener = editAlarmClickListener;
+                mAlarmItemClickListener = alarmItemClickListener;
                 mTime 	    = (TextView)itemView.findViewById(R.id.alarm_time);
                 mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
                 mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
@@ -201,7 +209,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             public onClick(View v){
                 int position = getAdapterPosition();
                 Alarm alarm = getitem(position);
-                editAlarmClickListener.editAlarm(alarm);
+                alarmItemClickListener.onAlarmClicked(alarm);
             }
         }
     }
