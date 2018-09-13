@@ -80,6 +80,8 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
         public TextView mDay;
         public TextView mLabel;
         public ImageView mStatus;
+        public ImageView mForward;
+        public ImageView mDeleteIcon;
 
         public ViewHolder(final View itemView){
             super(itemView);
@@ -87,6 +89,11 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
             mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
             mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
             mStatus  = (ImageView) itemView.findViewById(R.id.alarm_status);
+            mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
+            mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
+            
+            mDeleteIcon.setVisibility(View.INVISIBLE);
+            mForward.setVisibility(View.INVISIBLE);
         }
     }
 
