@@ -2,12 +2,12 @@ package com.olsttech.myalarm.addAlarm;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
 import com.olsttech.myalarm.R;
 
@@ -17,62 +17,38 @@ import com.olsttech.myalarm.R;
 
 public class EditAlarmActivity extends AppCompactActivity implements EditAlarmContract.View{
 
-    private Toolbar toolbar;
-    private TextView mCancel;
-    private TextView mSave;
-    private TextView mRepeat_value;
-    private TextView mLabel_value;
-    private TextView mSound_value;
-    private Button mSnoozeBtn;
-    
-    private EditAlarmContract.Presenter mEditAlarmPresenter;
-
-    public static Intent startActivity(Context context) {
+    public static void startActivity(Context context) {
         Intent intent = new Intent(context, EditAlarmActivity.class);
-        return intent();
+        context.startActivity(intent);
     }
 
     @Override
-    public void onCreateView(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setContentView(R.layout.fragment_addalarm);
-        bindViews();
-        initSetup();
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_addalarm);
 
-    private void bindView(){
-        mCancel = rootView.findViewById(R.id.cancel);
-        mSave = rootView.findViewById(R.id.save);
-        mRepeat_value = rootView.findViewById(R.id.repeat_value);
-        mLabel_value = rootView.findViewById(R.id.label_value);
-        mSound_value = rootView.findViewById(R.id.sound_value);
-        mSnoozeBtn = rootView.findViewById(R.id.snoozeBtn);  
-    }
-    
-    private initSetup(){
-        setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
-        mEditAlarmPresenter = new EditAlarmPresenter();
+        if (null == savedInstanceState) {
+            initFragment(EditAlarmFragment.newInstance());
+        }
     }
 
     @Override
-    public void showRepeatScreen() {
-
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
-    @Override
-    public void showLabelScreen() {
-
+    private void initFragment(Fragment editFragment) {
+        // Add the AddNoteFragment to the layout
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.contentFrame, editFragment);
+        transaction.commit();
     }
-
-    @Override
-    public void showSoundsListScreen() {
-
+/**
+    @VisibleForTesting
+    public IdlingResource getCountingIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
-    
-    @Override
-    public boolean setSnooze(){
-    
-    }
+    */
 }
