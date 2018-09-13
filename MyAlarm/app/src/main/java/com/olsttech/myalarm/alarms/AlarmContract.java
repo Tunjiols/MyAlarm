@@ -29,7 +29,7 @@ public interface AlarmContract {
     
     interface AlarmItemClickListener {
 
-        void onAlarmClick(Alarm alarm);
+        void onAlarmClicked(@NonNull Alarm alarm);
     }
 
     interface AddAlarmClickListener{
