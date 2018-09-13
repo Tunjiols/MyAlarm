@@ -45,8 +45,14 @@ public class AlarmPresenter implements AlarmContract.Presenter{
         mView.showAddAlarm();
     }
     
-    public void editAlarm(){
+    @Override
+    public void openEditAlarmScreen(@NonNull Alarm clickedAlarm){
+        mView.showEditAlarm(clickedAlarm);
+    }
     
+    @Override
+    public void editAlarm( @NonNull Alarm alarmList){
+        mView.showAlarmEditScreen(0, alarmList);
     }
 
     @Override
