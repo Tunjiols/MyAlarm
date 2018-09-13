@@ -72,7 +72,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     @Override
     public void showAddAlarm() {
-
+        AddAlarmActivity.startActivity(getContext());
     }
     
     @Override
