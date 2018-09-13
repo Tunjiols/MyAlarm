@@ -28,6 +28,8 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private TextView mEdit;
     private TextView mAdd;
     private LinearLayoutManager mLinearLayoutManager;
+    
+    private List<Alarm> mAlarmList;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private void initSetup(){
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mAlarmList = new ArrayList<Alarm>();
 
         mAlarmPresenter = new AlarmPresenter(this, this);
         mAlarmPresenter.getAllAlarms();
@@ -65,6 +68,9 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     @Override
     public void showAlarms(List<Alarm> alarms) {
+    
+        mAlarmList = alarms;
+        
         AlarmRecyclerViewAdapter recyclerViewAdapter = new AlarmRecyclerViewAdapter(this,
                 alarms, this);
         mRecyclerView.setAdapter(recyclerViewAdapter);
@@ -76,7 +82,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     }
     
     @Override
-    public void showAlarmEditScreen(String alarmId, @NonNull Alarm AlarmList) {
+    public void showAlarmEditScreen(String alarmId, @NonNull Alarm alarmList) {
         
         AlarmItemClickListener mAlarmItemClickListener = new AlarmItemClickListener(){
             @Override
@@ -85,7 +91,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             }
         }
         
-        EditAlarmAdapter editAdapter = new EditAlarmAdapter(AlarmList, mAlarmItemClickListener);
+        EditAlarmAdapter editAdapter = new EditAlarmAdapter(alarmList, mAlarmItemClickListener);
     }
 
     @Override
@@ -109,20 +115,17 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.edit:
-                new AlarmContract.EditAlarmClickListener() {
-                    @Override
-                    public void editAlarm() {
-                        mAlarmPresenter.editAlarm();
-                    }
-                };
+                
+                mAlarmPresenter.editAlarm(mAlarmList);
+               
                 break;
             case R.id.add:
-                new AlarmContract.AddAlarmClickListener() {
-                    @Override
-                    public void addNewAlarm() {
+               // new AlarmContract.AddAlarmClickListener() {
+               //     @Override
+                //    public void addNewAlarm() {
                         mAlarmPresenter.addAlarm();
-                    }
-                };
+               //     }
+              //  };
                 break;
         }
     }
