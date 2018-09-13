@@ -9,10 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-public class ShowRepeatActivity extends AppCompatActivity{
+public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatContract.View{
 
     private ListView mDayListView;
     private List<Srting> mDayList;
+    private ShowRepeatContract.Presenter presenter;
     
     public void startActivity(Context context, int flag){
         Intent intent = new Intent(context, ShowRepeatActivity.class);
@@ -41,7 +42,23 @@ public class ShowRepeatActivity extends AppCompatActivity{
     }
     
     private void initSetup(){
+        presenter.setView();
+    }
     
+    @Override
+    public void showView(@NonNull List<DayModel> getDayList){
+        DayClickListener dayClickListener = DayClickListener(){
+            @Override
+            public onDayClicked(DayModel dayModel){
+                 if(daymodel.getChecked == false)
+                     daymodel.setChecked(true);
+                 else
+                     daymodel.setChecked(false);
+            }
+        }
+        
+        DayListAdapter dayListAdapter = new DayListAdpater(getDayList, dayClickListener);
+        mDayListView.setApater(dayListAdapter);
     }
     
     private static List<String> getDayList(){
@@ -60,17 +77,26 @@ public class ShowRepeatActivity extends AppCompatActivity{
         
         @Override
         public View getView(int position, View view, ViewGroup parent) {
+            LayoutInflater inflater = LayoutInflate.from(parent.getContext());
+            inflater.inflate(R.layout., parent, false);
+            
+            ViewHolder viewHolder = new ViewHolder(view, mDayClickListener);
+            viewHolder.mText.setText(mDayList.get(position).getDay());
+            viewHolder.mCheckBox.setBoolean(mDayList.get(position).getChecked());
+            
             return view;
         }
         
         private class ViewHolder implements View.OnClickListener {
         
-            private TextView mText;
-            private CheckBox mCheckBox;
+            public TextView mText;
+            public CheckBox mCheckBox;
             
             public ViewHolder(View view, DayClickListener dayClickListener){
-                mText = view.findViewById(R.id.text);
-                mCheckBox = view.findViewById(R.id.checkbox);
+                mText = (TextView)view.findViewById(R.id.text);
+                mCheckBox = (CheckBox)view.findViewById(R.id.checkbox);
+                
+                view.setOnClickListener(this);
             }
             
             @Override
