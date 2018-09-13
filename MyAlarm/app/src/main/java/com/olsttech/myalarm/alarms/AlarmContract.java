@@ -24,6 +24,7 @@ public interface AlarmContract {
         void getAlarm(@NonNull String alarmId);
         void addAlarm();
         void editAlarm();
+        void openEditAlarmScreen(@NonNull Alarm clickedAlarm);
         void getAlarmRadioBtnStatus();
     }
     
