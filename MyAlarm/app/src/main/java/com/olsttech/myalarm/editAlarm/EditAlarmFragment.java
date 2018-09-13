@@ -1,4 +1,4 @@
-package com.olsttech.myalarm.addAlarm;
+package com.olsttech.myalarm.editAlarm;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -90,6 +90,6 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     
     @Override
     public boolean setSnooze(){
-    
+        return true;
     }
 }

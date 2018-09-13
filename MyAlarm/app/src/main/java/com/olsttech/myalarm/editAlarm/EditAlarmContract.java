@@ -1,4 +1,4 @@
-package com.olsttech.myalarm.addAlarm;
+package com.olsttech.myalarm.editAlarm;
 
 import android.support.annotation.NonNull;
 

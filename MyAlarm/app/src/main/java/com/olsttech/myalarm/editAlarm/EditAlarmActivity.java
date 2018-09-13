@@ -1,9 +1,9 @@
-package com.olsttech.myalarm.addAlarm;
+package com.olsttech.myalarm.editAlarm;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.olsttech.myalarm.R;
 
 /**
- * Created by adetunji on 01/09/2018.AddAlarmFragment
+ * Created by adetunji on 01/09/2018.EditAlarmActivity
  */
 
-public class EditAlarmActivity extends AppCompactActivity implements EditAlarmContract.View{
+public class EditAlarmActivity extends AppCompatActivity {
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, EditAlarmActivity.class);

@@ -1,4 +1,12 @@
- public class DayModel{
+package com.olsttech.myalarm.models;
+
+
+
+/**
+ * Created by adetunji on 01/09/2018. DayModel setup
+ */
+
+public class DayModel{
  
         private String mDay;
         private boolean mChecked;
@@ -24,4 +32,4 @@
             this.mChecked = checked;
         }
         
-    }
+}

@@ -1,22 +1,30 @@
 package com.olsttech.myalarm.alarms;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
 import com.olsttech.myalarm.adapters.AlarmRecyclerViewAdapter;
+import com.olsttech.myalarm.addAlarm.AddAlarmActivity;
+import com.olsttech.myalarm.editAlarm.EditAlarmActivity;
 import com.olsttech.myalarm.models.Alarm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View,  
@@ -79,18 +87,18 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     @Override
     public void showAddAlarm() {
         //Start AddAlarmActivity
-        AddAlarmActivity.startActivity(getContext());
+        AddAlarmActivity.startActivity(getParent());
     }
     
     @Override
-    public void showAlarmEditScreen(String alarmId, @NonNull Alarm alarmList) {
+    public void showAlarmEditScreen(String alarmId, @NonNull List<Alarm> alarmList) {
         
-        AlarmItemClickListener mAlarmItemClickListener = new AlarmItemClickListener(){
+        AlarmContract.AlarmItemClickListener mAlarmItemClickListener = new AlarmContract.AlarmItemClickListener(){
             @Override
             public void onAlarmClicked(@NonNull Alarm clickedAlarm){
                 mAlarmPresenter.openEditAlarmScreen(clickedAlarm);
             }
-        }
+        };
         
         EditAlarmAdapter editAdapter = new EditAlarmAdapter(alarmList, mAlarmItemClickListener);
     }
@@ -98,7 +106,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     @Override
     public void showEditAlarmScreen(@NonNull Alarm alarm) {
         //open alarm edit activity
-        EditAlarmActivity.startActivity(getContext());
+        EditAlarmActivity.startActivity(getParent());
     }
 
     @Override
@@ -147,21 +155,21 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         return super.onOptionsItemSelected(item);
     }
 
-    priavate static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
+    private static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
     
         private List<Alarm> mAlarmList;
         private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
         
         public EditAlarmAdapter(List<Alarm> alarmList, AlarmContract.AlarmItemClickListener alarmItemClickListener){
-            this.mAlarmItemClickListenerr = alarmItemClickListener;
+            this.mAlarmItemClickListener = alarmItemClickListener;
             this.mAlarmList = alarmList;
         }
         
         @Override
-        public ViewHolder onCreateViewholder(ViewGroup parent, int viewType ){
-            Context context = parent.getCntext();
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType ){
+            Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(R.layout.home_recycler_list, parent, false);
+            View view = inflater.inflate(R.layout.edit_recycler_list, parent, false);
             
             return new ViewHolder(view, mAlarmItemClickListener);
         }
@@ -169,11 +177,11 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
             Alarm alarm = mAlarmList.get(position);
-            
-            holder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
-            holder.mDay.setText(mAlarmList.get(position).getAlarmDay());
-            holder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
-           // holder.mStatus = mAlarmList.get(position).isAlarmStatus();
+
+            viewHolder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
+            viewHolder.mDay.setText(mAlarmList.get(position).getAlarmDay());
+            viewHolder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
+           // viewHolder.mStatus = mAlarmList.get(position).isAlarmStatus();
            
         }
         
@@ -184,7 +192,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             }else return 0;
         }
          
-        public class ViewHolder extends RecyclerView.View, implements View.OnclickListener{
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             
             public TextView mTime;
             public TextView mDay;
@@ -205,16 +213,16 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
                 mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
                 //mItemDelete  = (ImageView) itemView.findViewById(R.id.alarm_itemDelete);
-                mStatus.setVisibility(View.INVISIBLE):
+                mStatus.setVisibility(View.INVISIBLE);
                 
-                itemView.setOnclickListener(this);
+                itemView.setOnClickListener(this);
             }
             
             @Override
-            public onClick(View v){
+            public void onClick(View v){
                 int position = getAdapterPosition();
-                Alarm alarm = getitem(position);
-                alarmItemClickListener.onAlarmClicked(alarm);
+                Alarm alarm = mAlarmList.get(position);
+                mAlarmItemClickListener.onAlarmClicked(alarm);
             }
         }
     }

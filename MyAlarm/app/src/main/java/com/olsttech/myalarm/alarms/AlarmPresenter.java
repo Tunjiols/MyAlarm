@@ -1,6 +1,7 @@
 package com.olsttech.myalarm.alarms;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
@@ -44,15 +45,15 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     public void addAlarm(){
         mView.showAddAlarm();
     }
-    
+
     @Override
     public void openEditAlarmScreen(@NonNull Alarm clickedAlarm){
-        mView.showEditAlarm(clickedAlarm);
+        mView.showEditAlarmScreen(clickedAlarm);
     }
     
     @Override
-    public void editAlarm( @NonNull Alarm alarmList){
-        mView.showAlarmEditScreen(0, alarmList);
+    public void editAlarm(@NonNull List<Alarm>  alarmList){
+        mView.showAlarmEditScreen("", alarmList);
     }
 
     @Override
