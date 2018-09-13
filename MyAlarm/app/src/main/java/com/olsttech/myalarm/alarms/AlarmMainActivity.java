@@ -76,12 +76,12 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     }
     
     @Override
-    public void showAlarmEditScreen(@NonNull String alarmId, @NonNull Alarm AlarmList) {
+    public void showAlarmEditScreen(String alarmId, @NonNull Alarm AlarmList) {
         
         AlarmItemClickListener mAlarmItemClickListener = new AlarmItemClickListener(){
             @Override
             public void onAlarmClicked(@NonNull Alarm clickedAlarm){
-                //open alarm edit activity
+                mAlarmPresenter.openEditAlarmScreen(clickedAlarm);
             }
         }
         
@@ -90,7 +90,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     @Override
     public void showEditAlarm(@NonNull Alarm alarm) {
-
+        //open alarm edit activity
     }
 
     @Override
