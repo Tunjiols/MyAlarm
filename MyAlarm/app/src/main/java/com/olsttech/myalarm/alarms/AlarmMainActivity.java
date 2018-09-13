@@ -133,4 +133,76 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
         return super.onOptionsItemSelected(item);
     }
+
+    priavate static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
+    
+        private List<Alarm> mAlarmList;
+        private AlarmContract.EditAlarmClickListener mEditAlarmClickListener;
+        
+        public EditAlarmAdapter(List<Alarm> alarmList, AlarmContract.EditAlarmClickListener editAlarmClickListener){
+            this.mEditAlarmClickListener = editAlarmClickListener;
+            this.mAlarmList = alarmList;
+        }
+        
+        @Override
+        public ViewHolder onCreateViewholder(ViewGroup parent, int viewType ){
+            Context context = parent.getCntext();
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.home_recycler_list, parent, false);
+            
+            return new ViewHolder(view, mEditAlarmClickListener);
+        }
+        
+        @Override
+        public void onBindViewHolder(ViewHolder viewHolder, int position) {
+            Alarm alarm = mAlarmList.get(position);
+            
+            holder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
+            holder.mDay.setText(mAlarmList.get(position).getAlarmDay());
+            holder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
+           // holder.mStatus = mAlarmList.get(position).isAlarmStatus();
+           
+        }
+        
+        @Override
+        public int getItemCount() {
+            if (mAlarmList != null) {
+                return this.mAlarmList.size();
+            }else return 0;
+        }
+         
+        public class ViewHolder extends RecyclerView.View, implements View.OnclickListener{
+            
+            public TextView mTime;
+            public TextView mDay;
+            public TextView mLabel;
+            public ImageView mStatus;
+            public ImageView mDeleteIcon;
+            public ImageView mForward;
+            //public ImageView mItemDelete
+            public AlarmContract.EditAlarmClickListener mEditAlarmClickListener;
+            
+            public ViewHolder(View itemView, AlarmContract.EditAlarmClickListener editAlarmClickListener){
+                super(itemView);
+                mEditAlarmClickListener = editAlarmClickListener;
+                mTime 	    = (TextView)itemView.findViewById(R.id.alarm_time);
+                mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
+                mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
+                mStatus  = (ImageView) itemView.findViewById(R.id.alarm_status);
+                mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
+                mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
+                //mItemDelete  = (ImageView) itemView.findViewById(R.id.alarm_itemDelete);
+                mStatus.setVisibility(View.INVISIBLE):
+                
+                itemView.setOnclickListener(this);
+            }
+            
+            @Override
+            public onClick(View v){
+                int position = getAdapterPosition();
+                Alarm alarm = getitem(position);
+                editAlarmClickListener.editAlarm(alarm);
+            }
+        }
+    }
 }
