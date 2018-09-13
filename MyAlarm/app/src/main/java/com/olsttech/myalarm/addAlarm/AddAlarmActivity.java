@@ -16,6 +16,12 @@ import com.olsttech.myalarm.R;
  */
 
 public class AddAlarmActivity extends AppCompatActivity{
+
+    public static void startActivity(Context context){
+        Intent intent = new Intent(context, AddAlarmActivity.class);
+        context.startActivity(intent);
+    }
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
