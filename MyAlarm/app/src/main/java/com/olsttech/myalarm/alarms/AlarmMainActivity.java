@@ -78,6 +78,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     @Override
     public void showAddAlarm() {
+        //Start AddAlarmActivity
         AddAlarmActivity.startActivity(getContext());
     }
     
@@ -95,8 +96,9 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     }
 
     @Override
-    public void showEditAlarm(@NonNull Alarm alarm) {
+    public void showEditAlarmScreen(@NonNull Alarm alarm) {
         //open alarm edit activity
+        EditAlarmActivity.startActivity(getContext());
     }
 
     @Override
