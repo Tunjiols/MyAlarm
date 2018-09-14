@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SoundsContract{
     interface View{
-        void loadView();
+        void loadView(@NonNull List<String> soundNames);
     }
     
     interface Presenter{
