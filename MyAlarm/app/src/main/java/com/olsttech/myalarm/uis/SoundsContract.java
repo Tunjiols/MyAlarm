@@ -23,6 +23,6 @@ public interface SoundsContract{
     }
     
     interface ClickListener{
-        onSoundSelect(String soundName);
+        onSoundSelect(@Nullable SoundModel soundModel);
     }
 }
