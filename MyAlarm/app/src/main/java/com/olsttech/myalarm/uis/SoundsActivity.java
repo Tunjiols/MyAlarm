@@ -25,13 +25,18 @@ import java.util.List;
 
 public class SoundstActivity extends AppCompatActivity implements SoundsContract.View{
 
-    private RecyclerView mDayListView;
-    private List<String> mDayList;
+    private RecyclerView mSoundListView;
+    private List<SoundModel> mSoundsList;
     private SoundsContract.Presenter presenter;
+    private String mSound;
+    private static final String INIT_SOUND = "init_sound";
     
-    public void startActivity(Context context, int flag){
+    public void startActivity(Context context, int flag, String sound, SoundsPresenter.SoundCallBack soundCallback){
         Intent intent = new Intent(context, SoundsActivity.class);
+        intent.putExtra(INIT_SOUND, sound);
         intent.setFlags(flag);
+        
+        soundCallback.callBack(mSound);
         
         context.startActivity(intent);
     }
@@ -53,7 +58,7 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
     
     private void bindView(){
 
-        mDayListView = (RecyclerView) findViewById(R.id.recyclayout);
+        mSoundListView = (RecyclerView) findViewById(R.id.recyclayout);
     }
     
     private void initSetup(){
@@ -62,12 +67,13 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
     }
     
     @Override
-    public void loadView(@NonNull List<String> soundsList){
+    public void loadView(@NonNull List<SoundModel> soundsList){
         SoundsPresenter.ClickListener soundClickListener = new SoundsPresenter.ClickListener(){
             @Override
             public void onSoundSelect(SoundModel soundModel){
                  if(!soundModel.getChecked())
                      soundModel.setChecked(true);
+                     mSound = soundModel.getSound();
                  else
                      soundModel.setChecked(false);
             }
@@ -75,8 +81,8 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getParent());
         SoundsListAdapter soundsListAdapter = new SoundsListAdapter(soundsList, soundClickListener);
-        mDayListView.setLayoutManager(linearLayoutManager);
-        mDayListView.setAdapter(soundsListAdapter);
+        mSoundListView.setLayoutManager(linearLayoutManager);
+        mSoundListView.setAdapter(soundsListAdapter);
     }
     
     private class SoundsListAdapter extends RecyclerView.Adapter<SoundsListAdapter.ViewHolder> {
