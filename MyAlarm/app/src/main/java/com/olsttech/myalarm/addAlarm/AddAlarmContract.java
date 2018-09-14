@@ -12,9 +12,9 @@ public interface AddAlarmContract {
 
     interface View {
         void showAddAlarm();
-        void showRepeatScreen();
-        void showLabelScreen();
-        void showSoundsListScreen();
+        void showRepeatScreen(AddAlarmCallBack callbacks);
+        void showLabelScreen(AddAlarmCallBack callbacks);
+        void showSoundsListScreen(AddAlarmCallBack callbacks);
     }
   
     interface Presenter{
@@ -26,5 +26,9 @@ public interface AddAlarmContract {
         void saveAlarm(@NonNull Alarm alarm, String alarmId);
     }
 
+    interface AddAlarmCallBack{
+        void callBack(@Nullable String value);
+    }
+    
     void onAlarmAdded(@NonNull Alarm alarm);
 }
