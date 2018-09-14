@@ -19,5 +19,7 @@ public interface LabelContract{
         loadlabelEditScreen();
     }
     
-    void callBack(@Nullable String label);
+    interface LabelCallBack{
+        void callBack(@Nullable String label);
+    }
 }
