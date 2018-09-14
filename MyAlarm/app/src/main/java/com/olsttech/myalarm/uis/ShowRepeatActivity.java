@@ -30,7 +30,7 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
     private ShowRepeatContract.Presenter presenter;
     private List<DayModel> mSelectedDays;
     
-    public void startActivity(Context context, int flag, ShowRepeatActivity.RepeatcallBack repeatCallback){
+    public void startActivity(Context context, int flag, ShowRepeatPresenter.RepeatcallBack repeatCallback){
         Intent intent = new Intent(context, ShowRepeatActivity.class);
         intent.setFlags(flag);
         mSelectedDays = new ArrayList<DayModel>():
