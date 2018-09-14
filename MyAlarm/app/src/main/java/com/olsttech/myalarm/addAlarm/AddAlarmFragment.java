@@ -15,7 +15,8 @@ import com.olsttech.myalarm.R;
  * Created by adetunji on 01/09/2018.AddAlarmFragment
  */
 
-public class AddAlarmFragment extends Fragment implements AddAlarmContract.View{
+public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
+                    View.OnCLickListener{
 
     private TextView mCancel;
     private TextView mSave;
@@ -23,8 +24,12 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View{
     private TextView mLabel_value;
     private TextView mSound_value;
     private Button mSnoozeBtn;
+    
+    private AddAlarmContract.Presenter mAddAlarmPresenter;
+    private Alarm mAlarm;
 
     public static AddAlarmFragment newInstance() {
+        mAddAlarmPresenter = new AddAlarmPresenter(this);
         return new AddAlarmFragment();
     }
 
@@ -91,5 +96,29 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View{
     @Override
     public void showSoundsListScreen() {
 
+    }
+    
+    @Override
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.cancel:
+                break;
+            case R.id.save:
+                String alarmId = "1";
+                mAddAlarmPresenter.saveAlarm( mAlarm, alarmId);
+                break;
+            case R.id.repeat_layout:
+                mAddAlarmPresenter.setRepeat();
+                break;
+            case R.id.label_layout:
+                mAddAlarmPresenter.addAlarmLabel();
+                break;
+            case R.id.sound_layout:
+                mAddAlarmPresenter.setSound();
+                break;
+            case R.id.snooze_btn:
+                mAddAlarmPreseenter.setSnooze();
+                break;
+        }
     }
 }
