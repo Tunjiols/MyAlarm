@@ -15,7 +15,8 @@ import com.olsttech.myalarm.R;
  * Created by adetunji on 01/09/2018.EditAlarmFragment
  */
 
-public class EditAlarmFragment extends Fragment implements EditAlarmContract.View{
+public class EditAlarmFragment extends Fragment implements EditAlarmContract.View,
+                    View.OnClickListener{
 
     private TextView mCancel;
     private TextView mSave;
@@ -23,8 +24,11 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     private TextView mLabel_value;
     private TextView mSound_value;
     private Button mSnoozeBtn;
+    
+    private EditAlarmPresenter mEditAlarmPresenter;
 
     public static EditAlarmFragment newInstance() {
+        mEditAlarmPresenter = new EditAlarmPresenter(this);
         return new EditAlarmFragment();
     }
 
@@ -91,5 +95,26 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     @Override
     public boolean setSnooze(){
         return true;
+    }
+    
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.cancel:
+                
+                break;
+            case R.id.save:
+                
+                break;
+            case R.id.label_layout:
+            
+                break;
+            case R.id.sound_layout:
+                
+                break;
+            case R.id.snooze_layout:
+                
+                break
+        }
+    
     }
 }
