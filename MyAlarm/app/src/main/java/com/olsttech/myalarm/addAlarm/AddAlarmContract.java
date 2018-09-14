@@ -12,9 +12,10 @@ public interface AddAlarmContract {
 
     interface View {
         void showAddAlarm();
-        void showRepeatScreen(AddAlarmCallBack callbacks);
-        void showLabelScreen(AddAlarmCallBack callbacks);
-        void showSoundsListScreen(AddAlarmCallBack callbacks);
+        void showRepeatScreen();
+        void showLabelScreen();
+        void showSoundsListScreen();
+        void setSnooze();
     }
   
     interface Presenter{
