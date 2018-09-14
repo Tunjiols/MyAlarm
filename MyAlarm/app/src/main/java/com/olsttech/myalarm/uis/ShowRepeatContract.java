@@ -15,5 +15,8 @@ public interface ShowRepeatContract{
     interface Presenter{
         void setView();
     }
-
+    
+    interface RepeatCallBack {
+        void callBack(List<DayModel> selectedWeeks)
+    }
 }
