@@ -15,14 +15,19 @@ import com.olsttech.myalarm.R;
 public class LabelActivity extends AppCompatActivity implements LabelContract.View, 
                             View.OnClickListener{
 
+    private static final String INIT_LABEL = "initLabel";
     private LabelContract.Presenter presenter;
     private EditText mEditText;
     private TextView mCancel;
     private TextView mSave;
+    privte String mLabel;
     
-    public void startActivity(Context context, int flag){
+    
+    public void startActivity(Context context, int flag, String label, LabelPresenter.LabelCallBack callback){
         Intent intent = new Intent(context, LabelActivity.class);
+        intent.putExtra(INIT_LABEL, label);
         intent.setFlags(flag);
+        callback.callBack(mLabel);
         
         context.startActivity(intent);
     }
@@ -52,6 +57,8 @@ public class LabelActivity extends AppCompatActivity implements LabelContract.Vi
     private void initSetup(){
         presenter = new LabelPresenter(this);
         presenter.loadlabelEditScreen();
+        //if(!INIT_LABEL == null)
+           // mLabel = null;
     }
     
     @Override
@@ -70,12 +77,15 @@ public class LabelActivity extends AppCompatActivity implements LabelContract.Vi
                     label = mEditText.getText().trim();
                     labelcallback.callback(label);
                     //implement close the activity
+                    mLabel = label;
                     finish();
                 }
                 break;
             case R.id.cancel:
-                if(!TextUtils.isEmpty(mEditText.getText()))
+                if(!TextUtils.isEmpty(mEditText.getText())){
                     mEditText.setText("");
+                    mLabel = null;
+                }
                 break;
         }
     }
