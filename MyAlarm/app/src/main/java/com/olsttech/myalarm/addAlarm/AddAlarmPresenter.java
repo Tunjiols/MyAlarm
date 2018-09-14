@@ -10,37 +10,39 @@ import com.olsttech.myalarm.models.Alarm;
 
 public class AddAlarmPresenter implements AddAlarmContract.Presenter{
 
-    public AddAlarmPresenter(){
-
+    private AddAlarmContract.View mView;
+    
+    public AddAlarmPresenter(AddAlarmContract.View view){
+        this.mView = view;
     }
 
     @Override
     public void setRepeat() {
-
+        mView.showRepeatScreen();
     }
 
     @Override
     public void addAlarmLabel() {
-
+        mView.showLabelScreen();
     }
 
     @Override
     public void setSound() {
-
+        mView.showSoundsListScreen();
     }
 
     @Override
     public void setAlarmTime() {
-
+       
     }
 
     @Override
     public void setSnooze() {
-
+        
     }
 
     @Override
     public void saveAlarm(@NonNull Alarm alarm, String alarmId) {
-
+        
     }
 }
