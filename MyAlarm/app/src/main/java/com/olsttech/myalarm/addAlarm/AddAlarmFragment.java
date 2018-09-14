@@ -20,13 +20,19 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
     private TextView mCancel;
     private TextView mSave;
+    private TextView mAlarmTime;
     private TextView mRepeat_value;
     private TextView mLabel_value;
     private TextView mSound_value;
     private Button mSnoozeBtn;
     
     private AddAlarmContract.Presenter mAddAlarmPresenter;
-    private Alarm mAlarm;
+    
+    private long mAlarmTime;
+    private String  mAlarmLabel;
+    private String mAlarmDay;
+    private String mAlarmSound;
+    private boolean mAlarmStatus;
 
     public static AddAlarmFragment newInstance() {
         mAddAlarmPresenter = new AddAlarmPresenter(this);
@@ -89,11 +95,19 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 new  ShowRepeatPresenter.RepeatCallBack{
                     @Override
                     void callBack(List<DayModel> selectedWeeks){
-                        for(DayModel week ; selectedWeeks){
-                            week.getText();
+                        String repeatDays = "No repeat";
+                        if(null == selectedWeeks ){
+                            mRepeat_value.setText(repeatDays);
+                            mAlarmDay = repeatDays;
                         }
-                        mRepeat_value.setText("No repeat");
-                    }
+                        else{
+                            
+                            for(DayModel week ; selectedWeeks){
+                                week.getText();
+                                repeatDays = week;
+                            }
+                            mAlarmDay = repeatDays;
+                        }
                 });
         
     }
@@ -107,8 +121,10 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                         if(label == null)
                             //set default label value as "Alarm"
                             mSound_value.setText("Alarm");
+                            mAlarmLabel = "Alarm";
                         else
                             mSound_value.setText(label);
+                            mAlarmLabel = label;
                     }
                 });
     }
@@ -122,10 +138,22 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                         if(label == null)
                             //set default label value as "Default sound"
                             mLabel_value.setText("Default sound");
+                            mAlarmSound = "Default sound";
                         else
                             mLabel_value.setText(sound);
+                            mAlarmSound = sound;
                     }
                 });
+    }
+    
+    @Override
+    public void setSnooze(){
+        if(!mSnoozeBtn.isChecked())
+            mSnoozeBtn.Checked(true)
+            mAlarmStatus = true;
+        else
+            mSnoozeBtn.Checked(false);
+            mAlarmStatus = false;
     }
     
     @Override
@@ -134,8 +162,10 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
             case R.id.cancel:
                 break;
             case R.id.save:
-                String alarmId = "1";
-                mAddAlarmPresenter.saveAlarm( mAlarm, alarmId);
+                mAlarmTime = 2200;
+                Alarm alarm = new Alarm( mAlarmTime, mAlarmLabel, mAlarmDay, mAlarmSound, mAlarmStatus);
+                String alarmId = "0";
+                mAddAlarmPresenter.saveAlarm( alarm, alarmId);
                 break;
             case R.id.repeat_layout:
                 mAddAlarmPresenter.setRepeat();
