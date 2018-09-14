@@ -28,10 +28,13 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
     private RecyclerView mDayListView;
     private List<String> mDayList;
     private ShowRepeatContract.Presenter presenter;
+    private List<DayModel> mSelectedDays;
     
-    public void startActivity(Context context, int flag){
+    public void startActivity(Context context, int flag, ShowRepeatActivity.RepeatcallBack repeatCallback){
         Intent intent = new Intent(context, ShowRepeatActivity.class);
         intent.setFlags(flag);
+        mSelectedDays = new ArrayList<DayModel>():
+        repeatCallback.callBack(mSelectedDays);
         
         context.startActivity(intent);
     }
@@ -66,11 +69,15 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
         DayClickListener dayClickListener = new DayClickListener(){
             @Override
             public void onDayClicked(DayModel dayModel){
-                 if(!dayModel.getChecked())
+                 if(!dayModel.getChecked()){
                      dayModel.setChecked(true);
+                     mSelectedDays.add(dayModel);
+                 }
                  else
                      dayModel.setChecked(false);
-            }
+                     if(mSelectedDays.contain(dayModel))
+                        mSelectedDays.remove(dayModel);
+                 }
         };
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getParent());
