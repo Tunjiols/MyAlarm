@@ -1,6 +1,7 @@
 package com.olsttech.myalarm.uis;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.olsttech.myalarm.models.DayModel;
 
@@ -16,7 +17,7 @@ public interface LabelContract{
     }
     
     interface Presenter{
-        loadlabelEditScreen();
+        void loadlabelEditScreen();
     }
     
     interface LabelCallBack{

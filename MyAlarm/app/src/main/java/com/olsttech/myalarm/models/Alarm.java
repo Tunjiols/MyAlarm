@@ -55,7 +55,7 @@ public class Alarm {
         this.alarmSound = alarmSound;
     }
 
-    public boolean isAlarmStatus() {
+    public boolean getAlarmStatus() {
         return alarmStatus;
     }
 

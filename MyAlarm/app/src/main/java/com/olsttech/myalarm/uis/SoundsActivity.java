@@ -6,32 +6,29 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.recyclerview.extensions.ListAdapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
-import com.olsttech.myalarm.models.DayModel;
+import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.List;
 
-public class SoundstActivity extends AppCompatActivity implements SoundsContract.View{
+public class SoundsActivity extends AppCompatActivity implements SoundsContract.View{
 
     private RecyclerView mSoundListView;
     private List<SoundModel> mSoundsList;
     private SoundsContract.Presenter presenter;
-    private String mSound;
+    private static String mSound;
     private static final String INIT_SOUND = "init_sound";
     
-    public void startActivity(Context context, int flag, String sound, SoundsPresenter.SoundCallBack soundCallback){
+    public static void startActivity(Context context, int flag, String sound, SoundsContract.SoundsCallBack soundCallback){
         Intent intent = new Intent(context, SoundsActivity.class);
         intent.putExtra(INIT_SOUND, sound);
         intent.setFlags(flag);
@@ -68,12 +65,13 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
     
     @Override
     public void loadView(@NonNull List<SoundModel> soundsList){
-        SoundsPresenter.ClickListener soundClickListener = new SoundsPresenter.ClickListener(){
+        SoundsContract.ClickListener soundClickListener = new SoundsContract.ClickListener(){
             @Override
             public void onSoundSelect(SoundModel soundModel){
-                 if(!soundModel.getChecked())
+                 if(!soundModel.getChecked()) {
                      soundModel.setChecked(true);
                      mSound = soundModel.getSound();
+                 }
                  else
                      soundModel.setChecked(false);
             }
@@ -84,14 +82,14 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
         mSoundListView.setLayoutManager(linearLayoutManager);
         mSoundListView.setAdapter(soundsListAdapter);
     }
-    
+
     private class SoundsListAdapter extends RecyclerView.Adapter<SoundsListAdapter.ViewHolder> {
         
         private List<SoundModel> mSoundsList;
-        private SoundsPresenter.ClickListener mSoundClickListener;
+        private SoundsContract.ClickListener mSoundClickListener;
 
 
-        public SoundsListAdapter(List<SoundModel> soundsList, SoundsPresenter.ClickListener soundClickListener){
+        public SoundsListAdapter(List<SoundModel> soundsList, SoundsContract.ClickListener soundClickListener){
             this.mSoundsList = soundsList;
             this.mSoundClickListener = soundClickListener;
         }
@@ -152,9 +150,9 @@ public class SoundstActivity extends AppCompatActivity implements SoundsContract
         
             public TextView mText;
             public CheckBox mCheckBox;
-            private SoundsPresenter.ClickListener mSoundClickListener;
+            private SoundsContract.ClickListener mSoundClickListener;
             
-            public ViewHolder(final View view, SoundsPresenter.ClickListener soundClickListener){
+            public ViewHolder(final View view, SoundsContract.ClickListener soundClickListener){
                 super(view);
                 this.mSoundClickListener = soundClickListener;
                 mText = (TextView)view.findViewById(R.id.text);

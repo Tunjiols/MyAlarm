@@ -15,7 +15,7 @@ import java.util.List;
  * Created by adetunji on 01/09/2018.class AlarmPresenter
  */
 
-public class EditAlarmPresenter implements AlarmContract.Presenter{
+public class EditAlarmPresenter implements EditAlarmContract.Presenter{
 
     private EditAlarmContract.View mView;
     private AlarmDataManagerApi.LoadAlarmFromPreference mAlarmDataManager;
@@ -26,32 +26,32 @@ public class EditAlarmPresenter implements AlarmContract.Presenter{
     }
 
     @Override
-    public void getAllAlarms() {
+    public void editRepeat() {
+        mView.showRepeatScreen();
+    }
+
+    @Override
+    public void editAlarmLabel() {
+        mView.showLabelScreen();
+    }
+
+    @Override
+    public void changeSound() {
+        mView.showSoundsListScreen();
+    }
+
+    @Override
+    public void editAlarmTime() {
 
     }
 
     @Override
-    public void getAlarm(@NonNull String alarmId) {
-
+    public void editSnooze() {
+        mView.setSnooze();
     }
 
     @Override
-    public void addAlarm() {
-
-    }
-
-    @Override
-    public void editAlarm() {
-
-    }
-
-    @Override
-    public void openEditAlarmScreen(@NonNull Alarm clickedAlarm) {
-
-    }
-
-    @Override
-    public void getAlarmRadioBtnStatus() {
+    public void saveEditedAlarm(@NonNull Alarm alarm, String alarmId) {
 
     }
 }

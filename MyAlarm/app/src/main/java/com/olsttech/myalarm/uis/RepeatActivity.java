@@ -6,35 +6,32 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.recyclerview.extensions.ListAdapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
 import com.olsttech.myalarm.models.DayModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatContract.View{
+public class RepeatActivity extends AppCompatActivity implements RepeatContract.View{
 
     private RecyclerView mDayListView;
     private List<String> mDayList;
-    private ShowRepeatContract.Presenter presenter;
-    private List<DayModel> mSelectedDays;
+    private RepeatContract.Presenter presenter;
+    private static List<DayModel> mSelectedDays;
     
-    public void startActivity(Context context, int flag, ShowRepeatPresenter.RepeatcallBack repeatCallback){
-        Intent intent = new Intent(context, ShowRepeatActivity.class);
+    public static void startActivity(Context context, int flag, String repeat, RepeatContract.RepeatCallBack repeatCallback){
+        Intent intent = new Intent(context, RepeatActivity.class);
         intent.setFlags(flag);
-        mSelectedDays = new ArrayList<DayModel>():
-        repeatCallback.callBack(mSelectedDays);
+        repeatCallback.RepeatcallBack(mSelectedDays);
         
         context.startActivity(intent);
     }
@@ -42,7 +39,7 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
     @Override
     public void onCreate(@Nullable Bundle bundle){
         super.onCreate(bundle);
-        setContentView(R.layout.showreepeat_activity);
+        setContentView(R.layout.repeat_activity);
         
         bindView();
         initSetup();
@@ -56,11 +53,13 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
     
     private void bindView(){
 
-        mDayListView = (RecyclerView) findViewById(R.id.recyclayout);
+        mDayListView = (RecyclerView) findViewById(R.id.recycleryout);
     }
     
     private void initSetup(){
-        presenter = new ShowRepeatPresenter(this);
+
+        mSelectedDays = new ArrayList<DayModel>();
+        presenter = new RepeatPresenter(this);
         presenter.setView();
     }
     
@@ -75,12 +74,12 @@ public class ShowRepeatActivity extends AppCompatActivity implements ShowRepeatC
                  }
                  else
                      dayModel.setChecked(false);
-                     if(mSelectedDays.contain(dayModel))
+                     if(mSelectedDays.contains(dayModel))
                         mSelectedDays.remove(dayModel);
                  }
         };
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getParent());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         DayListAdapter dayListAdapter = new DayListAdapter(getDayList, dayClickListener);
         mDayListView.setLayoutManager(linearLayoutManager);
         mDayListView.setAdapter(dayListAdapter);

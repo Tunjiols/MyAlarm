@@ -47,11 +47,11 @@ public class AlarmPreference implements AlarmPreferenceApi{
 
     private List<Alarm> allAlarmsFromPreference(){
         List<Alarm> alarmList = new ArrayList<Alarm>();
-        Alarm alarm = new Alarm();
-        alarm.setAlarmLabel(mAlarmSharePrefs.getString(AlarmConstants.ALARM_LABEL));
-        alarm.setAlamTime(mAlarmSharePrefs.getLongDate(AlarmConstants.ALARM_TIME));
-        alarm.setAlarmDay(mAlarmSharePrefs.getString(AlarmConstants.ALARM_DAY));
-        alarm.setAlarmStatus(mAlarmSharePrefs.getBoolean(AlarmConstants.ALARM_STATUS,false));
+        Alarm alarm = new Alarm(2200, "Test Label", "Monday", "Test sound", true);
+        //alarm.setAlarmLabel(mAlarmSharePrefs.getString(AlarmConstants.ALARM_LABEL));
+        //alarm.setAlamTime(mAlarmSharePrefs.getLongDate(AlarmConstants.ALARM_TIME));
+        //alarm.setAlarmDay(mAlarmSharePrefs.getString(AlarmConstants.ALARM_DAY));
+        //alarm.setAlarmStatus(mAlarmSharePrefs.getBoolean(AlarmConstants.ALARM_STATUS,false));
 
         alarmList.add(alarm);
 

@@ -5,11 +5,11 @@ import com.olsttech.myalarm.models.DayModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowRepeatPresenter implements ShowRepeatContract.Presenter{
+public class RepeatPresenter implements RepeatContract.Presenter{
     
-    private ShowRepeatContract.View mView;
+    private RepeatContract.View mView;
     
-    public ShowRepeatPresenter(ShowRepeatContract.View view){
+    public RepeatPresenter(RepeatContract.View view){
         mView = view;
     }
     

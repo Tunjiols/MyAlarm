@@ -1,8 +1,10 @@
 package com.olsttech.myalarm.uis;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.olsttech.myalarm.models.DayModel;
+import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.List;
 
@@ -10,19 +12,20 @@ import java.util.List;
 */
 
 public interface SoundsContract{
+
     interface View{
-        void loadView(@NonNull List<String> soundNames);
+        void loadView(@NonNull List<SoundModel> soundNames);
     }
     
     interface Presenter{
-        getSounds();
+        void getSounds();
     }
     
     interface SoundsCallBack{
-        callBack(@NonNull String soundName);
+        void callBack(@NonNull String soundName);
     }
     
     interface ClickListener{
-        onSoundSelect(@Nullable SoundModel soundModel);
+        void onSoundSelect(@Nullable SoundModel soundModel);
     }
 }

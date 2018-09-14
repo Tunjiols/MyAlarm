@@ -36,7 +36,7 @@ public class AlarmPresenterTest {
         MockitoAnnotations.initMocks(this);
 
         // Get a reference to the class under test
-        mAlarmPresenter = new AlarmPresenter( mView, );
+        //mAlarmPresenter = new AlarmPresenter( mView, );
     }
 }
 

@@ -11,8 +11,9 @@ public class LabelPresenter implements LabelContract.Presenter{
     public LabelPresenter(LabelContract.View view){
         this.mView = view;
     }
+
     @Override
-    void loadlabelEditScreen(){
+    public void loadlabelEditScreen(){
         mView.loadView();
     }
 }

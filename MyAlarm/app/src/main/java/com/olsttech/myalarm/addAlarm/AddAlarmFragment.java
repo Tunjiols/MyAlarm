@@ -1,30 +1,46 @@
 package com.olsttech.myalarm.addAlarm;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
+import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.models.DayModel;
+import com.olsttech.myalarm.uis.LabelActivity;
+import com.olsttech.myalarm.uis.LabelContract;
+import com.olsttech.myalarm.uis.RepeatActivity;
+import com.olsttech.myalarm.uis.RepeatContract;
+import com.olsttech.myalarm.uis.SoundsActivity;
+import com.olsttech.myalarm.uis.SoundsContract;
+
+import java.util.List;
 
 /**
  * Created by adetunji on 01/09/2018.AddAlarmFragment
  */
 
 public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
-                    View.OnCLickListener{
+                    View.OnClickListener{
 
     private TextView mCancel;
     private TextView mSave;
-    private TextView mAlarmTime;
+    private TextView mAlarmTimeView;
     private TextView mRepeat_value;
     private TextView mLabel_value;
     private TextView mSound_value;
-    private Button mSnoozeBtn;
+    private RadioButton mSnoozeBtn;
     
     private AddAlarmContract.Presenter mAddAlarmPresenter;
     
@@ -34,8 +50,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private String mAlarmSound;
     private boolean mAlarmStatus;
 
+    private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
+    private FrameLayout mAlarmTimeFrameView;
+
+
     public static AddAlarmFragment newInstance() {
-        mAddAlarmPresenter = new AddAlarmPresenter(this);
         return new AddAlarmFragment();
     }
 
@@ -46,6 +65,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mAddAlarmPresenter = new AddAlarmPresenter(this);
     }
 
     /**
@@ -78,6 +98,16 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
             mSound_value = rootView.findViewById(R.id.sound_value);
             mSnoozeBtn = rootView.findViewById(R.id.snoozeBtn);
 
+        mLabel = rootView.findViewById(R.id.label);
+        mRepeat = rootView.findViewById(R.id.repeat);
+        mSound = rootView.findViewById(R.id.sound);
+        mSnooze = rootView.findViewById(R.id.snooze);
+
+        mLabel.setOnClickListener(this);
+        mRepeat.setOnClickListener(this);
+        mSound.setOnClickListener(this);
+        mSnooze.setOnClickListener(this);
+
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
@@ -91,37 +121,38 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
     @Override
     public void showRepeatScreen() {
-        ShowRepeatActivity.startActivity(getContext(), Intent.START_,"No repeat",
-                new  ShowRepeatPresenter.RepeatCallBack{
+        RepeatActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK, "No repeat",
+                new  RepeatContract.RepeatCallBack(){
+
                     @Override
-                    void callBack(List<DayModel> selectedWeeks){
+                    public void RepeatcallBack(List<DayModel> selectedWeeks) {
                         String repeatDays = "No repeat";
                         if(null == selectedWeeks ){
                             mRepeat_value.setText(repeatDays);
                             mAlarmDay = repeatDays;
                         }
                         else{
-                            
-                            for(DayModel week ; selectedWeeks){
-                                week.getText();
-                                repeatDays = week;
+                            for(DayModel week : selectedWeeks){
+                                repeatDays = week.getDay();
                             }
                             mAlarmDay = repeatDays;
                         }
+                    }
                 });
         
     }
 
     @Override
     public void showLabelScreen() {
-        LabelActivity.startActivity(getContext(), Intent.START_,"Default alarm",
-                 new  LabelPresenter.LabelCallBack{
+        LabelActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK,"Default alarm",
+                 new  LabelContract.LabelCallBack(){
                     @Override
-                    void callBack(@Nullable String Label){
-                        if(label == null)
+                    public void callBack(@Nullable String label){
+                        if(label == null) {
                             //set default label value as "Alarm"
                             mSound_value.setText("Alarm");
                             mAlarmLabel = "Alarm";
+                        }
                         else
                             mSound_value.setText(label);
                             mAlarmLabel = label;
@@ -131,28 +162,30 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
     @Override
     public void showSoundsListScreen() {
-        SoundsActivity.startActivity(getContext(), Intent.START_,"Default sound",
-                new  SoundsPresenter.SoundCallBack{
+        SoundsActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK,"Default sound",
+                new SoundsContract.SoundsCallBack() {
                     @Override
-                    void callBack(@Nullable String sound){
-                        if(label == null)
+                    public void callBack(@Nullable String soundName) {
+                        if(soundName == null) {
                             //set default label value as "Default sound"
                             mLabel_value.setText("Default sound");
                             mAlarmSound = "Default sound";
+                        }
                         else
-                            mLabel_value.setText(sound);
-                            mAlarmSound = sound;
+                            mLabel_value.setText(soundName);
+                            mAlarmSound = soundName;
                     }
                 });
     }
     
     @Override
     public void setSnooze(){
-        if(!mSnoozeBtn.isChecked())
-            mSnoozeBtn.Checked(true)
+        if(!mSnoozeBtn.isChecked()) {
+            mSnoozeBtn.setChecked(true);
             mAlarmStatus = true;
+        }
         else
-            mSnoozeBtn.Checked(false);
+            mSnoozeBtn.setChecked(false);
             mAlarmStatus = false;
     }
     
@@ -167,17 +200,17 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 String alarmId = "0";
                 mAddAlarmPresenter.saveAlarm( alarm, alarmId);
                 break;
-            case R.id.repeat_layout:
+            case R.id.repeat:
                 mAddAlarmPresenter.setRepeat();
                 break;
-            case R.id.label_layout:
+            case R.id.label:
                 mAddAlarmPresenter.addAlarmLabel();
                 break;
-            case R.id.sound_layout:
+            case R.id.sound:
                 mAddAlarmPresenter.setSound();
                 break;
-            case R.id.snooze_btn:
-                mAddAlarmPreseenter.setSnooze();
+            case R.id.snooze:
+                mAddAlarmPresenter.setSnooze();
                 break;
         }
     }

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.olsttech.myalarm.R;
+import com.olsttech.myalarm.models.Alarm;
 
 /**
  * Created by adetunji on 01/09/2018.EditAlarmActivity
@@ -17,8 +18,10 @@ import com.olsttech.myalarm.R;
 
 public class EditAlarmActivity extends AppCompatActivity {
 
-    public static void startActivity(Context context) {
+    private  static Alarm CLICKED_ALARM;
+    public static void startActivity(Context context, Alarm clickedAlarm) {
         Intent intent = new Intent(context, EditAlarmActivity.class);
+        CLICKED_ALARM = clickedAlarm;
         context.startActivity(intent);
     }
 
@@ -28,7 +31,7 @@ public class EditAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addalarm);
 
         if (null == savedInstanceState) {
-            initFragment(EditAlarmFragment.newInstance());
+            initFragment(EditAlarmFragment.newInstance(CLICKED_ALARM));
         }
     }
 

@@ -1,13 +1,14 @@
 package com.olsttech.myalarm.uis;
 
 import com.olsttech.myalarm.models.DayModel;
+import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SoundsPresenter implements SoundsContract.Presenter{
 
-    private List<String> soundNames;
+    private List<SoundModel> soundNames;
     private SoundsContract.View mView;
     
     public SoundsPresenter(SoundsContract.View view){
@@ -15,13 +16,13 @@ public class SoundsPresenter implements SoundsContract.Presenter{
         
     }
     @Override
-    void getSounds(){
+    public void getSounds(){
        
         mView.loadView(getSoundsFromService());
     }
     
-    private List<String> getSoundsFromService(){
-        soundNames = new ArrayList<String>();
+    private List<SoundModel> getSoundsFromService(){
+        soundNames = new ArrayList<SoundModel>();
          //call the media service
         return soundNames;
     }

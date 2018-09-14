@@ -14,8 +14,8 @@ public interface AlarmContract {
     interface View {
         void showAlarms(List<Alarm> Alarm);
         void showAddAlarm();
-        void showAlarmEditScreen(String alarmId, @NonNull List<Alarm>  AlarmList);
-        void showEditAlarmScreen(@NonNull Alarm alarm );
+        void showAlarmEditScreen(@NonNull List<Alarm>  AlarmList);
+        void openEditAlarm(@NonNull Alarm alarm );
         void showAlarmRadioBtn();
     }
 
@@ -24,7 +24,7 @@ public interface AlarmContract {
         void getAlarm(@NonNull String alarmId);
         void addAlarm();
         void editAlarm(@NonNull List<Alarm>  alarmList);
-        void openEditAlarmScreen(@NonNull Alarm clickedAlarm);
+        void openEditAlarmScreen(@NonNull List<Alarm> clickedAlarm);
         void getAlarmRadioBtnStatus();
     }
     

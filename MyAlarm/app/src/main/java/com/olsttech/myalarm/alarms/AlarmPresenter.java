@@ -7,7 +7,6 @@ import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
 import com.olsttech.myalarm.models.Alarm;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,13 +46,13 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     }
 
     @Override
-    public void openEditAlarmScreen(@NonNull Alarm clickedAlarm){
-        mView.showEditAlarmScreen(clickedAlarm);
+    public void openEditAlarmScreen(@NonNull List<Alarm> alarms){
+        mView.showAlarmEditScreen(alarms);
     }
     
     @Override
     public void editAlarm(@NonNull List<Alarm>  alarmList){
-        mView.showAlarmEditScreen("", alarmList);
+        //mView.showAlarmEditScreen("", alarmList);
     }
 
     @Override

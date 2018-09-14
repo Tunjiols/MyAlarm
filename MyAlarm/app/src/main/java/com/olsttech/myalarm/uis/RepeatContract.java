@@ -6,7 +6,7 @@ import com.olsttech.myalarm.models.DayModel;
 
 import java.util.List;
 
-public interface ShowRepeatContract{
+public interface RepeatContract {
 
     interface View{
         void showView(@NonNull List<DayModel> getDayList);
@@ -17,6 +17,6 @@ public interface ShowRepeatContract{
     }
     
     interface RepeatCallBack {
-        void callBack(List<DayModel> selectedWeeks)
+        void RepeatcallBack(List<DayModel> selectedWeeks);
     }
 }

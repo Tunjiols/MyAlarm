@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.models.Alarm;
@@ -79,7 +80,7 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
         public TextView mTime;
         public TextView mDay;
         public TextView mLabel;
-        public ImageView mStatus;
+        public RadioButton mStatus;
         public ImageView mForward;
         public ImageView mDeleteIcon;
 
@@ -88,12 +89,12 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
             mTime 	    = (TextView)itemView.findViewById(R.id.alarm_time);
             mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
             mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
-            mStatus  = (ImageView) itemView.findViewById(R.id.alarm_status);
+            mStatus  = (RadioButton) itemView.findViewById(R.id.alarm_status);
             mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
             mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
             
-            mDeleteIcon.setVisibility(View.INVISIBLE);
-            mForward.setVisibility(View.INVISIBLE);
+            //mDeleteIcon.setVisibility(View.INVISIBLE);
+            //mForward.setVisibility(View.INVISIBLE);
         }
     }
 

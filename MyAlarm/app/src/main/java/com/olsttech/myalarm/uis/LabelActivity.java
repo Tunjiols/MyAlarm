@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
 /** 
@@ -20,10 +23,10 @@ public class LabelActivity extends AppCompatActivity implements LabelContract.Vi
     private EditText mEditText;
     private TextView mCancel;
     private TextView mSave;
-    privte String mLabel;
+    private static String mLabel;
     
     
-    public void startActivity(Context context, int flag, String label, LabelPresenter.LabelCallBack callback){
+    public static void startActivity(Context context, int flag, String label, LabelContract.LabelCallBack callback){
         Intent intent = new Intent(context, LabelActivity.class);
         intent.putExtra(INIT_LABEL, label);
         intent.setFlags(flag);
@@ -68,14 +71,14 @@ public class LabelActivity extends AppCompatActivity implements LabelContract.Vi
     }
     
     @Override
-    void onClick(View v){
+    public void onClick(View v){
         switch(v.getId()){
             case R.id.save:
                 LabelContract.LabelCallBack labelcallback;
                 String label;
                 if(!TextUtils.isEmpty(mEditText.getText())){
-                    label = mEditText.getText().trim();
-                    labelcallback.callback(label);
+                    label = mEditText.getText().toString().trim();
+                   // labelcallback.callback(label);
                     //implement close the activity
                     mLabel = label;
                     finish();

@@ -30,14 +30,18 @@ import java.util.List;
 public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View,  
                 View.OnClickListener{
     private Toolbar toolbar;
-    private FloatingActionButton fab;
     private AlarmContract.Presenter mAlarmPresenter;
     private RecyclerView mRecyclerView;
     private TextView mEdit;
     private TextView mAdd;
+    private TextView mAlarm_select;
     private LinearLayoutManager mLinearLayoutManager;
     
     private List<Alarm> mAlarmList;
+
+    private AlarmRecyclerViewAdapter recyclerViewAdapter;
+    private EditAlarmAdapter editAdapter;
+    private boolean edit = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +56,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclayout);
         mEdit = (TextView) findViewById(R.id.edit);
         mAdd = (TextView) findViewById(R.id.add);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        mAlarm_select = (TextView)findViewById(R.id.alarm_select);
     }
 
     /**Initial setups method*/
@@ -65,48 +69,51 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         mAlarmPresenter.getAllAlarms();
 
         setSupportActionBar(toolbar);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mEdit.setOnClickListener(this);
+        mAdd.setOnClickListener(this);
     }
 
     @Override
     public void showAlarms(List<Alarm> alarms) {
-    
         mAlarmList = alarms;
-        
-        AlarmRecyclerViewAdapter recyclerViewAdapter = new AlarmRecyclerViewAdapter(this,
+        recyclerViewAdapter = new AlarmRecyclerViewAdapter(this,
                 alarms, this);
+        setAdapter(recyclerViewAdapter);
+    }
+
+    private void setAdapter(AlarmRecyclerViewAdapter recyclerViewAdapter){
         mRecyclerView.setAdapter(recyclerViewAdapter);
     }
 
     @Override
     public void showAddAlarm() {
         //Start AddAlarmActivity
-        AddAlarmActivity.startActivity(getParent());
+        AddAlarmActivity.startActivity(this);
     }
     
     @Override
-    public void showAlarmEditScreen(String alarmId, @NonNull List<Alarm> alarmList) {
-        
+    public void showAlarmEditScreen(@NonNull List<Alarm> alarmList ) {
+
         AlarmContract.AlarmItemClickListener mAlarmItemClickListener = new AlarmContract.AlarmItemClickListener(){
             @Override
             public void onAlarmClicked(@NonNull Alarm clickedAlarm){
-                mAlarmPresenter.openEditAlarmScreen(clickedAlarm);
+                EditAlarmActivity.startActivity(AlarmMainActivity.this, clickedAlarm);
             }
         };
-        
-        EditAlarmAdapter editAdapter = new EditAlarmAdapter(alarmList, mAlarmItemClickListener);
+
+        editAdapter = new EditAlarmAdapter(alarmList, mAlarmItemClickListener);
+        setEditAdapter(editAdapter);
+        mAlarm_select.setText("Select to  Edit");
+    }
+
+    private void setEditAdapter(EditAlarmAdapter editAdapter){
+        mRecyclerView.setAdapter(editAdapter);
     }
 
     @Override
-    public void showEditAlarmScreen(@NonNull Alarm alarm) {
+    public void openEditAlarm(@NonNull Alarm alarm) {
         //open alarm edit activity
-        EditAlarmActivity.startActivity(getParent());
+        //EditAlarmActivity.startActivity(this, alarm);
     }
 
     @Override
@@ -125,17 +132,20 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.edit:
-                
-                mAlarmPresenter.editAlarm(mAlarmList);
-               
+                edit = true;
+                mAdd.setText("Cancel");
+                mAlarmPresenter.openEditAlarmScreen(mAlarmList);
                 break;
             case R.id.add:
-               // new AlarmContract.AddAlarmClickListener() {
-               //     @Override
-                //    public void addNewAlarm() {
-                        mAlarmPresenter.addAlarm();
-               //     }
-              //  };
+                if (!edit) {
+                    mAlarmPresenter.addAlarm();
+                }
+                else {
+                    edit = false;
+                    mAdd.setText("+");
+                    setAdapter(recyclerViewAdapter);
+                    mAlarm_select.setText("Alarm");
+                }
                 break;
         }
     }
@@ -164,7 +174,8 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             this.mAlarmItemClickListener = alarmItemClickListener;
             this.mAlarmList = alarmList;
         }
-        
+
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType ){
             Context context = parent.getContext();
@@ -175,7 +186,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         }
         
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
             Alarm alarm = mAlarmList.get(position);
 
             viewHolder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
@@ -213,7 +224,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
                 mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
                 //mItemDelete  = (ImageView) itemView.findViewById(R.id.alarm_itemDelete);
-                mStatus.setVisibility(View.INVISIBLE);
+               // mStatus.setVisibility(View.INVISIBLE);
                 
                 itemView.setOnClickListener(this);
             }

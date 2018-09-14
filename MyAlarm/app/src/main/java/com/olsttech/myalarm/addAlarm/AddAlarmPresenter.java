@@ -18,12 +18,12 @@ public class AddAlarmPresenter implements AddAlarmContract.Presenter{
 
     @Override
     public void setRepeat() {
-        mView.showRepeatScreen(callbacks);
+        mView.showRepeatScreen();
     }
 
     @Override
     public void addAlarmLabel() {
-        mView.showLabelScreen(callbacks);
+        mView.showLabelScreen();
     }
 
     @Override
