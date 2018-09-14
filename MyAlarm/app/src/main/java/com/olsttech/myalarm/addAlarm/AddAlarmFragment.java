@@ -85,17 +85,47 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
     @Override
     public void showRepeatScreen() {
-
+        ShowRepeatActivity.startActivity(getContext(), Intent.START_,"No repeat",
+                new  ShowRepeatPresenter.RepeatCallBack{
+                    @Override
+                    void callBack(List<DayModel> selectedWeeks){
+                        for(DayModel week ; selectedWeeks){
+                            week.getText();
+                        }
+                        mRepeat_value.setText("No repeat");
+                    }
+                });
+        
     }
 
     @Override
     public void showLabelScreen() {
-
+        LabelActivity.startActivity(getContext(), Intent.START_,"Default alarm",
+                 new  LabelPresenter.LabelCallBack{
+                    @Override
+                    void callBack(@Nullable String Label){
+                        if(label == null)
+                            //set default label value as "Alarm"
+                            mSound_value.setText("Alarm");
+                        else
+                            mSound_value.setText(label);
+                    }
+                });
     }
 
     @Override
     public void showSoundsListScreen() {
-
+        SoundsActivity.startActivity(getContext(), Intent.START_,"Default sound",
+                new  SoundsPresenter.SoundCallBack{
+                    @Override
+                    void callBack(@Nullable String sound){
+                        if(label == null)
+                            //set default label value as "Default sound"
+                            mLabel_value.setText("Default sound");
+                        else
+                            mLabel_value.setText(sound);
+                    }
+                });
     }
     
     @Override
