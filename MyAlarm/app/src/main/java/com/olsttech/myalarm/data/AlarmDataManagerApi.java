@@ -28,6 +28,8 @@ public interface AlarmDataManagerApi {
 
         void getAllAlarms(@NonNull DataManagerLoadAlarmCallBack callBack);
 
+        void saveAlarm(@NonNull Alarm alarm, OnLodingAlarmListener onLodingAlarmListener);
+
         void getAlarmTime();
 
         void getAlarmDay();
@@ -36,8 +38,8 @@ public interface AlarmDataManagerApi {
     }
 
     interface OnLodingAlarmListener {
-        void onLoadingSuccess(String message);
+        void onSuccess(String message);
 
-        void onLoadingFailure(String message);
+        void onFailure(String message);
     }
 }

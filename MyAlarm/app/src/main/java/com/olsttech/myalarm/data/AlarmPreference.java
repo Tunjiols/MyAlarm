@@ -2,6 +2,7 @@ package com.olsttech.myalarm.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.olsttech.myalarm.alarms.AlarmContract;
 import com.olsttech.myalarm.models.Alarm;
@@ -18,26 +19,25 @@ import java.util.List;
 public class AlarmPreference implements AlarmPreferenceApi{
 
     private AlarmSharePrefs mAlarmSharePrefs;
+    private List<Alarm> alarmList = new ArrayList<Alarm>();
 
     public AlarmPreference(Context context){
+
         mAlarmSharePrefs = new AlarmSharePrefs(context);
+        alarmList = allAlarmsFromPreference();
     }
 
     @Override
     public void prefGetAllAlarms(@NonNull LoadAlarmCallback callback) {
-
-        callback.onAlarmLoaded(allAlarmsFromPreference());
-
+        callback.onAlarmLoaded(alarmList);
     }
 
-    @Override
-    public void prefGetAlarm(@NonNull String alarmId, @NonNull GetAlarmCallback callback) {
 
-    }
 
     @Override
-    public void prefSaveAlarm(@NonNull Alarm alarm) {
+    public void prefSaveAlarm(@NonNull Alarm alarm, SaveAlarmCallback saveAlarmCallback) {
 
+         saveAlarmCallback.onAlarmSaved(savedAlarmOk(alarm));// return the whole alarm list after saving the alarm
     }
 
     @Override
@@ -46,7 +46,6 @@ public class AlarmPreference implements AlarmPreferenceApi{
     }
 
     private List<Alarm> allAlarmsFromPreference(){
-        List<Alarm> alarmList = new ArrayList<Alarm>();
         Alarm alarm = new Alarm(2200, "Test Label", "Monday", "Test sound", true);
         //alarm.setAlarmLabel(mAlarmSharePrefs.getString(AlarmConstants.ALARM_LABEL));
         //alarm.setAlamTime(mAlarmSharePrefs.getLongDate(AlarmConstants.ALARM_TIME));
@@ -54,6 +53,13 @@ public class AlarmPreference implements AlarmPreferenceApi{
         //alarm.setAlarmStatus(mAlarmSharePrefs.getBoolean(AlarmConstants.ALARM_STATUS,false));
 
         alarmList.add(alarm);
+
+        return alarmList;
+    }
+
+    private List<Alarm> savedAlarmOk(Alarm alarm){
+        alarmList.add(alarm);
+        Log.e("AlarmPreference listsiz", String.valueOf(alarmList.size()));
 
         return alarmList;
     }

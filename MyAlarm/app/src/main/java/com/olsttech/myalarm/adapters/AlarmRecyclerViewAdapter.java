@@ -9,10 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.olsttech.myalarm.alarms.AlarmMainActivity;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.R;
 
@@ -44,28 +47,35 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
 
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder,  int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
         holder.mDay.setText(mAlarmList.get(position).getAlarmDay());
         holder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
-       // holder.mStatus = mAlarmList.get(position).isAlarmStatus();
 
-        final int pos = position;
-        //holder.getAdapterPosition();
+        if (mAlarmList.get(position).getAlarmStatus())
+            holder.mStatus.setImageResource(R.drawable.ic_status);
+        else holder.mStatus.setImageResource(R.drawable.ic_status_off);
 
-       /** holder.mTitle.setOnClickListener(new View.OnClickListener() {
+
+         //      mAlarmList.get(position).setAlarmStatus(isChecked);
+
+        holder.mStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Uri uri = Uri.parse(mAlarmList.get(pos).getLink());
-               // mActivity.startActivity(startUrlIntent(uri));
+                if (mAlarmList.get(position).getAlarmStatus()) {
+                    mAlarmList.get(position).setAlarmStatus(false);
+                    holder.mStatus.setImageResource(R.drawable.ic_status_off);
+                } else {
+                    mAlarmList.get(position).setAlarmStatus(true);
+                    holder.mStatus.setImageResource(R.drawable.ic_status);
+                }
             }
-        });*/
-
+        });
     }
 
-    public Intent startUrlIntent(Uri uri){
+    /**public Intent startUrlIntent(Uri uri){
         return new Intent(Intent.ACTION_VIEW, uri);
-    }
+    }*/
 
 
     @Override
@@ -75,26 +85,25 @@ public class AlarmRecyclerViewAdapter extends RecyclerView.Adapter<AlarmRecycler
         }else return 0;
     }
 
+    /**
+     * View Class for AlarmRecyclerViewAdapter.
+     *
+     *  The view that was clicked.
+     */
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTime;
         public TextView mDay;
         public TextView mLabel;
-        public RadioButton mStatus;
-        public ImageView mForward;
-        public ImageView mDeleteIcon;
+        public ImageButton mStatus;
 
         public ViewHolder(final View itemView){
             super(itemView);
             mTime 	    = (TextView)itemView.findViewById(R.id.alarm_time);
             mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
             mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
-            mStatus  = (RadioButton) itemView.findViewById(R.id.alarm_status);
-            mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
-            mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
-            
-            //mDeleteIcon.setVisibility(View.INVISIBLE);
-            //mForward.setVisibility(View.INVISIBLE);
+            mStatus  = (ImageButton) itemView.findViewById(R.id.alarm_status);
+
         }
     }
 

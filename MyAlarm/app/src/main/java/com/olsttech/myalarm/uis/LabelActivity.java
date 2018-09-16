@@ -12,25 +12,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
-/** 
+import com.olsttech.myalarm.utils.AlarmConstants;
+
+/**
 * class for LabelActivity
 */
 public class LabelActivity extends AppCompatActivity implements LabelContract.View, 
                             View.OnClickListener{
 
-    private static final String INIT_LABEL = "initLabel";
+
     private LabelContract.Presenter presenter;
     private EditText mEditText;
     private TextView mCancel;
     private TextView mSave;
     private static String mLabel;
+
+    private static LabelContract.LabelCallBack mCallback;
     
     
     public static void startActivity(Context context, int flag, String label, LabelContract.LabelCallBack callback){
         Intent intent = new Intent(context, LabelActivity.class);
-        intent.putExtra(INIT_LABEL, label);
+        intent.putExtra(AlarmConstants.INIT_LABEL, label);
         intent.setFlags(flag);
-        callback.callBack(mLabel);
+
+        mCallback = callback;
         
         context.startActivity(intent);
     }
@@ -60,36 +65,35 @@ public class LabelActivity extends AppCompatActivity implements LabelContract.Vi
     private void initSetup(){
         presenter = new LabelPresenter(this);
         presenter.loadlabelEditScreen();
-        //if(!INIT_LABEL == null)
-           // mLabel = null;
+        mSave.setOnClickListener(this);
+        mCancel.setOnClickListener(this);
+
     }
     
     @Override
     public void loadView(){
-        if(!TextUtils.isEmpty(mEditText.getText()))
-            mEditText.setText("");
+        mEditText.setText(getIntent().getStringExtra(AlarmConstants.INIT_LABEL));//get preset label
     }
     
     @Override
     public void onClick(View v){
         switch(v.getId()){
             case R.id.save:
-                LabelContract.LabelCallBack labelcallback;
-                String label;
-                if(!TextUtils.isEmpty(mEditText.getText())){
-                    label = mEditText.getText().toString().trim();
-                   // labelcallback.callback(label);
-                    //implement close the activity
-                    mLabel = label;
-                    finish();
-                }
+                getText();
                 break;
             case R.id.cancel:
-                if(!TextUtils.isEmpty(mEditText.getText())){
-                    mEditText.setText("");
-                    mLabel = null;
-                }
+                finish();
                 break;
+        }
+    }
+
+    private void getText(){
+        String label = mEditText.getText().toString().trim();
+        if(!TextUtils.isEmpty(label)
+                && !label.equals(getIntent().getStringExtra(AlarmConstants.INIT_LABEL))){
+            mCallback.callBack(label);//return the label value
+            //mLabel = label;
+            finish();
         }
     }
 }

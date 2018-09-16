@@ -18,11 +18,11 @@ public interface SoundsContract{
     }
     
     interface Presenter{
-        void getSounds();
+        void getSounds(@Nullable SoundModel setSound);
     }
     
     interface SoundsCallBack{
-        void callBack(@NonNull String soundName);
+        void callBack(@NonNull SoundModel soundName);
     }
     
     interface ClickListener{

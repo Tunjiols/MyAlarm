@@ -101,23 +101,29 @@
         android:id="@+id/snooze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_avg"
+        android:paddingStart="@dimen/padding_avg"
+        android:paddingEnd="@dimen/padding_avg"
+        android:paddingTop="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_small"
         android:background="@color/grey_900">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Snooze"
-            android:textColor="@color/grey_200"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"/>
+            android:layout_centerVertical="true"
+            android:text="Snooze"
+            android:textColor="@color/grey_200" />
 
-        <RadioButton
+        <ImageButton
             android:id="@+id/snoozeBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@color/grey_500"
+            android:src="@drawable/ic_status_off"
+            android:background="@color/grey_900"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 

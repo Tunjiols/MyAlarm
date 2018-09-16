@@ -1,6 +1,7 @@
 package com.olsttech.myalarm.alarms;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,8 +22,10 @@ import android.widget.TextView;
 import com.olsttech.myalarm.R;
 import com.olsttech.myalarm.adapters.AlarmRecyclerViewAdapter;
 import com.olsttech.myalarm.addAlarm.AddAlarmActivity;
+import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.editAlarm.EditAlarmActivity;
 import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.utils.SimpleItemDividerForDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private AlarmRecyclerViewAdapter recyclerViewAdapter;
     private EditAlarmAdapter editAdapter;
     private boolean edit = false;
+    private boolean mRefresh = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,21 +67,55 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     private void initSetup(){
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
         mAlarmList = new ArrayList<Alarm>();
 
         mAlarmPresenter = new AlarmPresenter(this, this);
-        mAlarmPresenter.getAllAlarms();
+        mAlarmPresenter.getAllAlarms();//get all alarms
 
         setSupportActionBar(toolbar);
         mEdit.setOnClickListener(this);
         mAdd.setOnClickListener(this);
     }
 
+
+    /**
+     * Called after {@link #onStop} when the current activity is being
+     * re-displayed to the user (the user has navigated back to it).  It will
+     * be followed by {@link #onStart} and then {@link #onResume}.
+     * <p>
+     * <p>For activities that are using raw {@link } objects (instead of
+     * creating them through
+     * {@link #managedQuery(Uri, String[], String, String[], String)},
+     * this is usually the place
+     * where the cursor should be requeried (because you had deactivated it in
+     * {@link #onStop}.
+     * <p>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onStop
+     * @see #onStart
+     * @see #onResume
+     */
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+       // if (mRefresh){
+            mAlarmPresenter.getAllAlarms();//get all alarms
+       // }
+
+        edit = false;
+        mAdd.setText("+");
+        setAdapter(recyclerViewAdapter);
+        mAlarm_select.setText("Alarm");
+    }
+
     @Override
     public void showAlarms(List<Alarm> alarms) {
         mAlarmList = alarms;
-        recyclerViewAdapter = new AlarmRecyclerViewAdapter(this,
-                alarms, this);
+        recyclerViewAdapter = new AlarmRecyclerViewAdapter(this, alarms, this);
         setAdapter(recyclerViewAdapter);
     }
 
@@ -88,7 +126,12 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     @Override
     public void showAddAlarm() {
         //Start AddAlarmActivity
-        AddAlarmActivity.startActivity(this);
+        AddAlarmActivity.startActivity(this, new AddAlarmContract.SaveAlarmCallBack() {
+            @Override
+            public void onAlarmSaveCallBack( boolean value) {
+                mRefresh = (value);
+            }
+        });
     }
     
     @Override
@@ -108,6 +151,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     private void setEditAdapter(EditAlarmAdapter editAdapter){
         mRecyclerView.setAdapter(editAdapter);
+       // mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
     }
 
     @Override
@@ -121,12 +165,6 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
     @Override
     public void onClick(View v) {
@@ -149,21 +187,9 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 break;
         }
     }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
+    /********************************************************************************************/
 
     private static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
     
@@ -202,7 +228,8 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 return this.mAlarmList.size();
             }else return 0;
         }
-         
+
+        /*****************************************************************************************/
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             
             public TextView mTime;

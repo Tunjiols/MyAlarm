@@ -11,7 +11,7 @@ public class SoundModel{
         private String mSound;
         private boolean mChecked;
         
-        public void DayModel(String sound, boolean checked){
+        public  SoundModel(String sound, boolean checked){
             this.mSound = sound;
             this.mChecked = checked;
         }

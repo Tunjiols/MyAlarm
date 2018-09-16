@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +21,25 @@ import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.List;
 
-public class SoundsActivity extends AppCompatActivity implements SoundsContract.View{
+public class SoundsActivity extends AppCompatActivity implements SoundsContract.View, View.OnClickListener{
 
     private RecyclerView mSoundListView;
     private List<SoundModel> mSoundsList;
     private SoundsContract.Presenter presenter;
-    private static String mSound;
-    private static final String INIT_SOUND = "init_sound";
+
+    private TextView mCancel;
+    private TextView mSave;
+
+    private SoundModel mSound;
+    private static SoundModel mSetSound;
+
+    private static SoundsContract.SoundsCallBack mSoundCallback;
     
-    public static void startActivity(Context context, int flag, String sound, SoundsContract.SoundsCallBack soundCallback){
+    public static void startActivity(Context context, int flag, SoundModel setSound, SoundsContract.SoundsCallBack soundCallback){
         Intent intent = new Intent(context, SoundsActivity.class);
-        intent.putExtra(INIT_SOUND, sound);
         intent.setFlags(flag);
-        
-        soundCallback.callBack(mSound);
+        mSetSound = setSound;
+        mSoundCallback = soundCallback;
         
         context.startActivity(intent);
     }
@@ -56,21 +62,33 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
     private void bindView(){
 
         mSoundListView = (RecyclerView) findViewById(R.id.recyclayout);
+        mCancel = (TextView) findViewById(R.id.cancel);
+        mSave = (TextView) findViewById(R.id.save);
     }
     
     private void initSetup(){
         presenter = new SoundsPresenter(this);
-        presenter.getSounds();
+        presenter.getSounds(mSetSound); //get sounds from database
+
+        mSave.setOnClickListener(this);
+        mCancel.setOnClickListener(this);
     }
     
     @Override
-    public void loadView(@NonNull List<SoundModel> soundsList){
+    public void loadView(@NonNull final List<SoundModel> soundsList){
         SoundsContract.ClickListener soundClickListener = new SoundsContract.ClickListener(){
             @Override
             public void onSoundSelect(SoundModel soundModel){
                  if(!soundModel.getChecked()) {
                      soundModel.setChecked(true);
-                     mSound = soundModel.getSound();
+
+                     //loop through all the sounds and check only the clicked sound
+                     for (SoundModel checkedSound : soundsList){
+                         if (!checkedSound.equals(soundModel)){
+                             checkedSound.setChecked(false);
+                         }
+                     }
+                     mSound = soundModel;
                  }
                  else
                      soundModel.setChecked(false);
@@ -83,6 +101,30 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
         mSoundListView.setAdapter(soundsListAdapter);
     }
 
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.save:
+                if (null != mSound) {
+                    mSoundCallback.callBack(mSound);
+                    finish();
+                }else {
+                    mSoundCallback.callBack(mSetSound);
+                    finish();
+                }
+                break;
+            case R.id.cancel:
+                finish();
+                break;
+        }
+    }
+
+    /********************************************************************************************/
     private class SoundsListAdapter extends RecyclerView.Adapter<SoundsListAdapter.ViewHolder> {
         
         private List<SoundModel> mSoundsList;
@@ -130,7 +172,6 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
          */
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
-
             viewHolder.mText.setText(mSoundsList.get(position).getSound());
             viewHolder.mCheckBox.setChecked(mSoundsList.get(position).getChecked());
         }
@@ -142,10 +183,14 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
          */
         @Override
         public int getItemCount() {
-            return 0;
+            if (null != mSoundsList)
+                return mSoundsList.size();
+            else
+                return 0;
         }
 
 
+        /*****************************************************************************************/
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         
             public TextView mText;
@@ -157,8 +202,8 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
                 this.mSoundClickListener = soundClickListener;
                 mText = (TextView)view.findViewById(R.id.text);
                 mCheckBox = (CheckBox)view.findViewById(R.id.checkBox);
-                
-                view.setOnClickListener(this);
+
+                mCheckBox.setOnClickListener(this);
             }
             
             @Override

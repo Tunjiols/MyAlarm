@@ -2,6 +2,7 @@ package com.olsttech.myalarm.alarms;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
@@ -30,6 +31,8 @@ public class AlarmPresenter implements AlarmContract.Presenter{
             @Override
             public void onAlarmLoaded(List<Alarm> alarms) {
                 mView.showAlarms(alarms);
+                Log.e("AlarmPresenter listsiz", String.valueOf(alarms.size()));
+
             }
         });
 

@@ -2,6 +2,7 @@ package com.olsttech.myalarm.data;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.olsttech.myalarm.models.Alarm;
 
@@ -30,9 +31,25 @@ public class AlarmDataManager implements AlarmDataManagerApi.LoadAlarmFromPrefer
         mAlarmPreference.prefGetAllAlarms(new AlarmPreferenceApi.LoadAlarmCallback() {
             @Override
             public void onAlarmLoaded(List<Alarm> alarms) {
-                callBack.onAlarmLoaded(alarms);
+                mAlarmList = alarms;
+                Log.e("AlarmDataManagG listsiz", String.valueOf(mAlarmList.size()));
+
             }
         });
+        callBack.onAlarmLoaded(mAlarmList);
+    }
+
+    @Override
+    public void saveAlarm(@NonNull Alarm alarm, final AlarmDataManagerApi.OnLodingAlarmListener onLodingAlarmListener) {
+        mAlarmPreference.prefSaveAlarm(alarm, new AlarmPreferenceApi.SaveAlarmCallback() {
+            @Override
+            public void onAlarmSaved(List<Alarm> alarms) {
+                mAlarmList = alarms;
+                Log.e("AlarmDataManagS listsiz", String.valueOf(mAlarmList.size()));
+                onLodingAlarmListener.onSuccess("Success");
+            }
+        });
+            onLodingAlarmListener.onFailure("Failed");
     }
 
     @Override
@@ -51,12 +68,12 @@ public class AlarmDataManager implements AlarmDataManagerApi.LoadAlarmFromPrefer
     }
 
     @Override
-    public void onLoadingSuccess(String message) {
+    public void onSuccess(String message) {
 
     }
 
     @Override
-    public void onLoadingFailure(String message) {
+    public void onFailure(String message) {
 
     }
 }

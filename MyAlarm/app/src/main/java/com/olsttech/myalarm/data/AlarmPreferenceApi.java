@@ -17,18 +17,18 @@ public interface AlarmPreferenceApi {
         void onAlarmLoaded(List<Alarm> alarms);
     }
 
-    interface GetAlarmCallback {
+    interface SaveAlarmCallback {
 
-        void onAlarmLoaded(Alarm alarm);
+        void onAlarmSaved(List<Alarm> alarms);
     }
 
 
 
         void prefGetAllAlarms(@NonNull LoadAlarmCallback callback);
 
-        void prefGetAlarm(@NonNull String alarmId, @NonNull GetAlarmCallback callback);
+        //void prefGetAlarm(@NonNull String alarmId, @NonNull GetAlarmCallback callback);
 
-        void prefSaveAlarm(@NonNull Alarm alarm);
+        void prefSaveAlarm(@NonNull Alarm alarm, SaveAlarmCallback saveAlarmCallback );
 
         void refreshData();
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,16 @@ import android.widget.TextView;
 import com.olsttech.myalarm.R;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.models.DayModel;
+import com.olsttech.myalarm.models.SoundModel;
 import com.olsttech.myalarm.uis.LabelActivity;
 import com.olsttech.myalarm.uis.LabelContract;
 import com.olsttech.myalarm.uis.RepeatActivity;
 import com.olsttech.myalarm.uis.RepeatContract;
 import com.olsttech.myalarm.uis.SoundsActivity;
 import com.olsttech.myalarm.uis.SoundsContract;
+import com.olsttech.myalarm.utils.AlarmConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,12 +43,17 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     private TextView mLabel_value;
     private TextView mSound_value;
     private RadioButton mSnoozeBtn;
+    private String mAlarmSound;
+    private boolean mAlarmStatus;
 
     private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
-    private FrameLayout mAlarmTime;
+    private FrameLayout mAlarmTimeView;
+    private long mAlarmTime;
+    private String mAlarmLabel = AlarmConstants.INIT_LABEL;
 
     private EditAlarmPresenter mEditAlarmPresenter;
     private static Alarm mAlarm;
+    private List<DayModel> mAlarmDays;
 
     public static EditAlarmFragment newInstance(Alarm alarm) {
         mAlarm = alarm;
@@ -59,6 +68,8 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mEditAlarmPresenter = new EditAlarmPresenter(this, getContext());
+        mAlarmDays = new ArrayList<>();
+        mAlarmDays.add(new DayModel(AlarmConstants.NO_REPEAT, true)) ;
     }
 
     /**
@@ -100,6 +111,8 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         mRepeat.setOnClickListener(this);
         mSound.setOnClickListener(this);
         mSnooze.setOnClickListener(this);
+        mCancel.setOnClickListener(this);
+        mSave.setOnClickListener(this);
 
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -112,14 +125,47 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         return rootView;
     }
 
+    /**
+     * Called when the fragment is visible to the user and actively running.
+     * This is generally
+     * tied to {@link } of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mLabel_value.setText(mAlarmLabel);//set alarm value
+
+
+        StringBuilder stringBuilder = new StringBuilder(7);
+        String data = "" ;
+
+        //concatinate the selected days
+        for (DayModel week : mAlarmDays) {
+            stringBuilder.append(week.getDay() + ",") ;
+        }
+        data = stringBuilder.toString();
+        if (!data.isEmpty()){
+            mRepeat_value.setText(data);//set alarm repeat days
+        }else   {
+            mRepeat_value.setText(mAlarmDays.get(0).getDay());//set alarm repeat days
+        }
+
+        Log.e("stringBuilder: ", data);
+
+    }
+
     @Override
     public void showRepeatScreen() {
-        RepeatActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK,
-                mAlarm.getAlarmDay(), new RepeatContract.RepeatCallBack() {
-            @Override
-            public void RepeatcallBack(List<DayModel> selectedWeeks) {
-
-            }
+        RepeatActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK, mAlarmDays,
+                new RepeatContract.RepeatCallBack() {
+                    @Override
+                    public void onDaySelectedCallBack(List<DayModel> selectedDays) {
+                        if (selectedDays != null) {
+                            mAlarmDays = selectedDays;
+                        }
+                }
         });
     }
 
@@ -135,11 +181,19 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     }
 
     @Override
-    public void showSoundsListScreen() {
+    public void showSoundsListScreen(SoundModel sound) {
         SoundsActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK,
-                mAlarm.getAlamSound(), new SoundsContract.SoundsCallBack() {
+                sound , new SoundsContract.SoundsCallBack() {
                     @Override
-                    public void callBack(@NonNull String soundName) {
+                    public void callBack(@NonNull SoundModel soundName) {
+                        if(soundName == null) {
+                            //set default label value as "Default sound"
+                            mSound_value.setText("Default sound");
+                            mAlarmSound = "Default sound";
+                        }
+                        //else
+                            //mSound_value.setText(soundName);
+                            //mAlarmSound = soundName;
 
                     }
                 });
@@ -147,18 +201,33 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     
     @Override
     public boolean setSnooze(){
-
+        if(!mSnoozeBtn.isChecked()) {
+            mSnoozeBtn.setChecked(true);
+            mAlarmStatus = true;
+        }
+        else
+            mSnoozeBtn.setChecked(false);
+            mAlarmStatus = false;
 
         return true;
     }
-    
+
     public void onClick(View v){
         switch(v.getId()){
             case R.id.cancel:
-
+                getActivity().onBackPressed();
                 break;
             case R.id.save:
-                // mEditAlarmPresenter
+                mAlarmTime = 1430;
+                Alarm alarm = new Alarm( mAlarmTime, mAlarmLabel, "Tuesday", mAlarmSound, mAlarmStatus);
+                String alarmId = "0";
+                 mEditAlarmPresenter.saveEditedAlarm(alarm, alarmId, new EditAlarmContract.SaveAlarmEditCallBack() {
+                     @Override
+                     public void onAlarmSaveCallBack( boolean value) {
+                         if (value)
+                             getActivity().finish();
+                     }
+                 });
                 break;
             case R.id.repeat:
                 mEditAlarmPresenter.editRepeat();
@@ -167,7 +236,7 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
                 mEditAlarmPresenter.editAlarmLabel();
                 break;
             case R.id.sound:
-                mEditAlarmPresenter.changeSound();
+                //mEditAlarmPresenter.changeSound();
                 break;
             case R.id.snooze:
                 mEditAlarmPresenter.editSnooze();

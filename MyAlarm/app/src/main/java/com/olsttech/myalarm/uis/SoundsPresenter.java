@@ -1,5 +1,9 @@
 package com.olsttech.myalarm.uis;
 
+import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.google.common.collect.Lists;
 import com.olsttech.myalarm.models.DayModel;
 import com.olsttech.myalarm.models.SoundModel;
 
@@ -16,14 +20,27 @@ public class SoundsPresenter implements SoundsContract.Presenter{
         
     }
     @Override
-    public void getSounds(){
+    public void getSounds(@Nullable SoundModel setSound){
        
-        mView.loadView(getSoundsFromService());
+        mView.loadView(getSoundsFromService(setSound));
     }
     
-    private List<SoundModel> getSoundsFromService(){
-        soundNames = new ArrayList<SoundModel>();
-         //call the media service
+    private List<SoundModel> getSoundsFromService(SoundModel setSound){
+        List<SoundModel> soundNames = new ArrayList<SoundModel>();
+
+        String[] soundList = {"Bell", "Dance", "Mew", "Wince", "Dnacers", "Is Alive", "Right na na"};
+
+        for (String sound : soundList){
+            soundNames.add(new SoundModel(sound, false));
+        }
+
+        for (SoundModel sound : soundNames){
+
+                if (sound.getSound().equals(setSound.getSound())) {
+                    sound.setChecked(true);
+                }
+                return soundNames;
+            }
         return soundNames;
     }
 }

@@ -19,8 +19,11 @@ import com.olsttech.myalarm.R;
 
 public class AddAlarmActivity extends AppCompatActivity{
 
-    public static void startActivity(Context context){
+    private static AddAlarmContract.SaveAlarmCallBack mOnAlarmSave;
+
+    public static void startActivity(Context context, AddAlarmContract.SaveAlarmCallBack onAlarmsave){
         Intent intent = new Intent(context, AddAlarmActivity.class);
+        mOnAlarmSave = onAlarmsave;
         context.startActivity(intent);
     }
     
@@ -30,7 +33,7 @@ public class AddAlarmActivity extends AppCompatActivity{
         setContentView(R.layout.activity_addalarm);
 
         if (null == savedInstanceState) {
-            initFragment(AddAlarmFragment.newInstance());
+            initFragment(AddAlarmFragment.newInstance(mOnAlarmSave));
         }
     }
 
@@ -38,6 +41,21 @@ public class AddAlarmActivity extends AppCompatActivity{
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+       // if (getFragmentManager().getBackStackEntryCount() == 0)
+       //     this.finish();
+       // else
+       //     getFragmentManager().popBackStack();
+
     }
 
     private void initFragment(Fragment addFragment) {

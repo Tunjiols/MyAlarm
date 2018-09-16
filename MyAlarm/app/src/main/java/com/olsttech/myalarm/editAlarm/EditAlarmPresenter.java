@@ -3,10 +3,12 @@ package com.olsttech.myalarm.editAlarm;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.alarms.AlarmContract;
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
 import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,8 @@ public class EditAlarmPresenter implements EditAlarmContract.Presenter{
     }
 
     @Override
-    public void changeSound() {
-        mView.showSoundsListScreen();
+    public void changeSound(SoundModel soundModel) {
+        mView.showSoundsListScreen(soundModel);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class EditAlarmPresenter implements EditAlarmContract.Presenter{
     }
 
     @Override
-    public void saveEditedAlarm(@NonNull Alarm alarm, String alarmId) {
-
+    public void saveEditedAlarm(@NonNull Alarm alarm, String alarmId, EditAlarmContract.SaveAlarmEditCallBack onAlarmsave) {
+        onAlarmsave.onAlarmSaveCallBack(true);
     }
 }

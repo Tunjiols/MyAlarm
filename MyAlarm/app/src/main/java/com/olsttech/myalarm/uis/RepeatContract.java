@@ -1,7 +1,9 @@
 package com.olsttech.myalarm.uis;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.models.DayModel;
 
 import java.util.List;
@@ -13,10 +15,11 @@ public interface RepeatContract {
     }
     
     interface Presenter{
-        void setView();
+        void setView(List<DayModel> mDaySetList);
+        void onSelected(List<DayModel> mSelectedDays);
     }
-    
-    interface RepeatCallBack {
-        void RepeatcallBack(List<DayModel> selectedWeeks);
+
+    interface RepeatCallBack{
+        void onDaySelectedCallBack(@Nullable List<DayModel> selectedDays);
     }
 }
