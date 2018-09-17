@@ -1,6 +1,5 @@
 package com.olsttech.myalarm.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,27 +8,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.olsttech.myalarm.R;
+
+import java.util.List;
+
 /**
  * Created by adetunji on 20/08/2018.class HourRecyclerAdapter
  */
 
-public class HourRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerViewAdapter.ViewHolder> {
+public class HourRecyclerAdapter extends RecyclerView.Adapter<HourRecyclerAdapter.ViewHolder> {
     protected Context mContext;
-    private Activity mActivity;
+    private List<String> hourTime;
 
-    private int[] hourTime = {01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,00};
+    private String[] hourTimes;
    
     
-    public HourRecyclerAdapter(Context context, Activity activity){
+    public HourRecyclerAdapter(Context context, List<String> time){
         this.mContext 	    = context;
-        this.mActivity      = activity;
+        this.hourTime = time;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder viewholder = null;
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.hour_time_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.time_view, parent, false);
         viewholder = new ViewHolder(view);
         return  viewholder;
     }
@@ -37,20 +40,20 @@ public class HourRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerViewA
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTime.setText(hourTime.get(posoition));
+
+        holder.mTime.setText(hourTime.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return hourTime.size();    
+        if (hourTime != null)
+            return this.hourTime.size();
+        else
+            return 0;
     }
 
-    /**
-     * View Class for AlarmRecyclerViewAdapter.
-     *
-     *  The view that was clicked.
-     */
 
+    /*******************************************************************************************/
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnFocusChangeListener{
         public TextView mTime;
 
@@ -65,8 +68,8 @@ public class HourRecyclerAdapter extends RecyclerView.Adapter<AlarmRecyclerViewA
                 ((TextView)view).getText();
             }
                 int position = getAdapterPosition();
-                DayModel dayModel = mDayList.get(position);
-                mDayClickListener.onDayClicked(dayModel);
+                //DayModel dayModel = mDayList.get(position);
+                //mDayClickListener.onDayClicked(dayModel);
         }
     }
 

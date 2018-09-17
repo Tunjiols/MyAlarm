@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
+import com.olsttech.myalarm.adapters.HourRecyclerAdapter;
 import com.olsttech.myalarm.alarms.AlarmMainActivity;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.models.DayModel;
@@ -30,10 +33,13 @@ import com.olsttech.myalarm.uis.RepeatActivity;
 import com.olsttech.myalarm.uis.RepeatContract;
 import com.olsttech.myalarm.uis.SoundsActivity;
 import com.olsttech.myalarm.uis.SoundsContract;
+import com.olsttech.myalarm.uis.TimeTracking;
 import com.olsttech.myalarm.utils.AlarmConstants;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.functions.Action1;
 
 /**
  * Created by adetunji on 01/09/2018.AddAlarmFragment
@@ -49,6 +55,8 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private TextView mLabel_value;
     private TextView mSound_value;
     private ImageButton mSnoozeBtn;
+    private RecyclerView mFrameLayoutHour;
+    private RecyclerView mFrameLayoutMinute;
     
     private AddAlarmContract.Presenter mAddAlarmPresenter;
     
@@ -64,6 +72,17 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private FrameLayout mAlarmTimeFrameView;
 
     private static AddAlarmContract.SaveAlarmCallBack mOnAlarmsave;
+
+    private List<String> hourTime;
+    private List<String> minuteTime;
+    private String[] hourTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
+            ,"14","15","16","17","18","19","20","21","22","23","00"};
+    private String[] minuteTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
+            ,"14","15","16","17","18","19","20","21","22","23","30","31","32","33","34","35","36",
+            "37", "38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53",
+            "54","55","56","57","58","59","00"};
+
+
 
     public static AddAlarmFragment newInstance(AddAlarmContract.SaveAlarmCallBack onAlarmsave) {
         mOnAlarmsave = onAlarmsave;
@@ -84,6 +103,8 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mAlarmSound = new SoundModel(AlarmConstants.DAFAULT_SOUND, true);
 
         mAlarmTime = 1200;//s default time
+
+
     }
 
     /**
@@ -121,6 +142,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mSound = rootView.findViewById(R.id.sound);
         mSnooze = rootView.findViewById(R.id.snooze);
 
+        mFrameLayoutHour = rootView.findViewById(R.id.frame_hour);
+        mFrameLayoutMinute = rootView.findViewById(R.id.frame_minute);
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
+
         mLabel.setOnClickListener(this);
         mRepeat.setOnClickListener(this);
         mSound.setOnClickListener(this);
@@ -128,8 +154,28 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mCancel.setOnClickListener(this);
         mSave.setOnClickListener(this);
 
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
+        hourTime = new ArrayList<>();
+        minuteTime = new ArrayList<>();
+        for (String hour : hourTimes ) {
+            hourTime.add(hour);
+        }
+        for (String minute : minuteTimes){
+            minuteTime.add(minute);
+        }
+
+        Log.e("houetime size :", String.valueOf(minuteTime.size()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
+        mFrameLayoutHour.setLayoutManager(linearLayoutManager);
+        mFrameLayoutMinute.setLayoutManager(linearLayoutManager2);
+        HourRecyclerAdapter hourRecyclerAdapter = new HourRecyclerAdapter(getContext(),hourTime);
+        mFrameLayoutHour.setAdapter(hourRecyclerAdapter);
+        HourRecyclerAdapter minuteRecyclerAdapter = new HourRecyclerAdapter(getContext(),minuteTime);
+        mFrameLayoutMinute.setAdapter(minuteRecyclerAdapter);
+
+        scrollingTime(mFrameLayoutHour);
+        scrollingTime(mFrameLayoutMinute);
+
         mSnoozeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,6 +309,40 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
         }
     }
+    public void scrollingTime(RecyclerView recyclerView) {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+                int firstVisiblesItem = dy;//recyclerView.getLayoutManager();
 
+                int lastVisiblesItem = dx;//recyclerView.getLayoutManager();
+
+                TimeTracking.NowVisible visible = new TimeTracking.NowVisible(firstVisiblesItem, lastVisiblesItem);
+
+                TimeTracking timeTracking = new TimeTracking(
+                        new Action1<TimeTracking.NowVisible>() {
+                            @Override
+                            public void call(TimeTracking.NowVisible visible) {
+                                int position = visible.getLastVisible();
+                                //TODO get my outputs
+                                View v = recyclerView.getLayoutManager().getChildAt(position);
+                            }
+                        },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable s) {
+                                Log.e("Error getting the time", s.getMessage());
+                            }
+                        }
+                );
+
+                timeTracking.postViewEvent(visible);
+
+                //---------------------------------------------------
+               // int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                //int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+            }
+        });
+    }
 
 }

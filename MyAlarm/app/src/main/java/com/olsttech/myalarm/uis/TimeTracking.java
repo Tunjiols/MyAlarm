@@ -18,12 +18,13 @@ public class TimeTracking {
     public TimeTracking(final Action1<NowVisible> onSuccess, final Action1<Throwable> onError) {
         this.mOnSuccess = onSuccess;
         this.mPublishSubject = PublishSubject.create();
-        this.mSubscription = publishSubject.distinctUntilChanged()
-                .throttleWithTimeout(THRESHOLD_MS, TimeUnit.MILLISECONDS)
-                .subscribe(this::onCallback, onError);
+        this.mSubscription = mPublishSubject.distinctUntilChanged()
+                .throttleWithTimeout(TIME_THRESHOLD_MS, TimeUnit.MILLISECONDS)
+                .subscribe(mOnSuccess, onError);
     }
 
     public void postViewEvent(final NowVisible visible) {
+        mOnSuccess.call(visible);
         mPublishSubject.onNext(visible);
     }
 
@@ -34,7 +35,7 @@ public class TimeTracking {
     private void onCallback(NowVisible visible) {
         mOnSuccess.call(visible);
     }
-    
+
     /*********************************************************************************/
     public static class NowVisible {
         final int firstVisible;
@@ -43,6 +44,14 @@ public class TimeTracking {
         public NowVisible(int firstVisible, int lastVisible) {
             this.firstVisible = firstVisible;
             this.lastVisible = lastVisible;
+        }
+
+        public int getFirstVisible(){
+            return this.firstVisible;
+        }
+
+        public int getLastVisible(){
+            return this.lastVisible;
         }
         // TODO please implement equals and hashCode, required for the distinction logic
     }

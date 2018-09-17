@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_A900"
@@ -17,96 +18,122 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:textSize="16sp"
-            android:textColor="@color/lime_A700" />
+            android:textColor="@color/lime_A700"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="Add Alarm"
-            android:textSize="16sp"
             android:textColor="@color/grey_600"
-            android:layout_centerInParent="true"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:textSize="16sp"
-            android:textColor="@color/lime_A700"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:text="Save"
+            android:textColor="@color/lime_A700"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/framelayout"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/grey_900">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/time_backgd"
+        android:padding="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/margin_avg"
+        android:layout_marginTop="@dimen/margin_big"
+        >
 
-    </FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/frame_hour"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@color/grey_900">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/frame_minute"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_small"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/frame_hour"
+            android:layout_toRightOf="@+id/frame_hour"
+            android:background="@color/grey_900" />
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/repeat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_avg"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@color/grey_900">
+        android:background="@color/grey_900"
+        android:padding="@dimen/padding_avg">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Repeat"
-            android:textColor="@color/grey_200"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"/>
+            android:text="Repeat"
+            android:textColor="@color/grey_200" />
 
         <TextView
             android:id="@+id/repeat_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Repeat"
-            android:textColor="@color/grey_500"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:text="Repeat"
+            android:textColor="@color/grey_500" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_avg"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@color/grey_900">
+        android:background="@color/grey_900"
+        android:padding="@dimen/padding_avg">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Label"
-            android:textColor="@color/grey_200"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"/>
+            android:text="Label"
+            android:textColor="@color/grey_200" />
 
         <TextView
             android:id="@+id/label_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alarm"
-            android:textColor="@color/grey_500"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:text="Alarm"
+            android:textColor="@color/grey_500" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/snooze"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/padding_avg"
-        android:paddingEnd="@dimen/padding_avg"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@color/grey_900">
+        android:background="@color/grey_900"
+        android:paddingBottom="@dimen/margin_small"
+        android:paddingEnd="@dimen/padding_avg"
+        android:paddingStart="@dimen/padding_avg"
+        android:paddingTop="@dimen/margin_small">
 
         <TextView
             android:layout_width="wrap_content"
@@ -122,18 +149,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_status_off"
+            android:layout_alignParentRight="true"
             android:background="@color/grey_900"
-            android:layout_alignParentRight="true"/>
+            android:src="@drawable/ic_status_off" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/sound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_avg"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@color/grey_900">
+        android:background="@color/grey_900"
+        android:padding="@dimen/padding_avg">
 
         <TextView
             android:layout_width="wrap_content"
@@ -141,7 +168,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:text="Sound"
-            android:textColor="@color/grey_200"/>
+            android:textColor="@color/grey_200" />
 
         <TextView
             android:id="@+id/sound_value"

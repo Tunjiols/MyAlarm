@@ -107,7 +107,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
        // }
 
         edit = false;
-        mAdd.setText("+");
+        mAdd.setText("Add");
         setAdapter(recyclerViewAdapter);
         mAlarm_select.setText("Alarm");
     }
@@ -180,7 +180,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 }
                 else {
                     edit = false;
-                    mAdd.setText("+");
+                    mAdd.setText("Add");
                     setAdapter(recyclerViewAdapter);
                     mAlarm_select.setText("Alarm");
                 }
