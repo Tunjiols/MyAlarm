@@ -345,4 +345,16 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         });
     }
 
+    private List<String> timeEmitter(String... time){
+    
+        List<String> hours = new ArrayList<String>();
+        
+		Observable<String>.from(time).subscribe(new Action1() {
+				@Override
+				public void call(String hour) {
+				    hours.add(hour);
+                }    
+			});
+        return hours;
+	}
 }
