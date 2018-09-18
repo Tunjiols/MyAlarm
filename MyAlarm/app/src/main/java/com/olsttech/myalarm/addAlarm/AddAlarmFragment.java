@@ -156,14 +156,10 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
         hourTime = new ArrayList<>();
         minuteTime = new ArrayList<>();
-        for (String hour : hourTimes ) {
-            hourTime.add(hour);
-        }
-        for (String minute : minuteTimes){
-            minuteTime.add(minute);
-        }
+        
+        hourTime = timeEmitter(hourTimes);
+        minuteTime = timeEmitter(minuteTimes);
 
-        Log.e("houetime size :", String.valueOf(minuteTime.size()));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
         mFrameLayoutHour.setLayoutManager(linearLayoutManager);
