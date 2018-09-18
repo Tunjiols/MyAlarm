@@ -1,5 +1,6 @@
 package com.olsttech.myalarm.uis;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -20,8 +21,7 @@ public class SoundsPresenter implements SoundsContract.Presenter{
         
     }
     @Override
-    public void getSounds(@Nullable SoundModel setSound){
-       
+    public void getSounds(@NonNull SoundModel setSound){
         mView.loadView(getSoundsFromService(setSound));
     }
     
@@ -31,16 +31,12 @@ public class SoundsPresenter implements SoundsContract.Presenter{
         String[] soundList = {"Bell", "Dance", "Mew", "Wince", "Dnacers", "Is Alive", "Right na na"};
 
         for (String sound : soundList){
-            soundNames.add(new SoundModel(sound, false));
+            if (sound.equals(setSound.getSound()))
+                soundNames.add(new SoundModel(sound, true));
+            else
+                soundNames.add(new SoundModel(sound, false));
         }
 
-        for (SoundModel sound : soundNames){
-
-                if (sound.getSound().equals(setSound.getSound())) {
-                    sound.setChecked(true);
-                }
-                return soundNames;
-            }
         return soundNames;
     }
 }

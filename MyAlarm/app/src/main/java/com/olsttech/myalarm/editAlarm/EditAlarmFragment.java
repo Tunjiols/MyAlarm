@@ -5,17 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
+import com.olsttech.myalarm.adapters.HourRecyclerAdapter;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.models.DayModel;
 import com.olsttech.myalarm.models.SoundModel;
@@ -25,10 +30,16 @@ import com.olsttech.myalarm.uis.RepeatActivity;
 import com.olsttech.myalarm.uis.RepeatContract;
 import com.olsttech.myalarm.uis.SoundsActivity;
 import com.olsttech.myalarm.uis.SoundsContract;
+import com.olsttech.myalarm.uis.TimeTracking;
 import com.olsttech.myalarm.utils.AlarmConstants;
+import com.olsttech.myalarm.utils.SimpleItemDividerForDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
 
 /**
  * Created by adetunji on 01/09/2018.EditAlarmFragment
@@ -42,16 +53,17 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     private TextView mRepeat_value;
     private TextView mLabel_value;
     private TextView mSound_value;
-    private RadioButton mSnoozeBtn;
-    private String mAlarmSound;
+    private ImageButton mSnoozeBtn;
+    private SoundModel mAlarmSound;
+    private String mAlarmLabel;
     private boolean mAlarmStatus;
     private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
-    private FrameLayout mAlarmTimeView;
     private RecyclerView mFrameLayoutHour;
     private RecyclerView mFrameLayoutMinute;
     
     private long mAlarmTime;
-    private String mAlarmLabel = AlarmConstants.INIT_LABEL;
+    private String mSetDays;
+
 
     private EditAlarmPresenter mEditAlarmPresenter;
     private static Alarm mAlarm;
@@ -59,12 +71,12 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     private List<DayModel> mAlarmDays;
     private List<String> hourTime;
     private List<String> minuteTime;
-    private String[] hourTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
-            ,"14","15","16","17","18","19","20","21","22","23","00"};
-    private String[] minuteTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
+    private String[] hourTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
+            ,"14","15","16","17","18","19","20","21","22","23"};
+    private String[] minuteTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
             ,"14","15","16","17","18","19","20","21","22","23","30","31","32","33","34","35","36",
             "37", "38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53",
-            "54","55","56","57","58","59","00"};
+            "54","55","56","57","58","59"};
 
     public static EditAlarmFragment newInstance(Alarm alarm) {
         mAlarm = alarm;
@@ -80,6 +92,8 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         super.onActivityCreated(savedInstanceState);
         mEditAlarmPresenter = new EditAlarmPresenter(this, getContext());
         mAlarmDays = new ArrayList<>();
+        hourTime = new ArrayList<>();
+        minuteTime = new ArrayList<>();
         mAlarmDays.add(new DayModel(AlarmConstants.NO_REPEAT, true)) ;
     }
 
@@ -131,25 +145,21 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
-        mRepeat_value.setText(mAlarm.getAlarmDay());
-        mLabel_value.setText(mAlarm.getAlarmLabel());
-        mSound_value.setText(mAlarm.getAlamSound());
-        mSnoozeBtn.setChecked(mAlarm.getAlarmStatus());
-        
-        
-        hourTime = new ArrayList<>();
-        minuteTime = new ArrayList<>();
-        for (String hour : hourTimes ) {
-            hourTime.add(hour);
-        }
-        for (String minute : minuteTimes){
-            minuteTime.add(minute);
-        }
-        
+        extractAllFromAlarm(mAlarm);// get all values from alarm
+
+        //set hour and minute texts
+        hourTime = timeEmitter(hourTimes);
+        minuteTime = timeEmitter(minuteTimes);
+
+        //instantiate LinearLayoutManager to dispay time
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
         mFrameLayoutHour.setLayoutManager(linearLayoutManager);
         mFrameLayoutMinute.setLayoutManager(linearLayoutManager2);
+
+        mFrameLayoutMinute.setItemAnimator(new DefaultItemAnimator());
+        mFrameLayoutMinute.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
+        mFrameLayoutHour.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
         HourRecyclerAdapter hourRecyclerAdapter = new HourRecyclerAdapter(getContext(),hourTime);
         mFrameLayoutHour.setAdapter(hourRecyclerAdapter);
         HourRecyclerAdapter minuteRecyclerAdapter = new HourRecyclerAdapter(getContext(),minuteTime);
@@ -161,11 +171,27 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         mSnoozeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAddAlarmPresenter.setSnooze(mAlarmStatus);
+                mEditAlarmPresenter.editSnooze(mAlarmStatus);
             }
         });
 
         return rootView;
+    }
+
+    private void extractAllFromAlarm(Alarm alarm){
+        //set preset texts
+        //mAlarmDays =
+        mRepeat_value.setText(alarm.getAlarmDay());
+
+        mAlarmLabel = alarm.getAlarmLabel();
+        mLabel_value.setText(mAlarmLabel);
+
+        //put the current sound parameters into mAlarmSound
+        mAlarmSound = new SoundModel(alarm.getAlamSound(),alarm.getAlarmStatus());
+        mSound_value.setText(alarm.getAlamSound());
+
+        if (alarm.getAlarmStatus())
+            mSnoozeBtn.setImageResource(R.drawable.ic_status);
     }
 
     /**
@@ -181,26 +207,17 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         mLabel_value.setText(mAlarmLabel);//set alarm value
         mSound_value.setText(mAlarmSound.getSound());//set default label value as "Default sound"
 
-        StringBuilder stringBuilder = new StringBuilder(7);
-
-         //concatinate the selected days
-        for (DayModel week : mAlarmDays) {
-            stringBuilder.append(week.getDay() + ",") ;
-        }
-        mSetDays = stringBuilder.toString();
+        mSetDays = getShortDay2(mAlarmDays);
         if (!mSetDays.isEmpty()){
             mRepeat_value.setText(mSetDays);//set alarm repeat days
         }else   {
             mRepeat_value.setText(mAlarmDays.get(0).getDay());//set alarm repeat days
         }
-
-        Log.e("stringBuilder: ", data);
-
     }
 
     @Override
-    public void showRepeatScreen() {
-        RepeatActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK, mAlarmDays,
+    public void showRepeatScreen(List<DayModel> days) {
+        RepeatActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK, days,
                 new RepeatContract.RepeatCallBack() {
                     @Override
                     public void onDaySelectedCallBack(List<DayModel> selectedDays) {
@@ -212,12 +229,12 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
     }
 
     @Override
-    public void showLabelScreen() {
+    public void showLabelScreen(String label) {
         LabelActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK,
-                mAlarm.getAlarmLabel(), new LabelContract.LabelCallBack() {
+                label, new LabelContract.LabelCallBack() {
                     @Override
                     public void callBack(@Nullable String label) {
-
+                        mAlarmLabel = label;
                     }
                 });
     }
@@ -227,22 +244,22 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
         SoundsActivity.startActivity(getContext(), Intent.FLAG_ACTIVITY_NEW_TASK, sound,
                 new SoundsContract.SoundsCallBack() {
                     @Override
-                    public void callBack(@Nullable SoundModel soundName) {
-                        if(soundName != null)
+                    public void callBack(@NonNull SoundModel soundName) {
                             mAlarmSound = soundName;
                     }
                 });
     }
     
     @Override
-    public boolean setSnooze(){
-       if (!snooze) {
+    public boolean setSnooze(boolean snooze){
+      if (!snooze) {
             mSnoozeBtn.setImageResource(R.drawable.ic_status);
             mAlarmStatus = true;
         } else {
             mSnoozeBtn.setImageResource(R.drawable.ic_status_off);
             mAlarmStatus = false;
         }
+        return false;
     }
 
     public void onClick(View v){
@@ -251,28 +268,29 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
                 getActivity().onBackPressed();
                 break;
             case R.id.save:
-               Alarm alarm = new Alarm( mAlarmTime, mAlarmLabel, mSetDays, mAlarmSound.getSound(), mAlarmStatus);
+              // Alarm alarm = new Alarm( mAlarmTime, mAlarmLabel, mSetDays, mAlarmSound.getSound(), mAlarmStatus);
                 String alarmId = "0";
-                mAddAlarmPresenter.saveAlarm(alarm, alarmId, new AddAlarmContract.SaveAlarmCallBack() {
+              /*  mEditAlarmPresenter.saveAlarm(alarm, alarmId, new EditAlarmContract.View().SaveAlarmCallBack() {
                     //callback to know if alarm is successfully saved
                     @Override
                     public void onAlarmSaveCallBack( boolean value) {
                         mOnAlarmsave.onAlarmSaveCallBack (value);
                         getActivity().finish();
                     }
-                });
+                });*/
+                getActivity().finish();
                 break;
             case R.id.repeat:
-                mEditAlarmPresenter.editRepeat();
+                mEditAlarmPresenter.editRepeat(mAlarmDays);
                 break;
             case R.id.label:
-                mEditAlarmPresenter.editAlarmLabel();
+                mEditAlarmPresenter.editAlarmLabel(mAlarmLabel);
                 break;
             case R.id.sound:
-               mAddAlarmPresenter.setSound(mAlarmSound);
+                mEditAlarmPresenter.changeSound(mAlarmSound);
                 break;
             case R.id.snooze:
-                mEditAlarmPresenter.editSnooze();
+                mEditAlarmPresenter.editSnooze(mAlarmStatus);
                 break;
         }
     
@@ -304,13 +322,51 @@ public class EditAlarmFragment extends Fragment implements EditAlarmContract.Vie
                             }
                         }
                 );
-
                 timeTracking.postViewEvent(visible);
-
-                //---------------------------------------------------
-               // int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                //int totalItemCount = recyclerView.getLayoutManager().getItemCount();
             }
         });
+    }
+
+    private List<String> timeEmitter(String... time){
+        final List<String> hours = new ArrayList<String>();
+
+        Observable<String> observable = Observable.from(time);
+
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                hours.add(s);
+            }
+        };
+        observable.subscribe(subscriber);
+        return hours;
+    }
+
+
+    private String getShortDay2(List<DayModel> dayList){
+        final StringBuilder stringBuilder = new StringBuilder(7);
+        Observable<DayModel> buildString = Observable.from(dayList);
+        Subscriber<DayModel> subscriber = new Subscriber<DayModel>(){
+            @Override
+            public void onNext(DayModel day) {
+                stringBuilder.append(day.getDay().substring(0, 3) + ", ");
+            }
+            @Override
+            public void onCompleted() { }
+            @Override
+            public void onError(Throwable err) { }
+        };
+        buildString.subscribe(subscriber);
+        return stringBuilder.toString();
     }
 }

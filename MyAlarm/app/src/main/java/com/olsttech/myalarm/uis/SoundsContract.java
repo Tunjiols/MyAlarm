@@ -18,7 +18,7 @@ public interface SoundsContract{
     }
     
     interface Presenter{
-        void getSounds(@Nullable SoundModel setSound);
+        void getSounds(@NonNull SoundModel setSound);
     }
     
     interface SoundsCallBack{

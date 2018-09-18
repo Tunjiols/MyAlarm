@@ -31,8 +31,6 @@ public class AlarmPresenter implements AlarmContract.Presenter{
             @Override
             public void onAlarmLoaded(List<Alarm> alarms) {
                 mView.showAlarms(alarms);
-                Log.e("AlarmPresenter listsiz", String.valueOf(alarms.size()));
-
             }
         });
 

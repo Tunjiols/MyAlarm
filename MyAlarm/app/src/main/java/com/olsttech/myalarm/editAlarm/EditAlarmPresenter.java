@@ -8,6 +8,7 @@ import com.olsttech.myalarm.alarms.AlarmContract;
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
 import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.models.DayModel;
 import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.ArrayList;
@@ -28,13 +29,13 @@ public class EditAlarmPresenter implements EditAlarmContract.Presenter{
     }
 
     @Override
-    public void editRepeat() {
-        mView.showRepeatScreen();
+    public void editRepeat(List<DayModel> day) {
+        mView.showRepeatScreen(day);
     }
 
     @Override
-    public void editAlarmLabel() {
-        mView.showLabelScreen();
+    public void editAlarmLabel(String label) {
+        mView.showLabelScreen(label);
     }
 
     @Override
@@ -48,8 +49,8 @@ public class EditAlarmPresenter implements EditAlarmContract.Presenter{
     }
 
     @Override
-    public void editSnooze() {
-        mView.setSnooze();
+    public void editSnooze(boolean snooze) {
+        mView.setSnooze(snooze);
     }
 
     @Override

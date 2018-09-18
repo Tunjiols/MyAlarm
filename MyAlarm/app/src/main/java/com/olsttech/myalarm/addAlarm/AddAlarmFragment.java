@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,10 +36,14 @@ import com.olsttech.myalarm.uis.SoundsActivity;
 import com.olsttech.myalarm.uis.SoundsContract;
 import com.olsttech.myalarm.uis.TimeTracking;
 import com.olsttech.myalarm.utils.AlarmConstants;
+import com.olsttech.myalarm.utils.SimpleItemDividerForDecoration;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 
 /**
@@ -62,26 +67,25 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     
     private long mAlarmTime;
     private String  mAlarmLabel;
-    private String mSetDays = "No Repeat" ;
+    private String mSetDays ;
 
     private List<DayModel> mAlarmDays;
     private SoundModel mAlarmSound;
     private boolean mAlarmStatus = false;
 
     private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
-    private FrameLayout mAlarmTimeFrameView;
 
     private static AddAlarmContract.SaveAlarmCallBack mOnAlarmsave;
     private TimeTracking mTimeTracking;
 
     private List<String> hourTime;
     private List<String> minuteTime;
-    private String[] hourTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
-            ,"14","15","16","17","18","19","20","21","22","23","00"};
-    private String[] minuteTimes = {"01","02","03","04","05","06","07","08","09","10","11","12","13"
+    private String[] hourTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
+            ,"14","15","16","17","18","19","20","21","22","23"};
+    private String[] minuteTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
             ,"14","15","16","17","18","19","20","21","22","23","30","31","32","33","34","35","36",
             "37", "38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53",
-            "54","55","56","57","58","59","00"};
+            "54","55","56","57","58","59"};
 
 
 
@@ -102,10 +106,8 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mAlarmDays = new ArrayList<>();
         mAlarmDays.add(new DayModel(AlarmConstants.NO_REPEAT, true)) ;
         mAlarmSound = new SoundModel(AlarmConstants.DAFAULT_SOUND, true);
-
-        mAlarmTime = 1200;//s default time
-
-
+        hourTime = new ArrayList<>();
+        minuteTime = new ArrayList<>();
     }
 
     /**
@@ -154,9 +156,6 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mSnooze.setOnClickListener(this);
         mCancel.setOnClickListener(this);
         mSave.setOnClickListener(this);
-
-        hourTime = new ArrayList<>();
-        minuteTime = new ArrayList<>();
         
         hourTime = timeEmitter(hourTimes);
         minuteTime = timeEmitter(minuteTimes);
@@ -165,14 +164,39 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
         mFrameLayoutHour.setLayoutManager(linearLayoutManager);
         mFrameLayoutMinute.setLayoutManager(linearLayoutManager2);
+        mFrameLayoutMinute.setItemAnimator(new DefaultItemAnimator());
+        mFrameLayoutMinute.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
+        mFrameLayoutHour.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
         HourRecyclerAdapter hourRecyclerAdapter = new HourRecyclerAdapter(getContext(),hourTime);
         mFrameLayoutHour.setAdapter(hourRecyclerAdapter);
         HourRecyclerAdapter minuteRecyclerAdapter = new HourRecyclerAdapter(getContext(),minuteTime);
         mFrameLayoutMinute.setAdapter(minuteRecyclerAdapter);
         
         
+
+
+       initSetup();
+
+        return rootView;
+    }
+
+    /**Method for Initial setup*/
+    private void initSetup(){
+
         scrollingTime(mFrameLayoutHour, mTimeTracking);
         scrollingTime(mFrameLayoutMinute, mTimeTracking);
+
+        /*Set initial repeat to No Repeat*/
+        if (mSetDays != null){
+            mRepeat_value.setText(mSetDays);//set alarm repeat days
+        }else   {
+            mRepeat_value.setText("No Repeat");//set as Default
+        }
+
+        if(mAlarmSound != null) {
+            mSound_value.setText(mAlarmSound.getSound());//set default label value as "Default sound"
+        }
+        mLabel_value.setText(mAlarmLabel);//set alarm value
 
         mSnoozeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,8 +204,6 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 mAddAlarmPresenter.setSnooze(mAlarmStatus);
             }
         });
-
-        return rootView;
     }
 
     @Override
@@ -203,14 +225,24 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         if(mAlarmSound != null) {
             mSound_value.setText(mAlarmSound.getSound());//set default label value as "Default sound"
         }
-        
-        mSetDays = getShortDay(mAlarmDays);
-        
+
+        mSetDays = getShortDay2(mAlarmDays);
         if (!mSetDays.isEmpty()){
-            mRepeat_value.setText(mSetDays);//set alarm repeat days
+           mRepeat_value.setText(mSetDays);//set alarm repeat days
         }else   {
-            mRepeat_value.setText("No Repeat"));//set as Default
-        }      
+            mRepeat_value.setText("No Repeat");//set as Default
+        }
+    }
+
+    /**
+     * Called when the Fragment is no longer resumed.  This is generally
+     * tied to {@lin Activity#onPause() Activity.onPause} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+       // mTimeTracking.unsubscribe();
     }
 
     @Override
@@ -299,7 +331,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         }
     }
     
-    public void scrollingTime(RecyclerView recyclerView, TimeTracking timeTracking ) {
+    public void scrollingTime(RecyclerView recyclerView, final  TimeTracking timeTrackings ) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
@@ -308,14 +340,15 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 int lastVisiblesItem = dx;//recyclerView.getLayoutManager();
 
                 TimeTracking.NowVisible visible = new TimeTracking.NowVisible(firstVisiblesItem, lastVisiblesItem);
-
+                TimeTracking timeTracking = timeTrackings;
                 timeTracking = new TimeTracking(
                         new Action1<TimeTracking.NowVisible>() {
                             @Override
                             public void call(TimeTracking.NowVisible visible) {
                                 int position = visible.getLastVisible();
                                 //TODO get my outputs
-                                View v = recyclerView.getLayoutManager().getChildAt(position);
+                                recyclerView.getLayoutManager().getChildAt(position);
+                                mAlarmTime = 0000;
                             }
                         },
                         new Action1<Throwable>() {
@@ -336,39 +369,37 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     }
 
     private List<String> timeEmitter(String... time){
-        List<String> hours = new ArrayList<String>();
+        final List<String> hours = new ArrayList<String>();
         
-		Observable<String>.from(time).subscribe(new Action1() {
-				@Override
-				public void call(String hour) {
-				    hours.add(hour);
-                }    
-			});
+        Observable<String> observable = Observable.from(time);
+
+        Subscriber<String> subscriber = new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String s) {
+                hours.add(s);
+            }
+        };
+        observable.subscribe(subscriber);
         return hours;
 	}
-    
-    public String getShortDay(DayModel dayLists) { 
-        StringBuilder stringBuilder = new StringBuilder(7);
-        if(dayLists.size() == 1){
-            dayLists.get(0).getDay().substring(0, 2);
-            return stringBuilder.append(day).toString();
-        }
-        else{
-            for (DayModel day : dayLists) {
-                day.getDay().substring(0, 2) + "," ;
-				return stringBuilder.append(day).toString;
-            }
-        }		
-	}
-    
-    private String getShortDay2(DayModel dayList){
-        StringBuilder stringBuilder = new StringBuilder(7);
+
+    private String getShortDay2(List<DayModel> dayList){
+        final StringBuilder stringBuilder = new StringBuilder(7);
         Observable<DayModel> buildString = Observable.from(dayList);
-	    Subscriber subscriber = new Subscriber(){ 
+	    Subscriber<DayModel> subscriber = new Subscriber<DayModel>(){
 		    @Override
 			    public void onNext(DayModel day) {
-                    day.getDay().substring(0, 2) + "," ;
-				    return stringBuilder.append(day).toString;
+				    stringBuilder.append(day.getDay().substring(0, 3) + ", ");
                 }
 		    @Override
 			    public void onCompleted() { }
@@ -376,5 +407,6 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 			    public void onError(Throwable err) { }
 	    };
 	    buildString.subscribe(subscriber);
+	    return stringBuilder.toString();
     }
 }

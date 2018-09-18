@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
@@ -84,12 +85,12 @@ public class RepeatActivity extends AppCompatActivity implements RepeatContract.
         DayClickListener dayClickListener = new DayClickListener(){
             @Override
             public void onDayClicked(DayModel dayModel){
-                 if(!dayModel.getChecked()){
-                     dayModel.setChecked(true);
+                 if(dayModel.getChecked()){
+                     //dayModel.setChecked(true);
                      mSelectedDays.add(dayModel);
                  }
                  else {
-                     dayModel.setChecked(false);
+                     //dayModel.setChecked(false);
                      if (mSelectedDays.contains(dayModel))
                          mSelectedDays.remove(dayModel);
                 }
@@ -186,14 +187,14 @@ public class RepeatActivity extends AppCompatActivity implements RepeatContract.
          * <p>
          */
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
 
             viewHolder.mText.setText(mDayList.get(position).getDay());
             //checked the box if the day is already selected
             if (mDayList.get(position).getChecked()) {
-                viewHolder.mCheckBox.setChecked(true);
+                viewHolder.mCheckBox.setImageResource(R.drawable.ic_checkedbutton);
             } else{
-                viewHolder.mCheckBox.setChecked(false);
+                viewHolder.mCheckBox.setImageResource(R.drawable.ic_uncheckedbutton);
             }
         }
 
@@ -215,22 +216,30 @@ public class RepeatActivity extends AppCompatActivity implements RepeatContract.
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         
             public TextView mText;
-            public CheckBox mCheckBox;
+            public ImageButton mCheckBox;
             private DayClickListener mDayClickListener;
             
             public ViewHolder(final View view, DayClickListener dayClickListener){
                 super(view);
                 this.mDayClickListener = dayClickListener;
                 mText = (TextView)view.findViewById(R.id.text);
-                mCheckBox = (CheckBox)view.findViewById(R.id.checkBox);
+                mCheckBox = (ImageButton) view.findViewById(R.id.checkBox);
 
                 mCheckBox.setOnClickListener(this);
             }
             
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 int position = getAdapterPosition();
                 DayModel dayModel = mDayList.get(position);
+                if (dayModel.getChecked()){
+                    dayModel.setChecked(false);
+                    mCheckBox.setImageResource(R.drawable.ic_uncheckedbutton);
+                }
+                else {
+                    dayModel.setChecked(true);
+                    mCheckBox.setImageResource(R.drawable.ic_checkedbutton);
+                }
                 mDayClickListener.onDayClicked(dayModel);
             }
         }

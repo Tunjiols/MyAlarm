@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
@@ -68,6 +69,7 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
     
     private void initSetup(){
         presenter = new SoundsPresenter(this);
+        Log.e("startActivity", mSetSound.getSound());
         presenter.getSounds(mSetSound); //get sounds from database
 
         mSave.setOnClickListener(this);
@@ -79,19 +81,15 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
         SoundsContract.ClickListener soundClickListener = new SoundsContract.ClickListener(){
             @Override
             public void onSoundSelect(SoundModel soundModel){
-                 if(!soundModel.getChecked()) {
-                     soundModel.setChecked(true);
-
+                        soundModel.setChecked(true);
+                     //TODO use RxJava to loop through the list of sounds and make sure only one is checked
                      //loop through all the sounds and check only the clicked sound
                      for (SoundModel checkedSound : soundsList){
                          if (!checkedSound.equals(soundModel)){
                              checkedSound.setChecked(false);
                          }
                      }
-                     mSound = soundModel;
-                 }
-                 else
-                     soundModel.setChecked(false);
+                mSound = soundModel;
             }
         };
 
@@ -110,13 +108,8 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.save:
-                if (null != mSound) {
                     mSoundCallback.callBack(mSound);
                     finish();
-                }else {
-                    mSoundCallback.callBack(mSetSound);
-                    finish();
-                }
                 break;
             case R.id.cancel:
                 finish();
@@ -173,7 +166,12 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
             viewHolder.mText.setText(mSoundsList.get(position).getSound());
-            viewHolder.mCheckBox.setChecked(mSoundsList.get(position).getChecked());
+            //viewHolder.mCheckBox.setChecked(mSoundsList.get(position).getChecked());
+            if (mSoundsList.get(position).getChecked()) {
+                viewHolder.mCheckBox.setImageResource(R.drawable.ic_checkedbutton);
+            } else{
+                viewHolder.mCheckBox.setImageResource(R.drawable.ic_uncheckedbutton);
+            }
         }
 
         /**
@@ -194,14 +192,14 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         
             public TextView mText;
-            public CheckBox mCheckBox;
+            public ImageButton mCheckBox;
             private SoundsContract.ClickListener mSoundClickListener;
             
             public ViewHolder(final View view, SoundsContract.ClickListener soundClickListener){
                 super(view);
                 this.mSoundClickListener = soundClickListener;
                 mText = (TextView)view.findViewById(R.id.text);
-                mCheckBox = (CheckBox)view.findViewById(R.id.checkBox);
+                mCheckBox = (ImageButton) view.findViewById(R.id.checkBox);
 
                 mCheckBox.setOnClickListener(this);
             }
@@ -210,6 +208,16 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
             public void onClick(View v){
                 int position = getAdapterPosition();
                 SoundModel soundModel = mSoundsList.get(position);
+
+                soundModel.setChecked(true);
+                mCheckBox.setImageResource(R.drawable.ic_checkedbutton);
+                for (SoundModel sound : mSoundsList){
+                    if (sound.getChecked() && !sound.getSound().equals(soundModel.getSound())) {
+                        sound.setChecked(false);
+                        mCheckBox.setImageResource(R.drawable.ic_uncheckedbutton);
+                    }
+                }
+
                 mSoundClickListener.onSoundSelect(soundModel);
             }
         }
