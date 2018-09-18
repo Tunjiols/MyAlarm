@@ -288,7 +288,8 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                     @Override
                     public void onAlarmSaveCallBack( boolean value) {
                         mOnAlarmsave.onAlarmSaveCallBack (value);
-                        getActivity().finish();
+                        if(value)
+                            getActivity().finish();
                     }
                 });
                 break;
