@@ -202,27 +202,17 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         super.onResume();
 
         mLabel_value.setText(mAlarmLabel);//set alarm value
-
-
-        StringBuilder stringBuilder = new StringBuilder(7);
-
-
-        //concatinate the selected days
-        for (DayModel week : mAlarmDays) {
-            stringBuilder.append(week.getDay() + ",") ;
+        if(mAlarmSound != null) {
+            mSound_value.setText(mAlarmSound.getSound());//set default label value as "Default sound"
         }
-        mSetDays = stringBuilder.toString();
+        
+        mSetDays = getShortDay(mAlarmDays);
+        
         if (!mSetDays.isEmpty()){
             mRepeat_value.setText(mSetDays);//set alarm repeat days
         }else   {
-            mRepeat_value.setText(mAlarmDays.get(0).getDay());//set alarm repeat days
-        }
-
-
-        if(mAlarmSound != null) {
-            //set default label value as "Default sound"
-            mSound_value.setText(mAlarmSound.getSound());
-        }
+            mRepeat_value.setText("No Repeat"));//set as Default
+        }      
     }
 
     @Override
@@ -358,4 +348,35 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 			});
         return hours;
 	}
+    
+    public String getShortDay(DayModel dayLists) { 
+        StringBuilder stringBuilder = new StringBuilder(7);
+        if(dayLists.size() == 1){
+            dayLists.get(0).getDay().substring(0, 2);
+            return stringBuilder.append(day).toString();
+        }
+        else{
+            for (DayModel day : dayLists) {
+                day.getDay().substring(0, 2) + "," ;
+				return stringBuilder.append(day).toString;
+            }
+        }		
+	}
+    
+    private String getShortDay2(DayModel dayList){
+        StringBuilder stringBuilder = new StringBuilder(7);
+        Observable<DayModel> buildString = Observable.from(dayList);
+	    Subscriber subscriber = new Subscriber() 
+		    @Override
+			    public void onNext(DayModel day) {
+                    day.getDay().substring(0, 2) + "," ;
+				    return stringBuilder.append(day).toString;
+                }
+		    @Override
+			    public void onCompleted() { }
+		    @Override
+			    public void onError(Throwable err) { }
+	    };
+	    buildString.subscribe(subscriber);
+    }
 }
