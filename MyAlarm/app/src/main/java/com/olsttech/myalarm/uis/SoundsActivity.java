@@ -211,12 +211,12 @@ public class SoundsActivity extends AppCompatActivity implements SoundsContract.
 
                 soundModel.setChecked(true);
                 mCheckBox.setImageResource(R.drawable.ic_checkedbutton);
-                for (SoundModel sound : mSoundsList){
+               /* for (SoundModel sound : mSoundsList){
                     if (sound.getChecked() && !sound.getSound().equals(soundModel.getSound())) {
                         sound.setChecked(false);
                         mCheckBox.setImageResource(R.drawable.ic_uncheckedbutton);
                     }
-                }
+                }*/
 
                 mSoundClickListener.onSoundSelect(soundModel);
             }
