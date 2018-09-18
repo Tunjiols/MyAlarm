@@ -72,6 +72,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private FrameLayout mAlarmTimeFrameView;
 
     private static AddAlarmContract.SaveAlarmCallBack mOnAlarmsave;
+    private TimeTracking mTimeTracking;
 
     private List<String> hourTime;
     private List<String> minuteTime;
@@ -130,12 +131,12 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_addalarm, container, false);
-            mCancel = rootView.findViewById(R.id.cancel);
-            mSave = rootView.findViewById(R.id.save);
-            mRepeat_value = rootView.findViewById(R.id.repeat_value);
-            mLabel_value = rootView.findViewById(R.id.label_value);
-            mSound_value = rootView.findViewById(R.id.sound_value);
-            mSnoozeBtn = rootView.findViewById(R.id.snoozeBtn);
+        mCancel = rootView.findViewById(R.id.cancel);
+        mSave = rootView.findViewById(R.id.save);
+        mRepeat_value = rootView.findViewById(R.id.repeat_value);
+        mLabel_value = rootView.findViewById(R.id.label_value);
+        mSound_value = rootView.findViewById(R.id.sound_value);
+        mSnoozeBtn = rootView.findViewById(R.id.snoozeBtn);
 
         mLabel = rootView.findViewById(R.id.label);
         mRepeat = rootView.findViewById(R.id.repeat);
@@ -168,9 +169,10 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mFrameLayoutHour.setAdapter(hourRecyclerAdapter);
         HourRecyclerAdapter minuteRecyclerAdapter = new HourRecyclerAdapter(getContext(),minuteTime);
         mFrameLayoutMinute.setAdapter(minuteRecyclerAdapter);
-
-        scrollingTime(mFrameLayoutHour);
-        scrollingTime(mFrameLayoutMinute);
+        
+        
+        scrollingTime(mFrameLayoutHour, mTimeTracking);
+        scrollingTime(mFrameLayoutMinute, mTimeTracking);
 
         mSnoozeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,7 +298,8 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
         }
     }
-    public void scrollingTime(RecyclerView recyclerView) {
+    
+    public void scrollingTime(RecyclerView recyclerView, TimeTracking timeTracking ) {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
@@ -306,7 +309,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
                 TimeTracking.NowVisible visible = new TimeTracking.NowVisible(firstVisiblesItem, lastVisiblesItem);
 
-                TimeTracking timeTracking = new TimeTracking(
+                timeTracking = new TimeTracking(
                         new Action1<TimeTracking.NowVisible>() {
                             @Override
                             public void call(TimeTracking.NowVisible visible) {
@@ -333,7 +336,6 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     }
 
     private List<String> timeEmitter(String... time){
-    
         List<String> hours = new ArrayList<String>();
         
 		Observable<String>.from(time).subscribe(new Action1() {
@@ -362,7 +364,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private String getShortDay2(DayModel dayList){
         StringBuilder stringBuilder = new StringBuilder(7);
         Observable<DayModel> buildString = Observable.from(dayList);
-	    Subscriber subscriber = new Subscriber() 
+	    Subscriber subscriber = new Subscriber(){ 
 		    @Override
 			    public void onNext(DayModel day) {
                     day.getDay().substring(0, 2) + "," ;
