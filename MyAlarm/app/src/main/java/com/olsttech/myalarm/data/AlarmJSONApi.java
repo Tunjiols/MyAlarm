@@ -11,4 +11,9 @@ public interface AlarmJSONApi{
     interface AlarmJsonCallBack{
         void onAlarmLoadedCallBack(List<Alarm> alarmList);
     }
+    
+    interface AlarmJsonSuccess{
+        onSuccess(String success);
+        onFailure(String failure);
+    }
 }
