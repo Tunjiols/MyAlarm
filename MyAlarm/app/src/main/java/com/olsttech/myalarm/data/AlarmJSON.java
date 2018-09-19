@@ -15,7 +15,7 @@ public class AlarmJSON implements AlarmJSONApi{
     }
     
     @Override
-    public void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id){
+    public void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id, AlarmJsonSuccess success){
     
     }
     
@@ -42,6 +42,28 @@ public class AlarmJSON implements AlarmJSONApi{
         return jsonObject;
     }
     
+    private saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
     
+        //Json filename
+        String fileName = "my_alarm.json";
+        
+        //Make  json array
+        JSONArray jsonArray = new JSONArray();
+        
+        jsonArray.put(jsonObject);
+        
+        //Write the json file to the private disk space
+        Writer writer = null;
+        try{
+            OutpuStream outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            writer = new OutputStreamWriter(outputStream);
+            writer.write(jsonArray.toString());
+        }finally{
+            if(null != writer ){
+                success.onSuccess("Success");
+                writer.close();
+            }
+        }     
+    }
     
 }
