@@ -27,13 +27,7 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     @Override
     public void getAllAlarms() {
 
-        mAlarmDataManager.getAllAlarms(new AlarmDataManagerApi.DataManagerLoadAlarmCallBack() {
-            @Override
-            public void onAlarmLoaded(List<Alarm> alarms) {
-                mView.showAlarms(alarms);
-            }
-        });
-
+        mAlarmDataManager.getAllAlarms((alarms)-> mView.showAlarms(alarms));
     }
 
     @Override

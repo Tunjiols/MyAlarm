@@ -151,7 +151,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     private void setEditAdapter(EditAlarmAdapter editAdapter){
         mRecyclerView.setAdapter(editAdapter);
-       // mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
+        mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
     }
 
     @Override

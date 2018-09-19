@@ -339,7 +339,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
                 int lastVisiblesItem = dx;//recyclerView.getLayoutManager();
 
-                TimeTracking.NowVisible visible = new TimeTracking.NowVisible(firstVisiblesItem, lastVisiblesItem);
+                int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
+                int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                //recyclerView.getLayoutManager().offsetChildrenVertical(50);
+                //int name =recyclerView.getLayoutManager().getFocusedChild().getId();
+                TimeTracking.NowVisible visible = new TimeTracking.NowVisible(visibleItemCount, totalItemCount);
                 TimeTracking timeTracking = timeTrackings;
                 timeTracking = new TimeTracking(
                         new Action1<TimeTracking.NowVisible>() {
@@ -347,8 +351,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                             public void call(TimeTracking.NowVisible visible) {
                                 int position = visible.getLastVisible();
                                 //TODO get my outputs
-                                recyclerView.getLayoutManager().getChildAt(position);
+
+                               //int name = recyclerView.getLayoutManager().getFocusedChild();//.getName();
                                 mAlarmTime = 0000;
+                                Log.e("TimeTrack getFirstVisi ", String.valueOf(visible.getFirstVisible()));
+                                Log.e("TimeTrack veiwid ", String.valueOf(visible.getLastVisible()));
                             }
                         },
                         new Action1<Throwable>() {
@@ -362,8 +369,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 timeTracking.postViewEvent(visible);
 
                 //---------------------------------------------------
-               // int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                //int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+
             }
         });
     }

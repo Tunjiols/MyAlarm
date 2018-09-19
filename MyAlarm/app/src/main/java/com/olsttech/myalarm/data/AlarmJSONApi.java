@@ -1,8 +1,15 @@
+package com.olsttech.myalarm.data;
 
+
+import android.support.annotation.NonNull;
+
+import com.olsttech.myalarm.models.Alarm;
+
+import java.util.List;
 
 public interface AlarmJSONApi{
 
-    void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id, AlarmJsonSuccess success);
+    void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm_id, AlarmJsonSuccess success);
     
     void getAlarmsFromJSON(AlarmJsonCallBack callbacks);
     
@@ -13,7 +20,7 @@ public interface AlarmJSONApi{
     }
     
     interface AlarmJsonSuccess{
-        onSuccess(String success);
-        onFailure(String failure);
+        void onSuccess(String message);
+        void onFailure(String message);
     }
 }

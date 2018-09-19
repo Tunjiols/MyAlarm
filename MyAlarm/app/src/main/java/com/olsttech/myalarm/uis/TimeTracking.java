@@ -9,7 +9,7 @@ import rx.subjects.Subject;
 
 public class TimeTracking {
 
-    private static final int TIME_THRESHOLD_MS = 100;
+    private static final int TIME_THRESHOLD_MS = 200;
 
     private Subject<NowVisible, NowVisible> mPublishSubject;
     private final Action1<NowVisible> mOnSuccess;

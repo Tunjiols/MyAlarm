@@ -1,12 +1,28 @@
+package com.olsttech.myalarm.data;
+
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.olsttech.myalarm.models.Alarm;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class AlarmJSON implements AlarmJSONApi{
     
-    private static final ALARM_ID = "Alarm id";
-    private static final ALARM_TIME = "Alarm time";
-    private static final ALARM_REPEAT = "Alarm repeat";
-    private static final ALARM_LABEL = "Alarm label";
-    private static final ALARM_SNOOZE = "Alarm snooze";
-    private static final ALARM_SOUND = "Alarm sound";
+    private static final String ALARM_ID = "Alarm id";
+    private static final String ALARM_TIME = "Alarm time";
+    private static final String ALARM_REPEAT = "Alarm repeat";
+    private static final String ALARM_LABEL = "Alarm label";
+    private static final String ALARM_SNOOZE = "Alarm snooze";
+    private static final String ALARM_SOUND = "Alarm sound";
     
     private Context mContext;
     
@@ -15,7 +31,7 @@ public class AlarmJSON implements AlarmJSONApi{
     }
     
     @Override
-    public void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id, AlarmJsonSuccess success){
+    public void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm_id, AlarmJsonSuccess success){
     
     }
     
@@ -29,7 +45,7 @@ public class AlarmJSON implements AlarmJSONApi{
     
     }
     
-    private JSONObject convertToJson(@NonNull Alarm alarm, String id){
+    private JSONObject convertToJson(@NonNull Alarm alarm, String id) throws JSONException{
         JSONObject jsonObject = new JSONObject();
         
         jsonObject.put(ALARM_ID, id);
@@ -42,7 +58,7 @@ public class AlarmJSON implements AlarmJSONApi{
         return jsonObject;
     }
     
-    private saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
+    private void saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
     
         //Json filename
         String fileName = "my_alarm.json";
@@ -55,7 +71,7 @@ public class AlarmJSON implements AlarmJSONApi{
         //Write the json file to the private disk space
         Writer writer = null;
         try{
-            OutpuStream outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStream outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(outputStream);
             writer.write(jsonArray.toString());
         }finally{

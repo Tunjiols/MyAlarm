@@ -32,7 +32,7 @@ public class AlarmDataManager implements AlarmDataManagerApi.LoadAlarmFromPrefer
             @Override
             public void onAlarmLoaded(List<Alarm> alarms) {
                 mAlarmList = alarms;
-                Log.e("AlarmDataManagG listsiz", String.valueOf(mAlarmList.size()));
+              //  Log.e("AlarmDataManagG listsiz", String.valueOf(mAlarmList.size()));
 
             }
         });
