@@ -13,15 +13,18 @@ public class AlarmJSON implements AlarmJSONApi{
     public AlarmJSON(Context context){
         this.mContext = context;
     }
-
+    
+    @Override
     public void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id){
     
     }
     
+    @Override
     public void getAlarmsFromJSON(AlarmJsonCallBack callback){
     
     }
     
+    @Override
     public void getAlarmInfoJSON(String alarmId, String param ){
     
     }
