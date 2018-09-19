@@ -4,7 +4,7 @@ public interface AlarmJSONApi{
 
     void saveAlarmToJSON(@NonNull Alarm alarm, String Alarm id);
     
-    void getAlarmsFromJSON();
+    void getAlarmsFromJSON(AlarmJsonCallBack callbacks);
     
     void getAlarmInfoJSON(String alarmId, String param );
     
