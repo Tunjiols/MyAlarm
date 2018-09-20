@@ -47,10 +47,9 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
     *@param AlarmJsonSuccess success): callback that returns success if the file is saved successfully.
     */
     private void saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
-    
         Writer writer = null;
         OutputStream outputStream;
-        //Observable<JSONArray> writeToDisk(SONObject jsonObject);
+		//Observable<JSONArray> writeToDisk(SONObject jsonObject);
         
         //Write the json file to the private disk space
         Observable<JSONArray> writeToDisk = Observable.from(jsonObject)
@@ -62,7 +61,7 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
                         jsonArray.add(alarmJson);
 			            return Observable.from(jsonArray);
 		            }})
-                .subscribe(jsonArray ->{
+                .create(jsonArray -> {
                     try{
                          //Json filename
                         String fileName = "my_alarm.json";
@@ -70,14 +69,17 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
                         writer = new OutputStreamWriter(outputStream);
                         writer.write(jsonArray.toString());
                     }finally{
-                        if(null != writer ){
-                            success.onSuccess("Success");
-                            outputStream.close();
-                            writer.close();
-                        }
+                        
                     }
-                }
-            );
+                })
+				.subcribe((writer, outputStream)-> {
+					if(null != writer ){
+                         success.onSuccess("Success");
+            	         outputStream.close();
+                         writer.close();
+                     }
+				});
+			};
     }
     
     /**load all alarms from Json file
