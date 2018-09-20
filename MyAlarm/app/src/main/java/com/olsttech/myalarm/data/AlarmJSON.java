@@ -37,7 +37,7 @@ public class AlarmJSON implements AlarmJSONApi{
     
     @Override
     public void getAlarmsFromJSON(AlarmJsonCallBack callback){
-    
+        loadFilesFromDatabase(callback);
     }
     
     @Override
@@ -58,6 +58,11 @@ public class AlarmJSON implements AlarmJSONApi{
         return jsonObject;
     }
     
+    
+    /**Method that saves the JsonObject into local disk. it converts the Jsonobjects into Jsonarray
+    *@param  jsonObject: input JsonObject
+    *@param AlarmJsonSuccess success): callback that returns success if the file is saved successfully.
+    */
     private void saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
     
         //Json filename
@@ -70,16 +75,68 @@ public class AlarmJSON implements AlarmJSONApi{
         
         //Write the json file to the private disk space
         Writer writer = null;
+        OutputStream outputStream;
         try{
-            OutputStream outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(outputStream);
             writer.write(jsonArray.toString());
         }finally{
             if(null != writer ){
                 success.onSuccess("Success");
+                outputStream.close();
                 writer.close();
             }
         }     
     }
     
+    /**load all alarms from Json file
+    *@param AlarmJsonCallBack callback, callback that returns alarm list.
+    */
+    private void loadFilesFromDatabase(AlarmJsonCallBack callback){
+        List<Alarm> alarmList = new ArrayList<Alarm>();
+        //Json filename
+        String fileName = "my_alarm.json";
+        BufferredReader reader = null;
+        
+        InputStream inputStream = mContext.openFileInput(filename);
+        try{
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder alarms = new StringBuilder();
+            
+            while((String line = reader.readline()) != null){
+            alarm.append(line);
+            }
+            JSONArray alarmArray = (JSONArray) new JSONTokener(alarms.tostring());
+            nextValue();
+            
+            for(JSONArray alarm : alarmArray){
+                alarmList.add(convertJSONObjectToAlarm(alarm));
+            }
+            
+            callback.onAlarmLoadedCallBack(alarmList);
+            
+        }catch(FileNotFoundException e){
+        
+        }finally{
+            if(reader != null){
+                reader.close();
+            }
+        }
+    }
+    
+     /**converts Json Object to Alarm Object
+    *@param JSONObject jsonObj, the jsonObject that has the alarm.
+    */
+    private Alarm convertJSONObjectToAlarm(JSONObject jsonObj){
+        Alarm alarm = new Alarm();
+        
+        alarmId = jsonObj.getString(ALARM_ID);
+        alarm.setAlamTime(jsonObj.getString(ALARM_TIME));
+        alarm.setAlarmDay(jsonObj.getString(ALARM_REPEAT));
+        alarm.setAlarmLabel(jsonObj.getString(ALARM_LABEL));
+        alarm.setAlarmStatus(jsonObj.getString(ALARM_SNOOZE));
+        alarm.setAlamSound(jsonObj.getString(ALARM_SOUND));
+        
+        return alarm;
+    }
 }
