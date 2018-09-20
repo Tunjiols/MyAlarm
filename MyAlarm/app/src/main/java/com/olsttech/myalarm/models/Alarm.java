@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
  */
 
 public class Alarm {
+    public String alarmId;
     public long alamTime;
     public String alarmLabel;
     public String alarmDay;
@@ -21,6 +22,14 @@ public class Alarm {
         this.alarmDay = alarmDay;
         this.alarmSound = alarmSound;
         this.alarmStatus = alarmStatus;
+    }
+
+    public String getAlarmId() {
+        return alarmId;
+    }
+
+    public void setAlarmId(String alarmId) {
+        this.alarmId = alarmId;
     }
 
     public long getAlamTime() {

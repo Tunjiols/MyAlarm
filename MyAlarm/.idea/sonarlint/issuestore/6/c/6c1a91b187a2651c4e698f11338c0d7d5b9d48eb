@@ -1,44 +1,44 @@
 
-V"squid:SwitchLastCaseIsDefaultCheck«""Add a default case to this switch.(×“¾ñùÿÿÿÿ
-Csquid:S10680",Remove this unused "mRefresh" private field.(Ğı˜
-/squid:S2176é"Rename this class.(Úª¸âùÿÿÿÿ
-usquid:S2293G"YReplace the type specification in this constructor call with the diamond operator ("<>").(¢ç®ùÿÿÿÿ
-squid:S1450)"cRemove the "mLinearLayoutManager" field and declare it as a local variable in the relevant methods.(Ï¹­ùÿÿÿÿ
-psquid:S1450."ZRemove the "editAdapter" field and declare it as a local variable in the relevant methods.(‡…÷
-hsquid:S1301«"KReplace this "switch" statement by "if" statements to increase readability.(×“¾ñùÿÿÿÿ
-bsquid:CommentedOutCodeLinei"<This block of commented-out lines of code should be removed.(ú½¨
-gsquid:CommentedOutCodeLinek"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
-hsquid:CommentedOutCodeLine "<This block of commented-out lines of code should be removed.(ıİ›Ãüÿÿÿÿ
-hsquid:CommentedOutCodeLineİ"<This block of commented-out lines of code should be removed.(Ü‡°¨ûÿÿÿÿ
-hsquid:CommentedOutCodeLineı"<This block of commented-out lines of code should be removed.(Å¯–îøÿÿÿÿ
-…"squid:ClassVariableVisibilityCheckë"QMake mTime a static final constant or non-public and provide accessors if needed.(á£¼üÿÿÿÿ
-„"squid:ClassVariableVisibilityCheckì"PMake mDay a static final constant or non-public and provide accessors if needed.( ·¢ùÿÿÿÿ
-†"squid:ClassVariableVisibilityCheckí"RMake mLabel a static final constant or non-public and provide accessors if needed.(·Ÿ‘ıÿÿÿÿ
-‚"squid:ClassVariableVisibilityCheckî"SMake mStatus a static final constant or non-public and provide accessors if needed.(ÃÆûè
-‹"squid:ClassVariableVisibilityCheckï"WMake mDeleteIcon a static final constant or non-public and provide accessors if needed.(Ï¿Çøÿÿÿÿ
-ˆ"squid:ClassVariableVisibilityCheckğ"TMake mForward a static final constant or non-public and provide accessors if needed.(©ôØ—øÿÿÿÿ
-’"squid:ClassVariableVisibilityCheckò"cMake mAlarmItemClickListener a static final constant or non-public and provide accessors if needed.(ëÚ…×
-Fsquid:S1905;"*Remove this unnecessary cast to "Toolbar".(«ó·øÿÿÿÿ
-Fsquid:S1905<"/Remove this unnecessary cast to "RecyclerView".(¶ù‘…
-Bsquid:S1905="+Remove this unnecessary cast to "TextView".(—Â‰¯
-Gsquid:S1905>"+Remove this unnecessary cast to "TextView".(ù¹‰Òøÿÿÿÿ
-Bsquid:S1905?"+Remove this unnecessary cast to "TextView".(¼¹¶š
-Hsquid:S1905÷"+Remove this unnecessary cast to "TextView".(õ³ïùüÿÿÿÿ
-Hsquid:S1905ø"+Remove this unnecessary cast to "TextView".(¨Ö•øÿÿÿÿ
-Csquid:S1905ù"+Remove this unnecessary cast to "TextView".(Ù÷Ãÿ
-Dsquid:S1905ú",Remove this unnecessary cast to "ImageView".(ƒ”†Õ
-Dsquid:S1905û",Remove this unnecessary cast to "ImageView".(ŠØ¹£
-Isquid:S1905ü",Remove this unnecessary cast to "ImageView".(ê¶³×ûÿÿÿÿ
-Bsquid:S1481Ø"*Remove this unused "alarm" local variable.(·Åô¦
-@squid:S1604"(Make this anonymous inner class a lambda(ëóúİ
-Esquid:S1604Œ"(Make this anonymous inner class a lambda(ÊÂÃ«ûÿÿÿÿ
-™squid:S1186¤"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(”¡„•
-Qsquid:S1854Ø"9Remove this useless assignment to local variable "alarm".(·Åô¦
-psquid:S00116("XRename this field "mAlarm_select" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„€Ùı
-Vsquid:UselessImportCheck"2Remove this unused import 'android.view.MenuItem'.(Ğ¬Ó‘
-Rsquid:UselessImportCheck".Remove this unused import 'android.view.Menu'.(£¯Ò…
-ssquid:UselessImportCheck"ORemove this unused import 'android.support.design.widget.FloatingActionButton'.(„Ÿ¹¼
-isquid:UselessImportCheck"@Remove this unused import 'android.support.annotation.Nullable'.(Ö‹øïüÿÿÿÿ
-fsquid:UselessImportCheck	"CRemove this unused import 'android.support.design.widget.Snackbar'.( À®p
-Vsquid:S11612":Add the "@Override" annotation above this method signature(¨Œşÿÿÿÿ
-esquid:MaximumInheritanceDepth!"=This class has 10 parents which is greater than 5 authorized.(óŠñ
+,squid:S2176"Rename this class.(Úª¸âùÿÿÿÿ
+csquid:MaximumInheritanceDepth"=This class has 10 parents which is greater than 5 authorized.(óŠñ
+"squid:ClassVariableVisibilityCheck"PMake mDay a static final constant or non-public and provide accessors if needed.( ·¢ùÿÿÿÿ
+nsquid:S00116"XRename this field "mAlarm_select" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„€Ùı
+qsquid:UselessImportCheck"ORemove this unused import 'android.support.design.widget.FloatingActionButton'.(„Ÿ¹¼
+–squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(”¡„•
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(éØ»Úûÿÿÿÿ
+@squid:S1905"+Remove this unnecessary cast to "TextView".(—Â‰¯
+Dsquid:S1905"/Remove this unnecessary cast to "RecyclerView".(¶ù‘…
+=squid:S1604"(Make this anonymous inner class a lambda(ëóúİ
+…"squid:ClassVariableVisibilityCheck"TMake mForward a static final constant or non-public and provide accessors if needed.(©ôØ—øÿÿÿÿ
+Asquid:S1905",Remove this unnecessary cast to "ImageView".(ƒ”†Õ
+Dsquid:S1905"*Remove this unnecessary cast to "Toolbar".(«ó·øÿÿÿÿ
+@squid:S1905"+Remove this unnecessary cast to "TextView".(¼¹¶š
+Asquid:S1905",Remove this unnecessary cast to "ImageView".(ŠØ¹£
+Esquid:S1905"+Remove this unnecessary cast to "TextView".(õ³ïùüÿÿÿÿ
+}squid:S1450"cRemove the "mLinearLayoutManager" field and declare it as a local variable in the relevant methods.(Ï¹­ùÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ú½¨
+Esquid:S1905"+Remove this unnecessary cast to "TextView".(¨Ö•øÿÿÿÿ
+ssquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(¢ç®ùÿÿÿÿ
+"squid:ClassVariableVisibilityCheck"cMake mAlarmItemClickListener a static final constant or non-public and provide accessors if needed.(ëÚ…×
+dsquid:UselessImportCheck"CRemove this unused import 'android.support.design.widget.Snackbar'.( À®p
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ü‡°¨ûÿÿÿÿ
+@squid:S1905"+Remove this unnecessary cast to "TextView".(Ù÷Ãÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ıİ›Ãüÿÿÿÿ
+"squid:ClassVariableVisibilityCheck"SMake mStatus a static final constant or non-public and provide accessors if needed.(ÃÆûè
+Fsquid:S1905",Remove this unnecessary cast to "ImageView".(ê¶³×ûÿÿÿÿ
+Bsquid:S1604"(Make this anonymous inner class a lambda(ÊÂÃ«ûÿÿÿÿ
+Nsquid:S1854"9Remove this useless assignment to local variable "alarm".(·Åô¦
+Psquid:UselessImportCheck".Remove this unused import 'android.view.Menu'.(£¯Ò…
+esquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(×“¾ñùÿÿÿÿ
+‚"squid:ClassVariableVisibilityCheck"QMake mTime a static final constant or non-public and provide accessors if needed.(á£¼üÿÿÿÿ
+ˆ"squid:ClassVariableVisibilityCheck"WMake mDeleteIcon a static final constant or non-public and provide accessors if needed.(Ï¿Çøÿÿÿÿ
+S"squid:SwitchLastCaseIsDefaultCheck""Add a default case to this switch.(×“¾ñùÿÿÿÿ
+nsquid:S1450"ZRemove the "editAdapter" field and declare it as a local variable in the relevant methods.(‡…÷
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Å¯–îøÿÿÿÿ
+ƒ"squid:ClassVariableVisibilityCheck"RMake mLabel a static final constant or non-public and provide accessors if needed.(·Ÿ‘ıÿÿÿÿ
+Esquid:S1905"+Remove this unnecessary cast to "TextView".(ù¹‰Òøÿÿÿÿ
+?squid:S1481"*Remove this unused "alarm" local variable.(·Åô¦
+Tsquid:UselessImportCheck"2Remove this unused import 'android.view.MenuItem'.(Ğ¬Ó‘
+Tsquid:S1161":Add the "@Override" annotation above this method signature(¨Œşÿÿÿÿ
+Asquid:S1068",Remove this unused "mRefresh" private field.(Ğı˜
+gsquid:UselessImportCheck"@Remove this unused import 'android.support.annotation.Nullable'.(Ö‹øïüÿÿÿÿ

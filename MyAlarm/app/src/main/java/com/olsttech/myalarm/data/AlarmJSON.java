@@ -9,11 +9,18 @@ import com.olsttech.myalarm.models.Alarm;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlarmJSON implements AlarmJSONApi{
     
@@ -61,7 +68,7 @@ public class AlarmJSON implements AlarmJSONApi{
     
     /**Method that saves the JsonObject into local disk. it converts the Jsonobjects into Jsonarray
     *@param  jsonObject: input JsonObject
-    *@param AlarmJsonSuccess success): callback that returns success if the file is saved successfully.
+    *@param success : callback that returns success if the file is saved successfully.
     */
     private void saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
     
@@ -75,7 +82,7 @@ public class AlarmJSON implements AlarmJSONApi{
         
         //Write the json file to the private disk space
         Writer writer = null;
-        OutputStream outputStream;
+        OutputStream outputStream = null;
         try{
             outputStream = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             writer = new OutputStreamWriter(outputStream);
@@ -90,24 +97,27 @@ public class AlarmJSON implements AlarmJSONApi{
     }
     
     /**load all alarms from Json file
-    *@param AlarmJsonCallBack callback, callback that returns alarm list.
+    *@param callback, callback that returns alarm list.
     */
     private void loadFilesFromDatabase(AlarmJsonCallBack callback){
         List<Alarm> alarmList = new ArrayList<Alarm>();
         //Json filename
-        String fileName = "my_alarm.json";
-        BufferredReader reader = null;
-        
-        InputStream inputStream = mContext.openFileInput(filename);
+        String filename = "my_alarm.json";
+        BufferedReader reader = null;
+        InputStream inputStream = null;
+
         try{
+            inputStream = mContext.openFileInput(filename);
+
             reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder alarms = new StringBuilder();
-            
-            while((String line = reader.readline()) != null){
-            alarm.append(line);
+            String line;
+
+            while((line = reader.readLine()) != null){
+                alarms.append(line);
             }
-            JSONArray alarmArray = (JSONArray) new JSONTokener(alarms.tostring());
-            nextValue();
+            JSONArray alarmArray = (JSONArray) new JSONTokener(alarms.toString());
+            //nextValue();
             
             for(JSONArray alarm : alarmArray){
                 alarmList.add(convertJSONObjectToAlarm(alarm));
@@ -117,21 +127,24 @@ public class AlarmJSON implements AlarmJSONApi{
             
         }catch(FileNotFoundException e){
         
+        }catch (IOException e){
+
         }finally{
             if(reader != null){
                 reader.close();
+                inputStream.close();
             }
         }
     }
     
      /**converts Json Object to Alarm Object
-    *@param JSONObject jsonObj, the jsonObject that has the alarm.
+    *@param jsonObj, the jsonObject that has the alarm.
     */
-    private Alarm convertJSONObjectToAlarm(JSONObject jsonObj){
+    private Alarm convertJSONObjectToAlarm(JSONObject jsonObj) throws JSONException{
         Alarm alarm = new Alarm();
-        
-        alarmId = jsonObj.getString(ALARM_ID);
-        alarm.setAlamTime(jsonObj.getString(ALARM_TIME));
+
+        alarm.setAlarmId(jsonObj.getString(ALARM_ID));
+        alarm.setAlamTime(Long.valueOf(jsonObj.getString(ALARM_TIME)));
         alarm.setAlarmDay(jsonObj.getString(ALARM_REPEAT));
         alarm.setAlarmLabel(jsonObj.getString(ALARM_LABEL));
         alarm.setAlarmStatus(jsonObj.getString(ALARM_SNOOZE));

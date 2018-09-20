@@ -4,17 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,11 +51,11 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     /**Bind view method*/
     private void bindViews(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclayout);
-        mEdit = (TextView) findViewById(R.id.edit);
-        mAdd = (TextView) findViewById(R.id.add);
-        mAlarm_select = (TextView)findViewById(R.id.alarm_select);
+        toolbar         = findViewById(R.id.toolbar);
+        mEdit           = findViewById(R.id.edit);
+        mAdd            = findViewById(R.id.add);
+        mRecyclerView   = findViewById(R.id.recyclayout);
+        mAlarm_select   = findViewById(R.id.alarm_select);
     }
 
     /**Initial setups method*/
@@ -68,7 +63,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
-        mAlarmList = new ArrayList<Alarm>();
+        mAlarmList = new ArrayList<>();
 
         mAlarmPresenter = new AlarmPresenter(this, this);
         mAlarmPresenter.getAllAlarms();//get all alarms
@@ -191,7 +186,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     /********************************************************************************************/
 
-    private static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.ViewHolder>{
+    private static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.EditViewHolder>{
     
         private List<Alarm> mAlarmList;
         private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
@@ -203,22 +198,22 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType ){
+        public EditViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType ){
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View view = inflater.inflate(R.layout.edit_recycler_list, parent, false);
             
-            return new ViewHolder(view, mAlarmItemClickListener);
+            return new EditViewHolder(view, mAlarmItemClickListener);
         }
         
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-            Alarm alarm = mAlarmList.get(position);
+        public void onBindViewHolder(@NonNull EditViewHolder editViewHolder, int position) {
+            //Alarm alarm = mAlarmList.get(position);
 
-            viewHolder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
-            viewHolder.mDay.setText(mAlarmList.get(position).getAlarmDay());
-            viewHolder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
-           // viewHolder.mStatus = mAlarmList.get(position).isAlarmStatus();
+            editViewHolder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
+            editViewHolder.mDay.setText(mAlarmList.get(position).getAlarmDay());
+            editViewHolder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
+           // editViewHolder.mStatus = mAlarmList.get(position).isAlarmStatus();
            
         }
         
@@ -230,7 +225,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         }
 
         /*****************************************************************************************/
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public class EditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             
             public TextView mTime;
             public TextView mDay;
@@ -239,20 +234,18 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
             public ImageView mDeleteIcon;
             public ImageView mForward;
             //public ImageView mItemDelete
-            public AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
+            private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
             
-            public ViewHolder(View itemView, AlarmContract.AlarmItemClickListener alarmItemClickListener){
+            private EditViewHolder(View itemView, AlarmContract.AlarmItemClickListener alarmItemClickListener){
                 super(itemView);
                 mAlarmItemClickListener = alarmItemClickListener;
-                mTime 	    = (TextView)itemView.findViewById(R.id.alarm_time);
-                mDay 	= (TextView)itemView.findViewById(R.id.alarm_date);
-                mLabel 	= (TextView)itemView.findViewById(R.id.alarm_label);
-                mStatus  = (ImageView) itemView.findViewById(R.id.alarm_status);
-                mDeleteIcon  = (ImageView) itemView.findViewById(R.id.alarm_deleteicon);
-                mForward  = (ImageView) itemView.findViewById(R.id.alarm_forward);
-                //mItemDelete  = (ImageView) itemView.findViewById(R.id.alarm_itemDelete);
-               // mStatus.setVisibility(View.INVISIBLE);
-                
+                mTime 	    = itemView.findViewById(R.id.alarm_time);
+                mDay 	= itemView.findViewById(R.id.alarm_date);
+                mLabel 	= itemView.findViewById(R.id.alarm_label);
+                mStatus  =  itemView.findViewById(R.id.alarm_status);
+                mDeleteIcon  =  itemView.findViewById(R.id.alarm_deleteicon);
+                mForward  =  itemView.findViewById(R.id.alarm_forward);
+
                 itemView.setOnClickListener(this);
             }
             

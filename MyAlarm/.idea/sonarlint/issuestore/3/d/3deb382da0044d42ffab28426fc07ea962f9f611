@@ -1,52 +1,52 @@
 
-V"squid:SwitchLastCaseIsDefaultCheck«""Add a default case to this switch.(×“¾ñùÿÿÿÿ
-Esquid:S1604İ"(Make this anonymous inner class a lambda(ĞäÊğÿÿÿÿÿ
-@squid:S1604•"(Make this anonymous inner class a lambda(¢³ÉŸ
-^squid:UselessImportCheck":Remove this unused import 'android.content.res.Resources'.(ÿÃÜó
-hsquid:CommentedOutCodeLineÒ"<This block of commented-out lines of code should be removed.(ŞãĞşÿÿÿÿ
-¥squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÓÌÔ‘şÿÿÿÿ8õğ¨’ß,
-jsquid:CommentedOutCodeLineØ"<This block of commented-out lines of code should be removed.(›Œ‡”8Ä„’ß,
-rsquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ø“
-hsquid:CommentedOutCodeLineõ"<This block of commented-out lines of code should be removed.(¶…ßöúÿÿÿÿ
-¥squid:S1186€"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(åí›®ÿÿÿÿÿ8õğ¨’ß,
-}squid:S2293ú"YReplace the type specification in this constructor call with the diamond operator ("<>").(—½—ûÿÿÿÿ8õğ¨’ß,
-`squid:UselessImportCheck"7Remove this unused import 'android.widget.FrameLayout'.(ºÍ‹Ùúÿÿÿÿ
-csquid:UselessImportCheck)":Remove this unused import 'java.io.ObjectStreamException'.(ÀÔôæÿÿÿÿÿ
-[squid:UselessImportCheck"7Remove this unused import 'android.widget.RadioButton'.(®é«
-Qsquid:S1481à"-Remove this unused "position" local variable.(ùŠ¿Ùüÿÿÿÿ8Şô¶‘ß,
-™squid:S1186Ò"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ıæ±Ó
-Isquid:S1135á"2Complete the task associated to this TODO comment.(ò³†^
-csquid:S1854Ô"DRemove this useless assignment to local variable "lastVisiblesItem".(ëßÊ†8¤ ‚‘ß,
-isquid:S1854Ò"ERemove this useless assignment to local variable "firstVisiblesItem".(ŞãĞşÿÿÿÿ8“Ş‘ß,
-@squid:S1659L"$Declare "mLabel" on a separate line.(©ö¦‰şÿÿÿÿ
-Esquid:S1604û"(Make this anonymous inner class a lambda(½üÚşıÿÿÿÿ
-qsquid:S1450L"URemove the "mLabel" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
-bsquid:UselessImportCheck"?Remove this unused import 'android.support.annotation.NonNull'.(¼Åß
-¥squid:S1186…"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¸ÜÒÄøÿÿÿÿ8õğ¨’ß,
-Lsquid:S1604é"(Make this anonymous inner class a lambda(ÚÑşºùÿÿÿÿ8õğ¨’ß,
-msquid:S14508"VRemove the "mCancel" field and declare it as a local variable in the relevant methods.(ºëÎ¾
-`squid:S1854à"<Remove this useless assignment to local variable "position".(ùŠ¿Ùüÿÿÿÿ8Şô¶‘ß,
-Esquid:S1604Š"(Make this anonymous inner class a lambda(Ğíá‘úÿÿÿÿ
-Wsquid:UselessImportCheck"4Remove this unused import 'android.widget.CheckBox'.(Ùáb
-\squid:UselessImportCheck"3Remove this unused import 'android.text.TextUtils'.(û˜½Õøÿÿÿÿ
-rsquid:S1450L"VRemove the "mRepeat" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
-csquid:CommentedOutCodeLineÔ"<This block of commented-out lines of code should be removed.(ëßÊ†
-qsquid:S1450L"URemove the "mSound" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
-Zsquid:S1481Ò"6Remove this unused "firstVisiblesItem" local variable.(ŞãĞşÿÿÿÿ8“Ş‘ß,
-osquid:CommentedOutCodeLineã"<This block of commented-out lines of code should be removed.(Ô¸Ì•úÿÿÿÿ8ˆ¤Ì‘ß,
-ssquid:UselessImportCheck"JRemove this unused import 'com.olsttech.myalarm.alarms.AlarmMainActivity'.(–Î¹¯úÿÿÿÿ
-psquid:S14509"TRemove the "mSave" field and declare it as a local variable in the relevant methods.(²¯ÕÍùÿÿÿÿ
-Asquid:S1659L"%Declare "mSnooze" on a separate line.(©ö¦‰şÿÿÿÿ
-rsquid:S1450L"VRemove the "mSnooze" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
-@squid:S1604²"(Make this anonymous inner class a lambda(ğ¨Í
-¥squid:S1186›"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ØŠ÷Öøÿÿÿÿ8õğ¨’ß,
-osquid:S00116<"WRename this field "mLabel_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×»¸ÿ
-@squid:S1185ó"(Remove this method to simply inherit it.(ßû¢½
-Esquid:S1604É"(Make this anonymous inner class a lambda(º¿Åıÿÿÿÿ
-Xsquid:S1854Û"@Remove this useless assignment to local variable "timeTracking".(ÎôÀƒ
-@squid:S1659L"$Declare "mSound" on a separate line.(©ö¦‰şÿÿÿÿ
-osquid:S00116="WRename this field "mSound_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»´ÅÀ
-Nsquid:S1068:"2Remove this unused "mAlarmTimeView" private field.(¹İëßøÿÿÿÿ
-[squid:UselessImportCheck"2Remove this unused import 'android.widget.Button'.(²òıÿÿÿÿ
-psquid:S00116;"XRename this field "mRepeat_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß×‰¸
-Tsquid:S1481Ô"5Remove this unused "lastVisiblesItem" local variable.(ëßÊ†8¤ ‚‘ß,
+zsquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(—½—ûÿÿÿÿ8õğ¨’ß,
+¢squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¸ÜÒÄøÿÿÿÿ8õğ¨’ß,
+Usquid:S1854"@Remove this useless assignment to local variable "timeTracking".(ÎôÀƒ
+nsquid:S00116"XRename this field "mRepeat_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß×‰¸
+Wsquid:S1481"6Remove this unused "firstVisiblesItem" local variable.(ŞãĞşÿÿÿÿ8“Ş‘ß,
+Lsquid:S1068"2Remove this unused "mAlarmTimeView" private field.(¹İëßøÿÿÿÿ
+psquid:S1450"VRemove the "mRepeat" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(¶…ßöúÿÿÿÿ
+Nsquid:S1481"-Remove this unused "position" local variable.(ùŠ¿Ùüÿÿÿÿ8Şô¶‘ß,
+psquid:S1450"VRemove the "mSnooze" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
+=squid:S1604"(Make this anonymous inner class a lambda(ğ¨Í
+Ysquid:UselessImportCheck"7Remove this unused import 'android.widget.RadioButton'.(®é«
+?squid:S1659"%Declare "mSnooze" on a separate line.(©ö¦‰şÿÿÿÿ
+]squid:S1854"<Remove this useless assignment to local variable "position".(ùŠ¿Ùüÿÿÿÿ8Şô¶‘ß,
+>squid:S1659"$Declare "mLabel" on a separate line.(©ö¦‰şÿÿÿÿ
+osquid:S1450"URemove the "mLabel" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
+gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(›Œ‡”8Ä„’ß,
+esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ŞãĞşÿÿÿÿ
+Bsquid:S1604"(Make this anonymous inner class a lambda(Ğíá‘úÿÿÿÿ
+`squid:S1854"DRemove this useless assignment to local variable "lastVisiblesItem".(ëßÊ†8¤ ‚‘ß,
+Bsquid:S1604"(Make this anonymous inner class a lambda(½üÚşıÿÿÿÿ
+¢squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ØŠ÷Öøÿÿÿÿ8õğ¨’ß,
+Qsquid:S1481"5Remove this unused "lastVisiblesItem" local variable.(ëßÊ†8¤ ‚‘ß,
+psquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ø“
+Bsquid:S1604"(Make this anonymous inner class a lambda(º¿Åıÿÿÿÿ
+=squid:S1604"(Make this anonymous inner class a lambda(¢³ÉŸ
+Isquid:S1604"(Make this anonymous inner class a lambda(ÚÑşºùÿÿÿÿ8õğ¨’ß,
+Fsquid:S1135"2Complete the task associated to this TODO comment.(ò³†^
+S"squid:SwitchLastCaseIsDefaultCheck""Add a default case to this switch.(×“¾ñùÿÿÿÿ
+asquid:UselessImportCheck":Remove this unused import 'java.io.ObjectStreamException'.(ÀÔôæÿÿÿÿÿ
+msquid:S00116"WRename this field "mLabel_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×»¸ÿ
+Ysquid:UselessImportCheck"2Remove this unused import 'android.widget.Button'.(²òıÿÿÿÿ
+`squid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ëßÊ†
+¢squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÓÌÔ‘şÿÿÿÿ8õğ¨’ß,
+=squid:S1185"(Remove this method to simply inherit it.(ßû¢½
+^squid:UselessImportCheck"7Remove this unused import 'android.widget.FrameLayout'.(ºÍ‹Ùúÿÿÿÿ
+fsquid:S1854"ERemove this useless assignment to local variable "firstVisiblesItem".(ŞãĞşÿÿÿÿ8“Ş‘ß,
+nsquid:S1450"TRemove the "mSave" field and declare it as a local variable in the relevant methods.(²¯ÕÍùÿÿÿÿ
+>squid:S1659"$Declare "mSound" on a separate line.(©ö¦‰şÿÿÿÿ
+–squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ıæ±Ó
+Zsquid:UselessImportCheck"3Remove this unused import 'android.text.TextUtils'.(û˜½Õøÿÿÿÿ
+\squid:UselessImportCheck":Remove this unused import 'android.content.res.Resources'.(ÿÃÜó
+Usquid:UselessImportCheck"4Remove this unused import 'android.widget.CheckBox'.(Ùáb
+ksquid:S1450"VRemove the "mCancel" field and declare it as a local variable in the relevant methods.(ºëÎ¾
+lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ô¸Ì•úÿÿÿÿ8ˆ¤Ì‘ß,
+osquid:S1450"URemove the "mSound" field and declare it as a local variable in the relevant methods.(©ö¦‰şÿÿÿÿ
+`squid:UselessImportCheck"?Remove this unused import 'android.support.annotation.NonNull'.(¼Åß
+Bsquid:S1604"(Make this anonymous inner class a lambda(ĞäÊğÿÿÿÿÿ
+¢squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(åí›®ÿÿÿÿÿ8õğ¨’ß,
+qsquid:UselessImportCheck"JRemove this unused import 'com.olsttech.myalarm.alarms.AlarmMainActivity'.(–Î¹¯úÿÿÿÿ
+msquid:S00116"WRename this field "mSound_value" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(»´ÅÀ

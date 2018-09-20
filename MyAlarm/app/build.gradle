@@ -93,8 +93,8 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion"
 
     //RxJava
-    compile "io.reactivex:rxandroid:$rootProject.ext.rxAndroidVersion"
-    compile "io.reactivex:rxjava:$rootProject.ext.rxJavaVersion"
+    implementation "io.reactivex:rxandroid:$rootProject.ext.rxAndroidVersion"
+    implementation "io.reactivex:rxjava:$rootProject.ext.rxJavaVersion"
 
     //Code quality analyzer
 //    plugins {

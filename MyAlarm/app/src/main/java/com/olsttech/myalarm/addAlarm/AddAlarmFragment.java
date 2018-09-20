@@ -327,6 +327,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
             case R.id.snooze:
                 mAddAlarmPresenter.setSnooze(mAlarmStatus);
                 break;
+            default: break;
 
         }
     }

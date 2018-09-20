@@ -1,3 +1,28 @@
+package com.olsttech.myalarm.data;
+
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.olsttech.myalarm.models.Alarm;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Observable;
+import rx.functions.Func1;
+import rx.subscriptions.Subscriptions;
+
 public class AlarmJSONRxJava implements AlarmJSONApi{
     
     private static final String ALARM_ID = "Alarm id";
@@ -28,7 +53,7 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
     
     }
     
-    private JSONObject convertToJson(@NonNull Alarm alarm, String alarmId) throws JSONException{
+    private JSONObject convertToJson(@NonNull Alarm alarm, String alarmId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         
         jsonObject.put(ALARM_ID, alarmId);
@@ -44,7 +69,7 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
     
     /**Method that saves the JsonObject into local disk. it converts the Jsonobjects into Jsonarray
     *@param  jsonObject: input JsonObject
-    *@param AlarmJsonSuccess success): callback that returns success if the file is saved successfully.
+    *@param success): callback that returns success if the file is saved successfully.
     */
     private void saveFileToDatabase(JSONObject jsonObject, AlarmJsonSuccess success) throws IOException, JSONException{
         Writer writer = null;
@@ -52,14 +77,14 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
 		//Observable<JSONArray> writeToDisk(SONObject jsonObject);
         
         //Write the json file to the private disk space
-        Observable<JSONArray> writeToDisk = Observable.from(jsonObject)
+        Observable<JSONArray> writeToDisk = Observable.just(jsonObject)
                 .doOnNext(new Func1<JSONObject, Observable<JSONArray>>() {
 		            @Override
 		            public Observable<JSONArray> call(JSONObject alarmJson) {
                         //Make  json array
                         JSONArray jsonArray = new JSONArray();
-                        jsonArray.add(alarmJson);
-			            return Observable.from(jsonArray);
+                        jsonArray.put(alarmJson);
+			            return Observable.from(jsonArray.put(jsonObject));
 		            }})
                 .create(jsonArray -> {
                     try{
@@ -83,16 +108,17 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
     }
     
     /**load all alarms from Json file
-    *@param AlarmJsonCallBack callback, callback that returns alarm list.
+    *@param callback, callback that returns alarm list.
     */
     private void loadFilesFromDatabase(AlarmJsonCallBack callback){
         List<Alarm> alarmList = new ArrayList<Alarm>();
         //Json filename
-        String fileName = "my_alarm.json";
-        BufferredReader reader = null;
+        String filename = "my_alarm.json";
+        BufferedReader reader = null;
         
-        InputStream inputStream = mContext.openFileInput(filename);
+        InputStream inputStream ;
         try{
+            inputStream = mContext.openFileInput(filename);
             reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder alarms = new StringBuilder();
             
@@ -118,40 +144,55 @@ public class AlarmJSONRxJava implements AlarmJSONApi{
     }
     
      /**converts Json Object to Alarm Object
-    *@param JSONObject jsonObj, the jsonObject that has the alarm.
+    *@param jsonObj jsonObj, the jsonObject that has the alarm.
     */
-    private Alarm convertJSONObjectToAlarm(JSONObject jsonObj){
-        Alarm alarm = new Alarm();
-        
-        alarmId = jsonObj.getString(ALARM_ID);
-        alarm.setAlamTime(jsonObj.getString(ALARM_TIME));
-        alarm.setAlarmDay(jsonObj.getString(ALARM_REPEAT));
-        alarm.setAlarmLabel(jsonObj.getString(ALARM_LABEL));
-        alarm.setAlarmStatus(jsonObj.getString(ALARM_SNOOZE));
-        alarm.setAlamSound(jsonObj.getString(ALARM_SOUND));
-        
-        return alarm;
-    }
+     private Alarm convertJSONObjectToAlarm(JSONObject jsonObj) throws JSONException{
+         Alarm alarm = new Alarm();
+
+         alarm.setAlarmId(jsonObj.getString(ALARM_ID));
+         alarm.setAlamTime(Long.valueOf(jsonObj.getString(ALARM_TIME)));
+         alarm.setAlarmDay(jsonObj.getString(ALARM_REPEAT));
+         alarm.setAlarmLabel(jsonObj.getString(ALARM_LABEL));
+         alarm.setAlarmStatus(jsonObj.getString(ALARM_SNOOZE));
+         alarm.setAlamSound(jsonObj.getString(ALARM_SOUND));
+
+         return alarm;
+     }
     
-    Observable<JSONArray> writeToDisks(JSONObject obj, Observable<JSONArray> jArray) { 
-	    return Observable<JSONArray>.create(subscriber -> {
+    Observable<JSONArray> writeToDisks(JSONObject alarmJson, AlarmJsonSuccess success) {
+	    return Observable.create(subscriber -> {
+            OutputStream outputStream;
+            JSONArray jsonArray = new JSONArray();
 		    try {
-			    DirectoryStream<Path> stream = Files.newDirectoryStream(dir, glob);
+                String filename = "my_alarm.json";
+                outputStream = mContext.openFileOutput(filename, Context.MODE_PRIVATE);
+
 			    subscriber.add(Subscriptions.create(() -> {
-				try {
-					stream.close();
-				}catch (IOException e) {
-					e.printStackTrace();
-				}
-			}));
-			Observable<Path>.from(stream).subscribe(subscriber);
-		}catch (DirectoryIteratorException ex) {
-			subscriber.onError(ex);
-		}catch (IOException ioe) {
-			subscriber.onError(ioe);
-		}
-	});
-}
+                    Writer writer = new OutputStreamWriter(outputStream);
+				    try {
+                        jsonArray.put(alarmJson);
+                        writer.write(jsonArray.toString());
+
+				    }
+				    catch (IOException e) {
+					    e.printStackTrace();
+				    }finally {
+				        try {
+                            success.onSuccess("Success");
+                            outputStream.close();
+                            writer.close();
+
+                        }catch (IOException e){
+				            e.printStackTrace();
+                        }
+                    }
+			    }));
+			    //Observable<JSONObject>.from(alarmJson).subscribe(subscriber);
+		    }catch (IOException ioe) {
+			    subscriber.onError(ioe);
+		    }
+	    });
+    }
 
 Observable<String> from(final Path path) { 
 	return Observable.<String>create(subscriber -> {
@@ -179,11 +220,4 @@ Observable<String> from(final Path path) {
 	});
 }	
 
-Observable<JSONObject> observable = Observable.create(new Observable.OnSubscribe() {
-		    @Override
-		    public void call(Subscriber<? super JSONObject> subscriber) {
-			    subscriber.onNext("Welcome to the world of Mindbowser!");
-			    subscriber.onCompleted();
-		    }
-	    });
 }
