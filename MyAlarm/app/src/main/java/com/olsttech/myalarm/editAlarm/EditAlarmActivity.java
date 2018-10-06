@@ -19,10 +19,13 @@ import com.olsttech.myalarm.models.Alarm;
 public class EditAlarmActivity extends AppCompatActivity {
 
     private  static Alarm CLICKED_ALARM;
-    public static void startActivity(Context context, Alarm clickedAlarm) {
+    private static EditAlarmContract.SaveAlarmCallBack mOnAlarmsave;
+
+    public static void startActivity(Context context, Alarm clickedAlarm, EditAlarmContract.SaveAlarmCallBack onAlarmsave) {
         Intent intent = new Intent(context, EditAlarmActivity.class);
         CLICKED_ALARM = clickedAlarm;
         context.startActivity(intent);
+        mOnAlarmsave =onAlarmsave;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class EditAlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addalarm);
 
         if (null == savedInstanceState) {
-            initFragment(EditAlarmFragment.newInstance(CLICKED_ALARM));
+            initFragment(EditAlarmFragment.newInstance(CLICKED_ALARM, mOnAlarmsave));
         }
     }
 

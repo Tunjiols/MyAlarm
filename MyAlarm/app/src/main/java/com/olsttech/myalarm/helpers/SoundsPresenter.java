@@ -1,11 +1,7 @@
-package com.olsttech.myalarm.uis;
+package com.olsttech.myalarm.helpers;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.google.common.collect.Lists;
-import com.olsttech.myalarm.models.DayModel;
 import com.olsttech.myalarm.models.SoundModel;
 
 import java.util.ArrayList;

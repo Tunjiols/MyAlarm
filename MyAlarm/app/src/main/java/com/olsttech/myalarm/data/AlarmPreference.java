@@ -18,13 +18,21 @@ import java.util.List;
 
 public class AlarmPreference implements AlarmPreferenceApi{
 
-    private AlarmSharePrefs mAlarmSharePrefs;
+    private static Context mContext;
     private List<Alarm> alarmList = new ArrayList<Alarm>();
+    private AlarmSharePrefs mAlarmSharePrefs;
 
-    public AlarmPreference(Context context){
 
-        mAlarmSharePrefs = new AlarmSharePrefs(context);
+    private static AlarmPreference instance = new AlarmPreference();
+
+    private AlarmPreference(){
+        mAlarmSharePrefs = new AlarmSharePrefs(mContext);
         alarmList = allAlarmsFromPreference();
+    }
+
+    public static AlarmPreference getInstance(Context context){
+        mContext = context;
+        return instance;
     }
 
     @Override
@@ -46,7 +54,8 @@ public class AlarmPreference implements AlarmPreferenceApi{
     }
 
     private List<Alarm> allAlarmsFromPreference(){
-        Alarm alarm = new Alarm(2200, "Alarm Test", "Monday", "Bell", true);
+        Alarm alarm = new Alarm(0, "22","00", "Alarm Test",
+                "Monday", "Bell", true, true);
         //alarm.setAlarmLabel(mAlarmSharePrefs.getString(AlarmConstants.ALARM_LABEL));
         //alarm.setAlamTime(mAlarmSharePrefs.getLongDate(AlarmConstants.ALARM_TIME));
         //alarm.setAlarmDay(mAlarmSharePrefs.getString(AlarmConstants.ALARM_DAY));

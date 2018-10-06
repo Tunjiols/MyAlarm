@@ -2,7 +2,6 @@ package com.olsttech.myalarm.alarms;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.olsttech.myalarm.data.AlarmDataManager;
 import com.olsttech.myalarm.data.AlarmDataManagerApi;
@@ -14,10 +13,10 @@ import java.util.List;
  * Created by adetunji on 01/09/2018.class AlarmPresenter
  */
 
-public class AlarmPresenter implements AlarmContract.Presenter{
+public class AlarmPresenter implements AlarmContract.Presenter, AlarmContract.OnEnableStateChanged{
 
     private AlarmContract.View mView;
-    private AlarmDataManagerApi.LoadAlarmFromPreference mAlarmDataManager;
+    private AlarmDataManagerApi.AlarmManagerPresenter mAlarmDataManager;
 
     public AlarmPresenter(AlarmContract.View view, Context context){
         this.mView = view;
@@ -47,11 +46,11 @@ public class AlarmPresenter implements AlarmContract.Presenter{
     
     @Override
     public void editAlarm(@NonNull List<Alarm>  alarmList){
-        //mView.showAlarmEditScreen("", alarmList);
+
     }
 
     @Override
-    public void getAlarmRadioBtnStatus() {
-
+    public void onEnableChanged(boolean state) {
+        //save the changes
     }
 }

@@ -13,19 +13,24 @@ import java.util.List;
 public interface AlarmContract {
     interface View {
         void showAlarms(List<Alarm> Alarm);
+
         void showAddAlarm();
+
         void showAlarmEditScreen(@NonNull List<Alarm>  AlarmList);
-        void openEditAlarm(@NonNull Alarm alarm );
-        void showAlarmRadioBtn();
+
     }
 
     interface Presenter{
+
         void getAllAlarms();
+
         void getAlarm(@NonNull String alarmId);
+
         void addAlarm();
+
         void editAlarm(@NonNull List<Alarm>  alarmList);
+
         void openEditAlarmScreen(@NonNull List<Alarm> clickedAlarm);
-        void getAlarmRadioBtnStatus();
     }
     
     interface AlarmItemClickListener {
@@ -37,8 +42,9 @@ public interface AlarmContract {
         void addNewAlarm();
     }
     
-    interface EditAlarmClickListener{
-        void editAlarm();
+    interface OnEnableStateChanged{
+        void onEnableChanged(boolean state);
+
     }
     
     interface AlarmItemBtnClickListener{

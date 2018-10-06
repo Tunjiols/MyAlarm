@@ -1,24 +1,23 @@
 package com.olsttech.myalarm.alarms;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
-import com.olsttech.myalarm.adapters.AlarmRecyclerViewAdapter;
+import com.olsttech.myalarm.adapters.HomeAlarmViewAdapter;
+import com.olsttech.myalarm.adapters.EditScreenAlarmAdapter;
 import com.olsttech.myalarm.addAlarm.AddAlarmActivity;
 import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.editAlarm.EditAlarmActivity;
+import com.olsttech.myalarm.editAlarm.EditAlarmContract;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.utils.SimpleItemDividerForDecoration;
 
@@ -26,22 +25,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlarmMainActivity extends AppCompatActivity implements AlarmContract.View,  
-                View.OnClickListener{
+                 View.OnClickListener{
+
     private Toolbar toolbar;
     private AlarmContract.Presenter mAlarmPresenter;
     private RecyclerView mRecyclerView;
     private TextView mEdit;
     private TextView mAdd;
     private TextView mAlarm_select;
-    private LinearLayoutManager mLinearLayoutManager;
     
     private List<Alarm> mAlarmList;
 
-    private AlarmRecyclerViewAdapter recyclerViewAdapter;
-    private EditAlarmAdapter editAdapter;
+    private HomeAlarmViewAdapter recyclerViewAdapter;
+    private EditScreenAlarmAdapter editAdapter;
     private boolean edit = false;
     private boolean mRefresh = false;
+    private boolean mEditRefresh = false;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -60,6 +61,7 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
     /**Initial setups method*/
     private void initSetup(){
+        LinearLayoutManager mLinearLayoutManager;
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
@@ -97,24 +99,31 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
     @Override
     protected void onRestart() {
         super.onRestart();
-       // if (mRefresh){
+
+        if (mRefresh){
             mAlarmPresenter.getAllAlarms();//get all alarms
-       // }
+        }
+        if (mEditRefresh){
+            mAlarmPresenter.getAllAlarms();//get all alarms again
+        }
 
         edit = false;
-        mAdd.setText("Add");
+        mAdd.setText(R.string.add);
         setAdapter(recyclerViewAdapter);
-        mAlarm_select.setText("Alarm");
+        mAlarm_select.setText(R.string.alarm);
     }
 
     @Override
     public void showAlarms(List<Alarm> alarms) {
         mAlarmList = alarms;
-        recyclerViewAdapter = new AlarmRecyclerViewAdapter(this, alarms, this);
+        recyclerViewAdapter = new HomeAlarmViewAdapter(this, alarms, this);
         setAdapter(recyclerViewAdapter);
     }
 
-    private void setAdapter(AlarmRecyclerViewAdapter recyclerViewAdapter){
+    /**
+     * Method to set adapter to the two recycler view
+     * the method is being used by two different recycler views*/
+    private void setAdapter(HomeAlarmViewAdapter recyclerViewAdapter){
         mRecyclerView.setAdapter(recyclerViewAdapter);
     }
 
@@ -135,38 +144,31 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
         AlarmContract.AlarmItemClickListener mAlarmItemClickListener = new AlarmContract.AlarmItemClickListener(){
             @Override
             public void onAlarmClicked(@NonNull Alarm clickedAlarm){
-                EditAlarmActivity.startActivity(AlarmMainActivity.this, clickedAlarm);
+                EditAlarmActivity.startActivity(AlarmMainActivity.this, clickedAlarm, new EditAlarmContract.SaveAlarmCallBack() {
+                    @Override
+                    public void onAlarmSaveCallBack(@Nullable boolean value) {
+                        mEditRefresh = value;
+                    }
+                });
             }
         };
 
-        editAdapter = new EditAlarmAdapter(alarmList, mAlarmItemClickListener);
+        editAdapter = new EditScreenAlarmAdapter(alarmList, mAlarmItemClickListener);
         setEditAdapter(editAdapter);
-        mAlarm_select.setText("Select to  Edit");
+        mAlarm_select.setText(R.string.select_to_edit);
     }
 
-    private void setEditAdapter(EditAlarmAdapter editAdapter){
+    private void setEditAdapter(EditScreenAlarmAdapter editAdapter){
         mRecyclerView.setAdapter(editAdapter);
         mRecyclerView.addItemDecoration(new SimpleItemDividerForDecoration(this));
     }
-
-    @Override
-    public void openEditAlarm(@NonNull Alarm alarm) {
-        //open alarm edit activity
-        //EditAlarmActivity.startActivity(this, alarm);
-    }
-
-    @Override
-    public void showAlarmRadioBtn() {
-
-    }
-
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.edit:
                 edit = true;
-                mAdd.setText("Cancel");
+                mAdd.setText(R.string.cancel);
                 mAlarmPresenter.openEditAlarmScreen(mAlarmList);
                 break;
             case R.id.add:
@@ -175,9 +177,9 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
                 }
                 else {
                     edit = false;
-                    mAdd.setText("Add");
+                    mAdd.setText(R.string.add);
                     setAdapter(recyclerViewAdapter);
-                    mAlarm_select.setText("Alarm");
+                    mAlarm_select.setText(R.string.alarm);
                 }
                 break;
         }
@@ -185,76 +187,4 @@ public class AlarmMainActivity extends AppCompatActivity implements AlarmContrac
 
 
     /********************************************************************************************/
-
-    private static class EditAlarmAdapter extends RecyclerView.Adapter<EditAlarmAdapter.EditViewHolder>{
-    
-        private List<Alarm> mAlarmList;
-        private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
-        
-        public EditAlarmAdapter(List<Alarm> alarmList, AlarmContract.AlarmItemClickListener alarmItemClickListener){
-            this.mAlarmItemClickListener = alarmItemClickListener;
-            this.mAlarmList = alarmList;
-        }
-
-        @NonNull
-        @Override
-        public EditViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType ){
-            Context context = parent.getContext();
-            LayoutInflater inflater = LayoutInflater.from(context);
-            View view = inflater.inflate(R.layout.edit_recycler_list, parent, false);
-            
-            return new EditViewHolder(view, mAlarmItemClickListener);
-        }
-        
-        @Override
-        public void onBindViewHolder(@NonNull EditViewHolder editViewHolder, int position) {
-            //Alarm alarm = mAlarmList.get(position);
-
-            editViewHolder.mTime.setText(String.valueOf(mAlarmList.get(position).getAlamTime()));
-            editViewHolder.mDay.setText(mAlarmList.get(position).getAlarmDay());
-            editViewHolder.mLabel.setText(mAlarmList.get(position).getAlarmLabel());
-           // editViewHolder.mStatus = mAlarmList.get(position).isAlarmStatus();
-           
-        }
-        
-        @Override
-        public int getItemCount() {
-            if (mAlarmList != null) {
-                return this.mAlarmList.size();
-            }else return 0;
-        }
-
-        /*****************************************************************************************/
-        public class EditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-            
-            public TextView mTime;
-            public TextView mDay;
-            public TextView mLabel;
-            public ImageView mStatus;
-            public ImageView mDeleteIcon;
-            public ImageView mForward;
-            //public ImageView mItemDelete
-            private AlarmContract.AlarmItemClickListener mAlarmItemClickListener;
-            
-            private EditViewHolder(View itemView, AlarmContract.AlarmItemClickListener alarmItemClickListener){
-                super(itemView);
-                mAlarmItemClickListener = alarmItemClickListener;
-                mTime 	    = itemView.findViewById(R.id.alarm_time);
-                mDay 	= itemView.findViewById(R.id.alarm_date);
-                mLabel 	= itemView.findViewById(R.id.alarm_label);
-                mStatus  =  itemView.findViewById(R.id.alarm_status);
-                mDeleteIcon  =  itemView.findViewById(R.id.alarm_deleteicon);
-                mForward  =  itemView.findViewById(R.id.alarm_forward);
-
-                itemView.setOnClickListener(this);
-            }
-            
-            @Override
-            public void onClick(View v){
-                int position = getAdapterPosition();
-                Alarm alarm = mAlarmList.get(position);
-                mAlarmItemClickListener.onAlarmClicked(alarm);
-            }
-        }
-    }
 }

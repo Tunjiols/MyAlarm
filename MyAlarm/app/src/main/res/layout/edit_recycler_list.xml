@@ -16,28 +16,55 @@
         android:src="@drawable/ic_delete_red" />
 
     <TextView
-        android:id="@+id/alarm_time"
-        android:layout_width="match_parent"
+        android:id="@+id/alarm_hour"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/alarm_deleteicon"
         android:layout_toRightOf="@+id/alarm_deleteicon"
         android:paddingLeft="@dimen/margin_small"
         android:paddingStart="@dimen/margin_small"
-        android:text="05:55"
+        android:text="00:"
         android:textColor="@color/grey_200"
         android:textSize="50sp"/>
     <TextView
+        android:id="@+id/alarm_min"
+        android:paddingStart="@dimen/_2sp"
+        android:paddingLeft="@dimen/_2sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/alarm_hour"
+        android:layout_toRightOf="@+id/alarm_hour"
+        android:text="55"
+        android:textColor="@color/grey_200"
+        android:textSize="50sp"/>
+
+    <TextView
         android:id="@+id/alarm_label"
-        android:layout_below="@+id/alarm_time"
+        android:layout_below="@+id/alarm_hour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/padding_big"
         android:paddingLeft="@dimen/padding_big"
         android:text="Alarm,"
         android:textColor="@color/grey_200"/>
+
+    <TextView
+        android:id="@+id/alarm_snooze"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:paddingStart="@dimen/_2sp"
+        android:paddingEnd="@dimen/_2sp"
+        android:layout_margin="@dimen/_5sdp"
+        android:layout_toEndOf="@+id/alarm_min"
+        android:layout_toRightOf="@+id/alarm_min"
+        android:background="@drawable/ic_snooze_backgd"
+        android:text="snooze"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+
     <TextView
         android:id="@+id/alarm_date"
-        android:layout_below="@+id/alarm_time"
+        android:layout_below="@+id/alarm_hour"
         android:layout_toRightOf="@+id/alarm_label"
         android:layout_toEndOf="@+id/alarm_label"
         android:paddingStart="@dimen/margin_small"

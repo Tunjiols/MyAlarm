@@ -28,15 +28,15 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".uis.SoundsActivity"
+        <activity android:name=".helpers.SoundsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".uis.LabelActivity"
+        <activity android:name=".helpers.LabelActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".uis.RepeatActivity"
+        <activity android:name=".helpers.RepeatActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
 

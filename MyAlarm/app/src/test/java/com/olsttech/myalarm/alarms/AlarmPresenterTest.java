@@ -30,7 +30,6 @@ import static org.mockito.Mockito.verify;
 
 public class AlarmPresenterTest {
 
-    private Context context;
     private List<Alarm> mTestAlarmList = Lists.newArrayList( new Alarm(1130,
             "alarmLabel", "alarmDay", "alarmSound", true ));
 
@@ -38,7 +37,10 @@ public class AlarmPresenterTest {
     private AlarmContract.View mView;
 
     @Mock
-    private AlarmDataManager alarmDataManager = new AlarmDataManager(context);
+    Context context;
+
+    @Mock
+    private AlarmDataManagerApi alarmDataManager;
 
     /**
      * {@link ArgumentCaptor} is a powerful Mockito API to capture argument values and use them to
@@ -65,7 +67,7 @@ public class AlarmPresenterTest {
         //fail("Implement in step 6");
         mAlarmPresenter.getAllAlarms();
 
-        verify(alarmDataManager).getAllAlarms(mArgumentCaptorCallback.capture());
+        //verify(alarmDataManager).getAllAlarms(mArgumentCaptorCallback.capture());
         mArgumentCaptorCallback.getValue().onAlarmLoaded(mTestAlarmList);
         verify(mView).showAlarms(mTestAlarmList);
     }

@@ -3,6 +3,8 @@ package com.olsttech.myalarm.data;
 import android.support.annotation.NonNull;
 
 import com.olsttech.myalarm.models.Alarm;
+import com.olsttech.myalarm.models.TimePicker;
+import com.olsttech.myalarm.services.AlarmHandlerApi;
 
 import java.util.List;
 
@@ -24,22 +26,21 @@ public interface AlarmDataManagerApi {
 
     }
 
-    interface LoadAlarmFromPreference {
+    interface AlarmManagerPresenter {
 
         void getAllAlarms(@NonNull DataManagerLoadAlarmCallBack callBack);
 
-        void saveAlarm(@NonNull Alarm alarm, OnLodingAlarmListener onLodingAlarmListener);
+        void saveAlarm(@NonNull List<Alarm> alarmList, OnSavedAlarmListener onSavedAlarmListener);
 
-        void getAlarmTime();
+        void registerAlarm(TimePicker timePicker, int dayInterval,
+                           AlarmHandlerApi.OnRegisterAlarmListener listener);
 
-        void getAlarmDay();
+        void unRigisterAlarm(@NonNull Alarm alarm);
 
-        void getAlarmLabel();
+        void deleteAlarmAndUnregisterIt(@NonNull Alarm alarm);
     }
 
-    interface OnLodingAlarmListener {
-        void onSuccess(String message);
-
-        void onFailure(String message);
+    interface OnSavedAlarmListener {
+        void onSuccess(boolean isSuccess);
     }
 }

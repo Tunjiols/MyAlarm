@@ -19,21 +19,39 @@ public interface EditAlarmContract {
     interface View {
         
         void showRepeatScreen(List<DayModel> day);
+
         void showLabelScreen(String label);
+
         void showSoundsListScreen(SoundModel sound);
+
         boolean setSnooze(boolean snooze);
+
+        void deleAlarm();
     }
   
     interface Presenter{
         void editRepeat(List<DayModel> day);
+
         void editAlarmLabel(String label);
+
         void changeSound(SoundModel soundModel);
-        void editAlarmTime();
+
         void editSnooze(boolean snooze);
-        void saveEditedAlarm(@NonNull Alarm alarm, String alarmId, SaveAlarmEditCallBack onAlarmsave);
+
+        void saveEditedAlarm(@NonNull Alarm alarm, SaveAlarmEditCallBack onAlarmsave);
+
+        void deleteAlarm(@NonNull Alarm alarm, SaveAlarmEditCallBack onAlarmSave);
     }
+
     interface SaveAlarmEditCallBack{
+
         void onAlarmSaveCallBack(@Nullable boolean value);
     }
+
+    interface SaveAlarmCallBack{
+
+        void onAlarmSaveCallBack(@Nullable boolean value);
+    }
+
     void onAlarmEdited(@NonNull Alarm alarm);
 }

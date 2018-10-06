@@ -1,9 +1,8 @@
-package com.olsttech.myalarm.uis;
+package com.olsttech.myalarm.helpers;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.models.DayModel;
 
 import java.util.List;

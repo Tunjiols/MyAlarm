@@ -1,44 +1,38 @@
 package com.olsttech.myalarm.addAlarm;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.math.MathUtils;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.olsttech.myalarm.R;
-import com.olsttech.myalarm.adapters.HourRecyclerAdapter;
-import com.olsttech.myalarm.alarms.AlarmMainActivity;
+import com.olsttech.myalarm.adapters.TimeRecyclerAdapter;
+import com.olsttech.myalarm.helpers.GetId;
 import com.olsttech.myalarm.models.Alarm;
 import com.olsttech.myalarm.models.DayModel;
 import com.olsttech.myalarm.models.SoundModel;
-import com.olsttech.myalarm.uis.LabelActivity;
-import com.olsttech.myalarm.uis.LabelContract;
-import com.olsttech.myalarm.uis.RepeatActivity;
-import com.olsttech.myalarm.uis.RepeatContract;
-import com.olsttech.myalarm.uis.SoundsActivity;
-import com.olsttech.myalarm.uis.SoundsContract;
-import com.olsttech.myalarm.uis.TimeTracking;
+import com.olsttech.myalarm.helpers.LabelActivity;
+import com.olsttech.myalarm.helpers.LabelContract;
+import com.olsttech.myalarm.helpers.RepeatActivity;
+import com.olsttech.myalarm.helpers.RepeatContract;
+import com.olsttech.myalarm.helpers.SoundsActivity;
+import com.olsttech.myalarm.helpers.SoundsContract;
+import com.olsttech.myalarm.models.TimePicker;
 import com.olsttech.myalarm.utils.AlarmConstants;
 import com.olsttech.myalarm.utils.SimpleItemDividerForDecoration;
+import com.olsttech.myalarm.utils.TimeEmitter;
 
-import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,20 +46,20 @@ import rx.functions.Action1;
 
 public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                     View.OnClickListener{
-
+    private static final String TAG = AddAlarmFragment.class.getCanonicalName();
     private TextView mCancel;
     private TextView mSave;
     private TextView mAlarmTimeView;
     private TextView mRepeat_value;
     private TextView mLabel_value;
     private TextView mSound_value;
+    private TextView mTimeset;
     private ImageButton mSnoozeBtn;
     private RecyclerView mFrameLayoutHour;
     private RecyclerView mFrameLayoutMinute;
-    
+    private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
     private AddAlarmContract.Presenter mAddAlarmPresenter;
-    
-    private long mAlarmTime;
+
     private String  mAlarmLabel;
     private String mSetDays ;
 
@@ -73,21 +67,14 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
     private SoundModel mAlarmSound;
     private boolean mAlarmStatus = false;
 
-    private RelativeLayout mRepeat, mLabel, mSound, mSnooze;
+    private TimePicker mTimePicker;
+    private String editedTimeInitHour = "00";
+    private String editedTimeInitMin = "00";
 
     private static AddAlarmContract.SaveAlarmCallBack mOnAlarmsave;
-    private TimeTracking mTimeTracking;
 
     private List<String> hourTime;
     private List<String> minuteTime;
-    private String[] hourTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
-            ,"14","15","16","17","18","19","20","21","22","23"};
-    private String[] minuteTimes = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13"
-            ,"14","15","16","17","18","19","20","21","22","23","30","31","32","33","34","35","36",
-            "37", "38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53",
-            "54","55","56","57","58","59"};
-
-
 
     public static AddAlarmFragment newInstance(AddAlarmContract.SaveAlarmCallBack onAlarmsave) {
         mOnAlarmsave = onAlarmsave;
@@ -108,6 +95,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mAlarmSound = new SoundModel(AlarmConstants.DAFAULT_SOUND, true);
         hourTime = new ArrayList<>();
         minuteTime = new ArrayList<>();
+        mTimePicker = new TimePicker();
     }
 
     /**
@@ -144,6 +132,7 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mRepeat = rootView.findViewById(R.id.repeat);
         mSound = rootView.findViewById(R.id.sound);
         mSnooze = rootView.findViewById(R.id.snooze);
+        mTimeset = rootView.findViewById(R.id.timeset);
 
         mFrameLayoutHour = rootView.findViewById(R.id.frame_hour);
         mFrameLayoutMinute = rootView.findViewById(R.id.frame_minute);
@@ -156,9 +145,17 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mSnooze.setOnClickListener(this);
         mCancel.setOnClickListener(this);
         mSave.setOnClickListener(this);
-        
-        hourTime = timeEmitter(hourTimes);
-        minuteTime = timeEmitter(minuteTimes);
+
+        setTimeRecyclerAdapter();
+        initSetup();
+
+        return rootView;
+    }
+
+    private void setTimeRecyclerAdapter(){
+        TimeEmitter timeEmitter = new TimeEmitter();
+        hourTime = timeEmitter.emitTime(TimeEmitter.HOUR_EMITTER);
+        minuteTime = timeEmitter.emitTime(TimeEmitter.MINUTES_EMITTER);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext());
@@ -167,30 +164,52 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
         mFrameLayoutMinute.setItemAnimator(new DefaultItemAnimator());
         mFrameLayoutMinute.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
         mFrameLayoutHour.addItemDecoration(new SimpleItemDividerForDecoration(getContext()));
-        HourRecyclerAdapter hourRecyclerAdapter = new HourRecyclerAdapter(getContext(),hourTime);
-        mFrameLayoutHour.setAdapter(hourRecyclerAdapter);
-        HourRecyclerAdapter minuteRecyclerAdapter = new HourRecyclerAdapter(getContext(),minuteTime);
+
+        TimeRecyclerAdapter timeRecyclerAdapter = new TimeRecyclerAdapter(getContext(), hourTime,
+                new TimeRecyclerAdapter.OnTimeFocusListener() {
+            @Override
+            public void onTimeFocus(String getFocusTime) {
+                mTimePicker.setmHour(getFocusTime);
+                String setEditedTime = mTimePicker.getmHour() + ":" + editedTimeInitMin;
+                editedTimeInitHour = mTimePicker.getmHour();
+                mTimeset.setText(setEditedTime);
+            }
+        });
+        mFrameLayoutHour.setAdapter(timeRecyclerAdapter);
+        TimeRecyclerAdapter minuteRecyclerAdapter = new TimeRecyclerAdapter(getContext(), minuteTime,
+                new TimeRecyclerAdapter.OnTimeFocusListener() {
+            @Override
+            public void onTimeFocus(String getFocusTime) {
+                mTimePicker.setmMinute(getFocusTime);
+                String setEditedTime = editedTimeInitHour + ":" + mTimePicker.getmMinute();
+                editedTimeInitMin = mTimePicker.getmMinute();
+                mTimeset.setText(setEditedTime);
+            }
+        });
         mFrameLayoutMinute.setAdapter(minuteRecyclerAdapter);
-        
-        
+    }
 
+    private Alarm getAlarmParameters(){
 
-       initSetup();
+        if (mTimePicker.getmHour() == null){
+            mTimePicker.setmHour("00");
+        }
+        if (mTimePicker.getmMinute() == null ){
+            mTimePicker.setmMinute("00");
+        }
 
-        return rootView;
+        return  new Alarm(GetId.getIdFromPref(getContext()), mTimePicker.getmHour(),mTimePicker.getmMinute(),
+                mAlarmLabel, mSetDays, mAlarmSound.getSound(), mAlarmStatus, true);
     }
 
     /**Method for Initial setup*/
     private void initSetup(){
 
-        scrollingTime(mFrameLayoutHour, mTimeTracking);
-        scrollingTime(mFrameLayoutMinute, mTimeTracking);
-
         /*Set initial repeat to No Repeat*/
         if (mSetDays != null){
             mRepeat_value.setText(mSetDays);//set alarm repeat days
         }else   {
-            mRepeat_value.setText("No Repeat");//set as Default
+            mRepeat_value.setText(R.string.no_repeat);//set as Default
         }
 
         if(mAlarmSound != null) {
@@ -204,11 +223,6 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 mAddAlarmPresenter.setSnooze(mAlarmStatus);
             }
         });
-    }
-
-    @Override
-    public void showAddAlarm() {
-
     }
 
     /**
@@ -226,11 +240,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
             mSound_value.setText(mAlarmSound.getSound());//set default label value as "Default sound"
         }
 
-        mSetDays = getShortDay2(mAlarmDays);
+        mSetDays = getShortDay(mAlarmDays);
         if (!mSetDays.isEmpty()){
            mRepeat_value.setText(mSetDays);//set alarm repeat days
         }else   {
-            mRepeat_value.setText("No Repeat");//set as Default
+            mRepeat_value.setText(R.string.no_repeat);//set as Default
         }
     }
 
@@ -301,15 +315,14 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
                 getActivity().finish();
                 break;
             case R.id.save:
-                Alarm alarm = new Alarm( mAlarmTime, mAlarmLabel, mSetDays, mAlarmSound.getSound(), mAlarmStatus);
-                String alarmId = "0";
-                mAddAlarmPresenter.saveAlarm(alarm, alarmId, new AddAlarmContract.SaveAlarmCallBack() {
+                mAddAlarmPresenter.saveAlarm(getAlarmParameters(), new AddAlarmContract.SaveAlarmCallBack() {
                     //callback to know if alarm is successfully saved
                     @Override
                     public void onAlarmSaveCallBack( boolean value) {
-                        mOnAlarmsave.onAlarmSaveCallBack (value);
-                        if(value)
+                        if(value) {
+                            mOnAlarmsave.onAlarmSaveCallBack (value);
                             getActivity().finish();
+                        }
                     }
                 });
                 break;
@@ -331,76 +344,11 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 
         }
     }
-    
-    public void scrollingTime(RecyclerView recyclerView, final  TimeTracking timeTrackings ) {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
-                int firstVisiblesItem = dy;//recyclerView.getLayoutManager();
 
-                int lastVisiblesItem = dx;//recyclerView.getLayoutManager();
-
-                int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
-                int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                //recyclerView.getLayoutManager().offsetChildrenVertical(50);
-                //int name =recyclerView.getLayoutManager().getFocusedChild().getId();
-                TimeTracking.NowVisible visible = new TimeTracking.NowVisible(visibleItemCount, totalItemCount);
-                TimeTracking timeTracking = timeTrackings;
-                timeTracking = new TimeTracking(
-                        new Action1<TimeTracking.NowVisible>() {
-                            @Override
-                            public void call(TimeTracking.NowVisible visible) {
-                                int position = visible.getLastVisible();
-                                //TODO get my outputs
-
-                               //int name = recyclerView.getLayoutManager().getFocusedChild();//.getName();
-                                mAlarmTime = 0000;
-                                Log.e("TimeTrack getFirstVisi ", String.valueOf(visible.getFirstVisible()));
-                                Log.e("TimeTrack veiwid ", String.valueOf(visible.getLastVisible()));
-                            }
-                        },
-                        new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable s) {
-                                Log.e("Error getting the time", s.getMessage());
-                            }
-                        }
-                );
-
-                timeTracking.postViewEvent(visible);
-
-                //---------------------------------------------------
-
-            }
-        });
-    }
-
-    private List<String> timeEmitter(String... time){
-        final List<String> hours = new ArrayList<String>();
-        
-        Observable<String> observable = Observable.from(time);
-
-        Subscriber<String> subscriber = new Subscriber<String>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(String s) {
-                hours.add(s);
-            }
-        };
-        observable.subscribe(subscriber);
-        return hours;
-	}
-
-    private String getShortDay2(List<DayModel> dayList){
+	/** Returns the string of concatenated weekdays
+     * @Link dayList: list of selected days
+     * */
+    private String getShortDay(List<DayModel> dayList){
         final StringBuilder stringBuilder = new StringBuilder(7);
         Observable<DayModel> buildString = Observable.from(dayList);
 	    Subscriber<DayModel> subscriber = new Subscriber<DayModel>(){
@@ -409,9 +357,9 @@ public class AddAlarmFragment extends Fragment implements AddAlarmContract.View,
 				    stringBuilder.append(day.getDay().substring(0, 3) + ", ");
                 }
 		    @Override
-			    public void onCompleted() { }
+			    public void onCompleted() {Log.i(TAG, "getShortDay completed"); }
 		    @Override
-			    public void onError(Throwable err) { }
+			    public void onError(Throwable err) {Log.e(TAG, "getShortDay error", err); }
 	    };
 	    buildString.subscribe(subscriber);
 	    return stringBuilder.toString();

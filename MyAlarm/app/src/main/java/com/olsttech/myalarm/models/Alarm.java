@@ -7,37 +7,52 @@ import android.support.annotation.Nullable;
  */
 
 public class Alarm {
-    public String alarmId;
-    public long alamTime;
-    public String alarmLabel;
-    public String alarmDay;
-    public String alarmSound;
-    public boolean alarmStatus;
+    private int alarmId;
+    private String alarmHour;
+    private String alarmMinute;
+    private String alarmLabel;
+    private String alarmDay;
+    private String alarmSound;
+    private boolean alarmStatus;
+    private boolean alarmEnabled;
 
     public Alarm (){}
 
-    public Alarm (long alamTime, String alarmLabel, String alarmDay, String alarmSound, boolean alarmStatus){
-        this.alamTime = alamTime;
+    public Alarm (int id, String alarmHour,String alarmMinute, String alarmLabel, String alarmDay,
+                  String alarmSound, boolean alarmStatus, boolean alarmEnabled){
+        this.alarmHour = alarmHour;
+        this.alarmMinute = alarmMinute;
         this.alarmLabel = alarmLabel;
         this.alarmDay = alarmDay;
         this.alarmSound = alarmSound;
         this.alarmStatus = alarmStatus;
+        this.alarmId = id;
+        this.alarmEnabled = alarmEnabled;
     }
 
-    public String getAlarmId() {
+
+    public String getAlarmHour() {
+        return alarmHour;
+    }
+
+    public void setAlarmHour(String alamHour) {
+        this.alarmHour = alamHour;
+    }
+
+    public String getAlarmMinute() {
+        return alarmMinute;
+    }
+
+    public void setAlarmMinute(String alamMinute) {
+        this.alarmMinute = alamMinute;
+    }
+
+    public int getAlarmId() {
         return alarmId;
     }
 
-    public void setAlarmId(String alarmId) {
+    public void setAlarmId(int alarmId) {
         this.alarmId = alarmId;
-    }
-
-    public long getAlamTime() {
-        return alamTime;
-    }
-
-    public void setAlamTime(long alamTime) {
-        this.alamTime = alamTime;
     }
 
     public String getAlarmLabel() {
@@ -72,4 +87,11 @@ public class Alarm {
         this.alarmStatus = alarmStatus;
     }
 
+    public boolean isAlarmEnabled() {
+        return alarmEnabled;
+    }
+
+    public void setAlarmEnabled(boolean alarmEnabled) {
+        this.alarmEnabled = alarmEnabled;
+    }
 }

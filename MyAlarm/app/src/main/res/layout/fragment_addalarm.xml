@@ -72,6 +72,16 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/timeset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textColor="@color/amber_400"
+        android:textSize="@dimen/_18sp"
+        android:layout_gravity="center"
+        />
+
     <RelativeLayout
         android:id="@+id/repeat"
         android:layout_width="match_parent"

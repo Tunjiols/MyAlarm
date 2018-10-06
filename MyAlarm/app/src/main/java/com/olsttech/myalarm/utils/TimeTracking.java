@@ -1,4 +1,4 @@
-package com.olsttech.myalarm.uis;
+package com.olsttech.myalarm.utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,11 +20,10 @@ public class TimeTracking {
         this.mPublishSubject = PublishSubject.create();
         this.mSubscription = mPublishSubject.distinctUntilChanged()
                 .throttleWithTimeout(TIME_THRESHOLD_MS, TimeUnit.MILLISECONDS)
-                .subscribe(mOnSuccess, onError);
+                .subscribe(this::onCallback, onError);
     }
 
     public void postViewEvent(final NowVisible visible) {
-        mOnSuccess.call(visible);
         mPublishSubject.onNext(visible);
     }
 
@@ -35,6 +34,7 @@ public class TimeTracking {
     private void onCallback(NowVisible visible) {
         mOnSuccess.call(visible);
     }
+
 
     /*********************************************************************************/
     public static class NowVisible {

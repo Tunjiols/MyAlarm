@@ -1,8 +1,5 @@
-package com.olsttech.myalarm.uis;
+package com.olsttech.myalarm.helpers;
 
-import android.util.Log;
-
-import com.olsttech.myalarm.addAlarm.AddAlarmContract;
 import com.olsttech.myalarm.addAlarm.AddAlarmPresenter;
 import com.olsttech.myalarm.models.DayModel;
 

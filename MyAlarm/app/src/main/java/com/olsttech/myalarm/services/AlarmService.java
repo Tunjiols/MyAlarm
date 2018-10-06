@@ -92,4 +92,11 @@ public class AlarmService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    //TODO : use the following services
+    // AlarmManager alarmManager;
+        //PendingIntent pendingIntent;
+    //BroadcastReceiver mReceiver; or WakefulBroadcastReceiver
+        //MediaPlayer mediaPlayer or Ringtone ringtone = RingtoneManager.getRingtone(context, uri);
+
 }
