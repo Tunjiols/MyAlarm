@@ -4,18 +4,22 @@ pipeline {
         skipStagesAfterUnstable()
     }
     stages {
-        stage('Build') { 
+        stage('Build Stage') { 
             steps { 
-                sh 'make' 
+                withGradle(gradle : gradle_6_5_1){
+                    sh 'make' 
+                }
             }
         }
-        stage('Test'){
+        stage('Test Stage'){
             steps {
-                sh 'make check'
-                junit 'reports/**/*.xml' 
+                withGradle(gradle : gradle_6_5_1){
+                    sh 'make Test'
+                    junit 'reports/**/*.xml'  
+                }   
             }
         }
-        stage('Deploy') {
+        stage('Deploy Stage') {
             steps {
                 sh 'make publish'
             }
